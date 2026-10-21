@@ -681,17 +681,27 @@ build_404()
 today = datetime.date.today().isoformat()
 open(os.path.join(OUT, "sitemap.xml"), "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     "".join(f"  <url><loc>{u}</loc><lastmod>{today}</lastmod></url>\n" for u in PAGES) + "</urlset>\n")
-# Redirections des anciennes adresses Shopify vers les nouvelles pages
-redir = ["/blogs/actualites/tagged/* /conseils 301", "/blogs/actualites/:slug /articles/:slug 301", "/blogs/actualites /conseils 301",
-         "/blogs/* /conseils 301", "/pages/contact /contact 301", "/pages/divulgation-daffiliation /divulgation 301",
-         "/pages/produits-chiens-chats /a-propos 301", "/pages/chiens-produits /chiens 301", "/pages/produits-chiens /chiens 301",
-         "/pages/chats-produits /chats 301", "/pages/produits-chats /chats 301", "/pages/essentiels-chien /recommandations 301",
-         "/pages/essentiels-chat /recommandations 301", "/pages/nos-recommandations /recommandations 301",
-         "/pages/nos-recommandations-pour-chiens-et-chats /recommandations 301", "/pages/produits /recommandations 301",
-         "/pages/chiens-* /chiens 301", "/pages/chats-* /chats 301", "/pages/* / 301",
-         "/policies/privacy-policy /politique-de-confidentialite 301", "/policies/terms-of-service /conditions-utilisation 301",
-         "/policies/* /conditions-utilisation 301", "/collections/* / 301", "/products/* /recommandations 301", "/cart / 301",
-         "/account / 301", "/account/* / 301", "/search /conseils 301"]
+# Redirections des anciennes adresses Shopify vers les nouvelles pages.
+# Une ligne explicite par ancienne adresse : aucune règle générique ne chevauche une règle précise.
+redir = [f"/blogs/actualites/{a['h']} /articles/{a['h']} 301" for a in A]
+redir += [f"/blogs/actualites/{a['h']}/ /articles/{a['h']} 301" for a in A]
+shopify_pages = {
+    "contact": "/contact", "divulgation-daffiliation": "/divulgation", "produits-chiens-chats": "/a-propos",
+    "produits-chiens": "/chiens", "chiens-produits": "/chiens", "chiens-sante": "/chiens#sante",
+    "chiens-alimentation": "/chiens#alimentation", "chiens-comportement": "/chiens#comportement",
+    "chiens-toilettage": "/chiens#toilettage", "produits-chats": "/chats", "chats-produits": "/chats",
+    "chats-sante": "/chats#sante", "chats-alimentation": "/chats#alimentation",
+    "chats-comportement": "/chats#comportement", "chats-toilettage": "/chats",
+    "nos-recommandations": "/recommandations", "nos-recommandations-pour-chiens-et-chats": "/recommandations",
+    "essentiels-chien": "/recommandations", "essentiels-chat": "/recommandations", "produits": "/recommandations"}
+redir += [f"/pages/{k} {v} 301" for k, v in shopify_pages.items()]
+policies = {"privacy-policy": "/politique-de-confidentialite", "terms-of-service": "/conditions-utilisation",
+            "legal-notice": "/conditions-utilisation", "contact-information": "/contact",
+            "refund-policy": "/divulgation", "shipping-policy": "/divulgation", "divulgation-affiliation": "/divulgation"}
+redir += [f"/policies/{k} {v} 301" for k, v in policies.items()]
+redir += ["/blogs/actualites /conseils 301", "/blogs/actualites/ /conseils 301", "/blogs/actualites/tagged/* /conseils 301",
+          "/collections/* / 301", "/collections / 301", "/products/* /recommandations 301", "/cart / 301",
+          "/account / 301", "/account/* / 301", "/search /conseils 301"]
 open(os.path.join(OUT, "_redirects"), "w").write("\n".join(redir) + "\n")
 open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
 print(f"Site généré dans {os.path.relpath(OUT)} : {len(PAGES)} pages · {len(full)} article(s) au texte complet : {', '.join(full)}")
