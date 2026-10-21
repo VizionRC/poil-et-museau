@@ -811,7 +811,7 @@ def clean_body(b):
         return f'<h2 id="{hid}">{inner.strip()}</h2>'
     b = re.sub(r"<h2([^>]*)>(.*?)</h2>", h2, b, flags=re.S)
     b = re.sub(r'href="(?:https?:?/+(?:www\.)?(?:poiletmuseau\.com)?)?/?blogs/actualites/([\w-]+)/?"', r'href="\1.html"', b)
-    b = re.sub(r'<a ([^>]*href="https://(?:amzn\.to|www\.amazon\.ca)[^"]*"[^>]*)>',
+    b = re.sub(r'<a ([^>]*href="https://(?:amzn\.to|link\.amazon|(?:www\.)?amazon\.(?:ca|com))[^"]*"[^>]*)>',
                lambda m: "<a " + re.sub(r'\srel="[^"]*"', "", m.group(1)) + ' rel="nofollow sponsored noopener">', b)
     shop_pages = {"produits-chiens": "chiens", "chiens-produits": "chiens", "produits-chats": "chats", "chats-produits": "chats",
                   "contact": "contact", "divulgation-daffiliation": "divulgation", "nos-recommandations": "reco", "produits": "reco"}

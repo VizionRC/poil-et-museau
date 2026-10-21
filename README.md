@@ -51,10 +51,42 @@ mots_cles: hiver, manteau chien, bottines chien
 | `brouillon` | facultatif : `oui` pour ne pas publier l'article |
 
 Chaque `<h2>` apparaît automatiquement dans la table des matières de l'article.
-Les liens Amazon (`amzn.to`, `amazon.ca`) reçoivent automatiquement `rel="nofollow sponsored"`.
+Ajoute aussi `description:` (120 à 160 caractères) : c'est le texte affiché sous le titre dans Google.
+Les intertitres qui se terminent par « ? » deviennent automatiquement une FAQ lisible par Google et les moteurs IA.
+Les liens Amazon (`amzn.to`, `link.amazon`, `amazon.ca`) reçoivent automatiquement `rel="nofollow sponsored"`.
 Pour un encadré de produit recommandé : `<div class="aff">…</div>`. Pour un conseil : `<div class="tip">…</div>`.
 
 4. Pousse sur GitHub : Cloudflare met le site à jour en une minute environ.
+
+## Version anglaise
+
+Le site français est à la racine (`/`), l'anglais sous `/en/`. Un bouton FR/EN passe d'une version à l'autre.
+
+Pour traduire un article, crée `content/en/articles/<adresse-anglaise>.html` avec cet en-tête :
+
+```html
+<!--
+titre: How to dress your dog for winter
+traduction_de: harnais-hiver
+image_alt: Australian Shepherd wearing a coat in the snow
+description: Coat, boots, harness: what your dog really needs for the cold.
+resume: What your dog really needs for the cold.
+mots_cles: winter, dog coat, dog boots
+-->
+```
+
+`traduction_de` est le nom du fichier français. La date, l'animal, la catégorie et la photo viennent de la version française.
+Dans le texte, garde les liens `/blogs/actualites/...` : ils pointent automatiquement vers la version anglaise de l'article.
+Un article sans traduction affiche la version française dans les listes anglaises.
+
+## Référencement (SEO, GEO, AEO)
+
+Tout est généré automatiquement à chaque publication :
+
+- `sitemap.xml` avec les liens FR/EN, à soumettre une fois dans Google Search Console ;
+- `feed.xml` et `en/feed.xml` (flux RSS) ;
+- `llms.txt` et `robots.txt` qui autorisent les moteurs IA (ChatGPT, Perplexity, Claude, Gemini) ;
+- les données structurées : Article, FAQ, fil d'Ariane, organisation et recherche.
 
 ## Photos des articles
 
