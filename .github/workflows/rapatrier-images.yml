@@ -1,0 +1,32 @@
+name: Rapatrier les images Shopify
+
+# Lancement manuel : onglet Actions > « Rapatrier les images Shopify » > Run workflow
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rapatrier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Télécharger les images et mettre à jour le contenu
+        run: python3 scripts/rapatrier_images.py
+      - name: Vérifier que le site se génère
+        run: python3 build.py
+      - name: Enregistrer dans le dépôt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add images content
+          if git diff --cached --quiet; then
+            echo "Rien à enregistrer : les images sont déjà dans le dépôt."
+          else
+            git commit -m "Rapatrier les images Shopify dans le dépôt"
+            git push
+          fi

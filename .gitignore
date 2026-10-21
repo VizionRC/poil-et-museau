@@ -1,0 +1,5 @@
+# Site généré par build.py (Cloudflare le regénère à chaque déploiement)
+dist/
+.wrangler/
+__pycache__/
+.DS_Store

@@ -1,0 +1,13 @@
+// Configuration Cloudflare Workers (site statique).
+// Dans Cloudflare : Workers & Pages > Créer > Importer un dépôt GitHub (VizionRC/poil-et-museau)
+//   Commande de build  : python3 build.py
+//   Commande de déploiement : npx wrangler deploy
+{
+  "name": "poil-et-museau",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
