@@ -5,6 +5,9 @@
 {
   "name": "poil-et-museau",
   "compatibility_date": "2026-10-01",
+  // Le site est servi uniquement sur poiletmuseau.com (pas de copie sur workers.dev)
+  "workers_dev": false,
+  "preview_urls": false,
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
