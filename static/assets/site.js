@@ -56,7 +56,7 @@
 
     /* Mot changeant (accueil) */
     var sw=document.getElementById("swap");
-    if(sw){var words=["chien","chat","museau","poil"],wi=0;
+    if(sw){var words=(sw.dataset.words||"chien,chat,museau,poil").split(","),wi=0;
       setInterval(function(){wi=(wi+1)%words.length;sw.innerHTML="<span>"+words[wi]+"</span>";},2400);}
 
     /* Traces de pattes (accueil) */
@@ -98,7 +98,8 @@
       var chips=document.getElementById("chips");
       if(chips)chips.addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;state.cat=b.dataset.cat;chips.querySelectorAll(".chip").forEach(function(x){x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b));});apply();});
       var q=document.getElementById("q");
-      if(q)q.addEventListener("input",function(){state.q=q.value;apply();});
+      if(q){q.addEventListener("input",function(){state.q=q.value;apply();});
+        try{var qp=new URLSearchParams(location.search).get("q");if(qp){q.value=qp;state.q=qp;}}catch(e){}}
       /* Catégorie présélectionnée par l'ancre (#sante, #comportement…) */
       var h=location.hash.replace("#","");
       if(h&&chips){var pre=chips.querySelector('[data-cat="'+h+'"]');if(pre)pre.click();}
@@ -108,14 +109,12 @@
     /* Outil aliments */
     var foods=document.getElementById("foods"),ver=document.getElementById("verdict");
     if(foods&&ver&&window.PM_FOODS){
-      var F=window.PM_FOODS,base=foods.dataset.base||"";
+      var F=window.PM_FOODS,T=window.PM_TXT||{};
       foods.addEventListener("click",function(e){
         var b=e.target.closest(".food");if(!b)return;
         foods.querySelectorAll(".food").forEach(function(x){x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",String(x===b));});
         var x=F[+b.dataset.i],ico=x.l==="bad"?"⛔ ":x.l==="ok"?"✅ ":"⚠️ ";
-        var help=x.l==="bad"
-          ?'Votre animal en a mangé? Appelez rapidement votre vétérinaire ou une clinique d’urgence. <a href="'+base+'articles/que-faire-si-mon-chien-ou-mon-chat-mange-un-aliment-dangereux.html">Que faire →</a>'
-          :'Toujours en petite quantité et en complément de son alimentation habituelle. <a href="'+base+'articles/aliments-dangereux-chien-chat.html">Voir les 10 aliments à éviter →</a>';
+        var help=x.l==="bad"?T.bad+' <a href="'+T.badLink+'">'+T.badCta+'</a>':T.ok+' <a href="'+T.okLink+'">'+T.okCta+'</a>';
         ver.innerHTML='<div class="big" aria-hidden="true">'+x.e+'</div><span class="badge '+x.l+'">'+ico+x.v+'</span><h3>'+x.n+'</h3><p>'+x.d+'</p><small>'+help+'</small>';
         ver.classList.remove("bump");void ver.offsetWidth;ver.classList.add("bump");
       });
@@ -133,7 +132,7 @@
     document.querySelectorAll("[data-copy]").forEach(function(b){
       b.addEventListener("click",function(){
         var txt=b.dataset.copy==="url"?location.href:b.dataset.copy,orig=b.textContent;
-        function done(){b.textContent="Copié ✓";setTimeout(function(){b.textContent=orig;},1800);}
+        function done(){b.textContent=document.body.dataset.copied||"Copié ✓";setTimeout(function(){b.textContent=orig;},1800);}
         function fallback(){var s=b.parentNode.querySelector("span");if(s){var r=document.createRange();r.selectNodeContents(s);var sel=getSelection();sel.removeAllRanges();sel.addRange(r);}}
         if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,fallback);}else fallback();
       });
