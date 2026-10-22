@@ -400,3 +400,11 @@ footer.site ul a:hover{color:var(--coral-ink)}
 /* Animations décoratives en pause jusqu'à la première interaction (vitesse d'affichage) */
 html:not(.live) .blob,html:not(.live) .sticker,html:not(.live) .sticker span,html:not(.live) .track,html:not(.live) .dot{animation-play-state:paused}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* Bandeau de consentement aux témoins */
+.consent{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:80;max-width:620px;margin-inline:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 50px -12px rgba(0,0,0,.35);padding:18px 20px;display:grid;gap:14px;font-size:.92rem;line-height:1.5}
+.consent a{color:var(--coral-ink);font-weight:700;text-decoration:underline}
+.consent-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.consent .btn{min-height:44px;padding:0 22px}
+.linklike{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
+.linklike:hover{text-decoration:underline}

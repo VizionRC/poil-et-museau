@@ -5,6 +5,38 @@
   function live(){root.classList.add("live");["pointerdown","keydown","touchstart","wheel","mousemove"].forEach(function(ev){removeEventListener(ev,live);});}
   ["pointerdown","keydown","touchstart","wheel","mousemove"].forEach(function(ev){addEventListener(ev,live,{passive:true,once:true});});
 
+
+  /* Google Analytics : chargé seulement après consentement explicite (Loi 25) */
+  var CK="pm-consent";
+  function getC(){try{return localStorage.getItem(CK);}catch(e){return null;}}
+  function setC(v){try{localStorage.setItem(CK,v);}catch(e){}}
+  function loadGA(id){
+    if(!id||window.__pmGA)return;window.__pmGA=1;
+    window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments);};
+    gtag("js",new Date());gtag("config",id,{anonymize_ip:true});
+    var s=document.createElement("script");s.async=true;s.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(id);document.head.appendChild(s);
+  }
+  function clearGA(){
+    document.cookie.split(";").forEach(function(c){var n=c.split("=")[0].trim();if(/^_ga/.test(n)){["",location.hostname,"."+location.hostname.replace(/^www\./,"")].forEach(function(d){document.cookie=n+"=; Max-Age=0; path=/"+(d?"; domain="+d:"");});}});
+  }
+  function banner(b){
+    var old=document.getElementById("consent");if(old)old.remove();
+    var d=b.dataset,el=document.createElement("div");
+    el.id="consent";el.className="consent";el.setAttribute("role","region");el.setAttribute("aria-label",d.consentLabel||"Cookies");
+    el.innerHTML='<p></p><div class="consent-btns"><button type="button" class="btn btn-ghost" data-v="no"></button><button type="button" class="btn btn-primary" data-v="yes"></button></div>';
+    var p=el.querySelector("p");p.textContent=d.consentText+" ";
+    var a=document.createElement("a");a.href=d.consentHref;a.textContent=d.consentMore;p.appendChild(a);
+    el.querySelector('[data-v="yes"]').textContent=d.consentYes;el.querySelector('[data-v="no"]').textContent=d.consentNo;
+    el.addEventListener("click",function(ev){var v=ev.target.getAttribute&&ev.target.getAttribute("data-v");if(!v)return;
+      setC(v);el.remove();if(v==="yes")loadGA(d.ga);else{clearGA();if(window.__pmGA)location.reload();}});
+    document.body.appendChild(el);
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    var b=document.body;if(!b||!b.dataset.ga)return;
+    var c=getC();if(c==="yes")loadGA(b.dataset.ga);else if(c!=="no")banner(b);
+    document.querySelectorAll("[data-consent-open]").forEach(function(x){x.addEventListener("click",function(){banner(b);});});
+  });
+
   /* Image introuvable ou bloquée : on garde la mise en page avec un repli */
   document.addEventListener("error",function(ev){
     var im=ev.target;if(!im||im.tagName!=="IMG")return;

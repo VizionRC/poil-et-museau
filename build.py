@@ -219,12 +219,15 @@ def footer():
         <li><a href="{u("apropos")}">{t("À propos", "About")}</a></li><li><a href="{u("contact")}">{t("Nous joindre", "Contact us")}</a></li>
         <li><a href="{u("divulgation")}">{t("Divulgation d'affiliation", "Affiliate disclosure")}</a></li>
         <li><a href="{u("confidentialite")}">{t("Politique de confidentialité", "Privacy policy")}</a></li>
-        <li><a href="{u("conditions")}">{t("Conditions d'utilisation", "Terms of use")}</a></li></ul></div>
+        <li><a href="{u("conditions")}">{t("Conditions d'utilisation", "Terms of use")}</a></li>
+        <li><button type="button" class="linklike" data-consent-open>{t("Gérer les témoins", "Manage cookies")}</button></li></ul></div>
     </div>
     <div class="bottom"><span>© <span id="yr">2026</span> Poil &amp; Museau. {t("Tous droits réservés.", "All rights reserved.")}</span><span>{t("Nos conseils ne remplacent pas l'avis d'un vétérinaire.", "Our advice does not replace a veterinarian's opinion.")}</span></div>
   </div>
 </footer>
 <button class="icon-btn" id="top" type="button" aria-label="{t("Retour en haut", "Back to top")}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>'''
+
+GA_ID = "G-2BEDFVE09K"  # Google Analytics 4 — chargé seulement après consentement (Loi 25)
 
 _CSS = None
 def inline_css():
@@ -334,7 +337,7 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 <script defer src="{ROOT}assets/site.js?v={ASSET_V}"></script>
 {ld}
 </head>
-<body data-copied="{t("Copié ✓", "Copied ✓")}">
+<body data-copied="{t("Copié ✓", "Copied ✓")}" data-ga="{GA_ID}" data-consent-text="{t("Nous utilisons Google Analytics pour mesurer, de façon globale, la fréquentation du site. Acceptez-vous ces témoins de statistiques?", "We use Google Analytics to measure overall site traffic. Do you accept these analytics cookies?")}" data-consent-yes="{t("Accepter", "Accept")}" data-consent-no="{t("Refuser", "Decline")}" data-consent-more="{t("En savoir plus", "Learn more")}" data-consent-href="{u("confidentialite", "#temoins") if LANG == "fr" else u("confidentialite", "#cookies")}" data-consent-label="{t("Consentement aux témoins", "Cookie consent")}">
 {header(active, ROOT + alt)}
 <main id="contenu">
 {body}
