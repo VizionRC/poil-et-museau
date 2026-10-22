@@ -220,7 +220,7 @@ def footer():
         <li><a href="{u("divulgation")}">{t("Divulgation d'affiliation", "Affiliate disclosure")}</a></li>
         <li><a href="{u("confidentialite")}">{t("Politique de confidentialité", "Privacy policy")}</a></li>
         <li><a href="{u("conditions")}">{t("Conditions d'utilisation", "Terms of use")}</a></li>
-        <li><button type="button" class="linklike" data-consent-open>{t("Gérer les témoins", "Manage cookies")}</button></li></ul></div>
+        <li><button type="button" class="linklike" data-consent-open>{t("Gérer les cookies", "Manage cookies")}</button></li></ul></div>
     </div>
     <div class="bottom"><span>© <span id="yr">2026</span> Poil &amp; Museau. {t("Tous droits réservés.", "All rights reserved.")}</span><span>{t("Nos conseils ne remplacent pas l'avis d'un vétérinaire.", "Our advice does not replace a veterinarian's opinion.")}</span></div>
   </div>
@@ -337,7 +337,7 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 <script defer src="{ROOT}assets/site.js?v={ASSET_V}"></script>
 {ld}
 </head>
-<body data-copied="{t("Copié ✓", "Copied ✓")}" data-ga="{GA_ID}" data-consent-text="{t("Nous utilisons Google Analytics pour mesurer, de façon globale, la fréquentation du site. Acceptez-vous ces témoins de statistiques?", "We use Google Analytics to measure overall site traffic. Do you accept these analytics cookies?")}" data-consent-yes="{t("Accepter", "Accept")}" data-consent-no="{t("Refuser", "Decline")}" data-consent-more="{t("En savoir plus", "Learn more")}" data-consent-href="{u("confidentialite", "#temoins") if LANG == "fr" else u("confidentialite", "#cookies")}" data-consent-label="{t("Consentement aux témoins", "Cookie consent")}">
+<body data-copied="{t("Copié ✓", "Copied ✓")}" data-ga="{GA_ID}" data-consent-text="{t("Ce site utilise des cookies Google Analytics pour savoir quels articles vous intéressent et améliorer nos conseils. Aucune publicité, aucune donnée vendue.", "This site uses Google Analytics cookies to learn which articles you enjoy and improve our advice. No ads, no data sold.")}" data-consent-yes="{t("Accepter les cookies", "Accept cookies")}" data-consent-no="{t("Refuser", "Decline")}" data-consent-more="{t("En savoir plus", "Learn more")}" data-consent-href="{u("confidentialite", "#temoins") if LANG == "fr" else u("confidentialite", "#cookies")}" data-consent-label="{t("Consentement aux cookies", "Cookie consent")}">
 {header(active, ROOT + alt)}
 <main id="contenu">
 {body}
