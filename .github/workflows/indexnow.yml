@@ -32,7 +32,8 @@ jobs:
           import json, os, re, subprocess, urllib.request
           site = "https://poiletmuseau.com"
           key = re.search(r'INDEXNOW_KEY = "([0-9a-f]+)"', open("build.py").read()).group(1)
-          sm = urllib.request.urlopen(site + "/sitemap.xml", timeout=30).read().decode()
+          subprocess.run(["python3", "build.py"], check=True, capture_output=True)
+          sm = open("dist/sitemap.xml", encoding="utf-8").read()
           toutes = re.findall(r"<loc>(.*?)</loc>", sm)
           urls = toutes
           if os.environ.get("TOUT") != "true":
@@ -49,7 +50,7 @@ jobs:
           if not urls:
               print("Rien à signaler."); raise SystemExit
           body = json.dumps({"host": "poiletmuseau.com", "key": key, "keyLocation": f"{site}/{key}.txt", "urlList": urls}).encode()
-          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"})
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": "poiletmuseau-indexnow/1.0"})
           r = urllib.request.urlopen(req, timeout=30)
           print(f"IndexNow : {r.status} pour {len(urls)} adresse(s)")
           PY
