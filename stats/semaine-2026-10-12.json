@@ -1,0 +1,27 @@
+{
+  "site": "poiletmuseau.com",
+  "genere_le": "2026-10-22T20:27:41+00:00",
+  "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
+  "semaine": {
+    "debut": "2026-10-12",
+    "fin": "2026-10-18",
+    "visites": 0,
+    "pages_vues": 0,
+    "pages": [],
+    "sources": [],
+    "pays": [],
+    "appareils": [],
+    "par_jour": []
+  },
+  "semaine_precedente": {
+    "debut": "2026-10-05",
+    "fin": "2026-10-11",
+    "visites": 0,
+    "pages_vues": 0,
+    "pages": [],
+    "sources": [],
+    "pays": [],
+    "appareils": [],
+    "par_jour": []
+  }
+}
