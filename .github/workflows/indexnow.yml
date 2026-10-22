@@ -1,0 +1,55 @@
+name: Signaler les nouveautés à Bing (IndexNow)
+
+# Après chaque publication sur main, signale les pages modifiées à IndexNow
+# (Bing, Copilot, ChatGPT Search via Bing, Yandex, Seznam, Naver…).
+# Les pages sont signalées environ 3 minutes après le push, le temps que Cloudflare publie.
+on:
+  push:
+    branches: [main]
+    paths: ["content/**", "build.py", "static/**", "images/articles/**"]
+  workflow_dispatch:
+    inputs:
+      tout:
+        description: "Signaler toutes les pages du plan du site"
+        type: boolean
+        default: true
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Attendre la mise en ligne
+        if: github.event_name == 'push'
+        run: sleep 180
+      - name: Envoyer à IndexNow
+        env:
+          TOUT: ${{ github.event_name == 'workflow_dispatch' && inputs.tout }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess, urllib.request
+          site = "https://poiletmuseau.com"
+          key = re.search(r'INDEXNOW_KEY = "([0-9a-f]+)"', open("build.py").read()).group(1)
+          sm = urllib.request.urlopen(site + "/sitemap.xml", timeout=30).read().decode()
+          toutes = re.findall(r"<loc>(.*?)</loc>", sm)
+          urls = toutes
+          if os.environ.get("TOUT") != "true":
+              diff = subprocess.run(["git", "diff", "--name-only", "HEAD~1", "HEAD"], capture_output=True, text=True).stdout.split()
+              if not any(f.startswith(("build.py", "static/")) for f in diff):
+                  urls = []
+                  for f in diff:
+                      m = re.match(r"content/(en/)?(articles|pages)/([\w-]+)\.html$", f)
+                      if m:
+                          enfant = f"/{'en/' if m.group(1) else ''}{'articles/' if m.group(2) == 'articles' else ''}{m.group(3)}"
+                          urls += [u for u in toutes if u.endswith(enfant)]
+                  urls += [site + "/", site + "/en/", site + "/conseils", site + "/en/advice"]
+          urls = sorted(set(u for u in urls if u in toutes or u.rstrip("/") in [t.rstrip("/") for t in toutes]))
+          if not urls:
+              print("Rien à signaler."); raise SystemExit
+          body = json.dumps({"host": "poiletmuseau.com", "key": key, "keyLocation": f"{site}/{key}.txt", "urlList": urls}).encode()
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"})
+          r = urllib.request.urlopen(req, timeout=30)
+          print(f"IndexNow : {r.status} pour {len(urls)} adresse(s)")
+          PY

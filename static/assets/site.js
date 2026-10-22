@@ -45,6 +45,20 @@
       emplacement:a.closest(".amz-box")?"encadre_produits":a.classList.contains("amz-cta")?"bouton":"texte",transport_type:"beacon"});
   },true);
 
+  /* Partage natif (téléphone) */
+  document.addEventListener("DOMContentLoaded",function(){
+    if(!navigator.share)return;
+    document.querySelectorAll("[data-share]").forEach(function(btn){
+      btn.hidden=false;
+      btn.addEventListener("click",function(){navigator.share({title:btn.dataset.title||document.title,url:location.href}).catch(function(){});
+        if(typeof window.gtag==="function")gtag("event","share",{method:"natif"});});
+    });
+  });
+  document.addEventListener("click",function(ev){
+    var a=ev.target.closest&&ev.target.closest(".share-bar a.sh");
+    if(a&&typeof window.gtag==="function")gtag("event","share",{method:a.textContent.trim(),transport_type:"beacon"});
+  },true);
+
   /* Image introuvable ou bloquée : on garde la mise en page avec un repli */
   document.addEventListener("error",function(ev){
     var im=ev.target;if(!im||im.tagName!=="IMG")return;

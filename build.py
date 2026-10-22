@@ -11,6 +11,7 @@ Chaque fichier commence par un en-tête <!-- clé: valeur --> suivi du texte en 
 Un article anglais indique l'article français qu'il traduit avec « traduction_de: ».
 Voir README.md pour ajouter un article."""
 import hashlib
+import urllib.parse
 import json, re, sys, html, os, datetime, shutil, unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -19,6 +20,7 @@ LOCAL = "--local" in sys.argv          # aperçu hors ligne : liens en .html
 OUT = os.path.abspath(ARGS[0]) if ARGS else os.path.join(HERE, "dist")
 CONTENT = os.path.join(HERE, "content")
 SITE = "https://poiletmuseau.com"
+INDEXNOW_KEY = "335dae8f3c5381b7c2a8cc06ef6f104d"  # clé publique IndexNow (Bing, Yandex, Seznam…), servie à /<clé>.txt
 e = html.escape
 
 # ---------------------------------------------------------------- langue courante
@@ -352,7 +354,13 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
     dest = os.path.join(OUT, path)
     os.makedirs(os.path.dirname(dest), exist_ok=True)
     open(dest, "w", encoding="utf-8").write(doc)
-    PAGES.append(dict(loc=canon(path), fr=canon(fr_path), en=canon(en_path), lastmod=modified or published or TODAY))
+    imgs = []
+    for m_ in re.finditer(r'<img [^>]*?src="[^"]*?images/articles/(?:480/|720/|1080/)?([^"/]+?\.webp)"[^>]*>', doc):
+        al = re.search(r'alt="([^"]*)"', m_.group(0))
+        u_ = f"{SITE}/images/articles/{m_.group(1)}"
+        if u_ not in [x[0] for x in imgs] and len(imgs) < 20:
+            imgs.append((u_, al.group(1) if al else ""))
+    PAGES.append(dict(loc=canon(path), fr=canon(fr_path), en=canon(en_path), lastmod=modified or published or TODAY, imgs=imgs))
 
 def pretty_links(doc):
     """Liens internes sans « .html » (adresses canoniques servies par Cloudflare)."""
@@ -964,6 +972,16 @@ def build_article(i, a, A):
         prod_box = (f'<section class="amz-box" id="{t("produits-mentionnes", "products-mentioned")}" aria-labelledby="amz-h"><h2 id="amz-h">{t("Les produits mentionnés dans cet article", "Products mentioned in this article")}</h2>'
                     f'<p class="meta">{t("Liens vers Amazon.ca. Les prix et la disponibilité sont affichés sur Amazon.", "Links go to Amazon.ca. Prices and availability are shown on Amazon.")}</p><ul>{rows}</ul></section>')
         aside = aside.replace("</aside>", f'<a class="amz-jump" href="#{t("produits-mentionnes", "products-mentioned")}"><span aria-hidden="true">🛒</span> {t("Produits mentionnés", "Products mentioned")} ({len(prods)})</a></aside>')
+    pin_rel = f'images/pins/{"en-" if LANG == "en" else ""}{a["h"]}.jpg'
+    pin_abs = f"{SITE}/{pin_rel}" if os.path.exists(os.path.join(HERE, pin_rel)) else abs_img(a)
+    url_abs = canon(path)
+    q = urllib.parse.quote
+    share = (f'<div class="share-bar" aria-label="{t("Partager cet article", "Share this article")}"><span class="share-t">{t("Cet article peut aider quelqu&#x27;un? Partagez-le :", "Could this help someone? Share it:")}</span>'
+             f'<a class="sh sh-pin" href="https://www.pinterest.com/pin/create/button/?url={q(url_abs, safe="")}&amp;media={q(pin_abs, safe="")}&amp;description={q(a["t"], safe="")}" target="_blank" rel="noopener">{t("Épingler", "Pin it")}</a>'
+             f'<a class="sh sh-fb" href="https://www.facebook.com/sharer/sharer.php?u={q(url_abs, safe="")}" target="_blank" rel="noopener">Facebook</a>'
+             f'<a class="sh" href="mailto:?subject={q(a["t"], safe="")}&amp;body={q(a["t"] + " — " + url_abs, safe="")}">{t("Courriel", "Email")}</a>'
+             f'<button class="sh" type="button" data-share data-title="{e(a["t"])}" hidden>{t("Partager…", "Share…")}</button>'
+             f'<button class="sh" type="button" data-copy="url">{t("Copier le lien", "Copy link")}</button></div>')
     pager = f'<nav class="pager" aria-label="{t("Articles précédent et suivant", "Previous and next articles")}">'
     pager += f'<a href="{older["h"]}.html"><small>{t("← Article précédent", "← Previous article")}</small><b>{e(older["t"])}</b></a>' if older else "<span></span>"
     pager += f'<a class="next" href="{newer["h"]}.html"><small>{t("Article suivant →", "Next article →")}</small><b>{e(newer["t"])}</b></a>' if newer else ""
@@ -974,11 +992,12 @@ def build_article(i, a, A):
 <article>
 <div class="wrap art-hero"><div class="art-head">{crumbs(items)}
   <h1>{e(a["t"])}</h1><p class="lead">{e(a["s"])}</p><div class="art-meta">{meta}</div>{aff_note}</div>
-  <div class="art-cover"><img fetchpriority="high" src="{img(a, 1400)}" alt="{e(a["alt"])}" width="1400" height="700"></div>
+  <div class="art-cover"><img fetchpriority="high" data-pin-media="{pin_abs}" data-pin-description="{e(a["t"])}" src="{img(a, 1400)}" alt="{e(a["alt"])}" width="1400" height="700"></div>
 </div>
 <div class="wrap art-layout">
   <div style="min-width:0"><div class="prose">{b}</div>
     {prod_box}
+    {share}
     <div class="vet-note"><span aria-hidden="true">🩺</span><span>{t("Cet article est informatif et ne remplace pas l'avis d'un vétérinaire. En cas de doute sur la santé de votre animal, consultez un professionnel.",
                                                                      "This article is for information only and does not replace a veterinarian's advice. If you have any doubt about your pet's health, consult a professional.")}</span></div>
     {pager}
@@ -1063,13 +1082,16 @@ for LANG in ("fr", "en"):
 build_404()
 
 # Plan du site bilingue (hreflang) — https://developers.google.com/search/docs/specialty/international/localized-versions
-sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">']
 for p_ in PAGES:
     sm.append(f"  <url><loc>{p_['loc']}</loc><lastmod>{p_['lastmod']}</lastmod>"
               f'<xhtml:link rel="alternate" hreflang="fr-CA" href="{p_["fr"]}"/><xhtml:link rel="alternate" hreflang="en-CA" href="{p_["en"]}"/>'
-              f'<xhtml:link rel="alternate" hreflang="x-default" href="{p_["fr"]}"/></url>')
+              f'<xhtml:link rel="alternate" hreflang="x-default" href="{p_["fr"]}"/>'
+              + "".join(f"<image:image><image:loc>{iu}</image:loc></image:image>" for iu, _ in p_.get("imgs", []))
+              + "</url>")
 sm.append("</urlset>")
 open(os.path.join(OUT, "sitemap.xml"), "w", encoding="utf-8").write("\n".join(sm) + "\n")
+open(os.path.join(OUT, f"{INDEXNOW_KEY}.txt"), "w").write(INDEXNOW_KEY)
 
 # Flux RSS (découverte rapide des nouveaux articles par les moteurs et agrégateurs)
 def rss(lang, items):
