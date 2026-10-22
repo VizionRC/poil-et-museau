@@ -10,6 +10,7 @@ Anglais (sous /en/)     :  content/en/articles/<slug>.html     →  /en/articles
 Chaque fichier commence par un en-tête <!-- clé: valeur --> suivi du texte en HTML.
 Un article anglais indique l'article français qu'il traduit avec « traduction_de: ».
 Voir README.md pour ajouter un article."""
+import hashlib
 import json, re, sys, html, os, datetime, shutil, unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -175,7 +176,7 @@ def NAV():
 # ---------------------------------------------------------------- gabarit commun
 def logo():
     return (f'<a href="{u("home")}" class="logo" aria-label="{t("Poil &amp; Museau, accueil", "Poil &amp; Museau, home")}">'
-            f'<img src="{ROOT}images/logo-illustration.webp" alt="" width="72" height="46">'
+            f'<img src="{ROOT}images/logo-illustration-120.webp" srcset="{ROOT}images/logo-illustration-120.webp 1x, {ROOT}images/logo-illustration-240.webp 2x" alt="" width="72" height="46">'
             '<span class="wm"><span class="w1">Poil</span><span class="amp">&amp;</span><span class="w2">Museau</span></span></a>')
 
 def header(active, alt_href):
@@ -190,7 +191,7 @@ def header(active, alt_href):
     {logo()}
     <nav class="links" aria-label="{t("Navigation principale", "Main navigation")}">{links}</nav>
     <div class="nav-right">
-      <a class="lang-btn" href="{alt_href}" hreflang="{other_lang}" lang="{other_lang}" title="{other_name}" aria-label="{other_name}">{other}</a>
+      <a class="lang-btn" href="{alt_href}" hreflang="{other_lang}" lang="{other_lang}" title="{other_name}" aria-label="{other} : {other_name}">{other}</a>
       <button class="icon-btn" id="theme" type="button" aria-label="{t("Changer le thème clair ou sombre", "Switch light or dark theme")}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
       <button class="icon-btn burger" id="burger" type="button" aria-label="{t("Ouvrir le menu", "Open menu")}" aria-expanded="false" aria-controls="mm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
     </div>
@@ -224,6 +225,66 @@ def footer():
   </div>
 </footer>
 <button class="icon-btn" id="top" type="button" aria-label="{t("Retour en haut", "Back to top")}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>'''
+
+_CSS = None
+def inline_css():
+    """Feuille de style intégrée dans la page : aucune requête bloquante au premier affichage."""
+    global _CSS
+    if _CSS is None:
+        c = open(os.path.join(HERE, "static", "assets", "style.css"), encoding="utf-8").read()
+        c = re.sub(r"/\*.*?\*/", "", c, flags=re.S)
+        c = re.sub(r"\s*\n\s*", "", c)
+        _CSS = c
+    return _CSS.replace("../fonts/", ROOT + "fonts/")
+
+ASSET_V = hashlib.md5(open(os.path.join(HERE, "static", "assets", "site.js"), "rb").read()).hexdigest()[:8]
+
+_DIMS = {}
+def _dims(rel):
+    if rel not in _DIMS:
+        try:
+            from PIL import Image
+            with Image.open(os.path.join(HERE, rel)) as im:
+                _DIMS[rel] = im.size
+        except Exception:
+            _DIMS[rel] = None
+    return _DIMS[rel]
+
+def responsive_imgs(doc):
+    """Ajoute width/height réels, srcset (720, 1080, original) et sizes aux photos d'articles."""
+    def fix(m):
+        tag = m.group(0)
+        src = re.search(r'src="([^"]+)"', tag).group(1)
+        mm = re.search(r'(images/articles/)(?:480/|720/|1080/)?([^"/?]+\.webp)$', src)
+        if not mm:
+            return tag
+        prefix = src[:src.index("images/articles/")]
+        name = mm.group(2)
+        full = "images/articles/" + name
+        dims = _dims(full)
+        if not dims:
+            return tag
+        W, H = dims
+        cands = []
+        for d, w in (("480/", 480), ("720/", 720), ("1080/", 1080)):
+            if w < W and os.path.exists(os.path.join(HERE, "images/articles", d, name)):
+                cands.append(f"{prefix}images/articles/{d}{name} {w}w")
+        cands.append(f"{prefix}{full} {W}w")
+        if 'srcset=' not in tag and len(cands) > 1 and 'sizes=' in tag:
+            tag = tag.replace("<img ", f'<img srcset="{", ".join(cands)}" ', 1)
+        elif 'srcset=' not in tag and len(cands) > 1:
+            sizes = "(max-width: 767px) calc(100vw - 32px), (max-width: 1199px) 60vw, 720px"
+            if 'class="art-cover"' in doc[max(0, m.start()-60):m.start()] or "1400" in tag:
+                sizes = "(max-width: 767px) calc(100vw - 32px), (max-width: 1199px) 92vw, 1100px"
+            tag = tag.replace("<img ", f'<img srcset="{", ".join(cands)}" sizes="{sizes}" ', 1)
+        if " width=" not in tag:
+            tag = tag.replace("<img ", f'<img width="{W}" height="{H}" ', 1)
+        else:
+            tag = re.sub(r'width="\d+" height="\d+"', f'width="{W}" height="{H}"', tag)
+        if "decoding=" not in tag:
+            tag = tag.replace("<img ", '<img decoding="async" ', 1)
+        return tag
+    return re.sub(r"<img [^>]*>", fix, doc)
 
 PAGES = []
 TODAY = datetime.date.today().isoformat()
@@ -266,11 +327,11 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 <link rel="alternate" type="application/rss+xml" title="{t("Poil &amp; Museau : derniers articles", "Poil &amp; Museau: latest articles")}" href="{ROOT}{t("feed.xml", "en/feed.xml")}">
 <link rel="icon" type="image/png" href="{ROOT}images/favicon.png">
 <link rel="apple-touch-icon" href="{ROOT}images/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..800,50..100&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{ROOT}assets/style.css">
-<script src="{ROOT}assets/site.js"></script>
+<link rel="preload" href="{ROOT}fonts/plus-jakarta-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{ROOT}fonts/fraunces-latin-soft-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>(function(r){{r.classList.add("js");try{{var t=localStorage.getItem("pm-theme");if(t)r.dataset.theme=t}}catch(e){{}}}})(document.documentElement)</script>
+<style>{inline_css()}</style>
+<script defer src="{ROOT}assets/site.js?v={ASSET_V}"></script>
 {ld}
 </head>
 <body data-copied="{t("Copié ✓", "Copied ✓")}">
@@ -282,6 +343,7 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 </body>
 </html>
 '''
+    doc = responsive_imgs(doc)
     if not LOCAL:
         doc = pretty_links(doc)
     dest = os.path.join(OUT, path)
@@ -304,7 +366,7 @@ def pretty_links(doc):
 
 def card(a):
     return f'''<a class="card" href="{art_url(a)}" data-sp="{a["sp"]}" data-cat="{a["cat"]}">
-  <div class="thumb"><img loading="lazy" src="{img(a)}" alt="{e(a["alt"])}" width="720" height="495"><span class="tag t-{a["sp"]}">{spl(a["sp"])}</span></div>
+  <div class="thumb"><img loading="lazy" sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1199px) 46vw, 380px" src="{img(a)}" alt="{e(a["alt"])}" width="720" height="495"><span class="tag t-{a["sp"]}">{spl(a["sp"])}</span></div>
   <div class="cb"><span class="cat-l">{cat(a["cat"])}</span><h3>{e(a["t"])}</h3><p>{e(a["s"])}</p>
   <div class="foot"><span>{fmt(a["d"])}</span><span class="read">{t("Lire →", "Read →")}</span></div></div></a>'''
 
@@ -443,7 +505,7 @@ def build_home():
     facts_html = ""
     for em, h, fr, en in FACTS:
         q, ans = fr if LANG == "fr" else en
-        facts_html += (f'<div class="flip reveal" tabindex="0" role="button" aria-label="{t("Retourner la carte", "Flip the card")} : {e(q)}"><div class="in"><div class="face front"><span class="e" aria-hidden="true">{em}</span>'
+        facts_html += (f'<div class="flip reveal" tabindex="0" role="button"><div class="in"><div class="face front"><span class="e" aria-hidden="true">{em}</span>'
                        f'<span class="q">{e(q)}</span><small>{t("Touchez pour retourner ↻", "Tap to flip ↻")}</small></div><div class="face back"><p>{e(ans)}</p>'
                        f'<a href="{art_url(art(h))}">{t("Lire l&#x27;article complet →", "Read the full article →")}</a></div></div></div>')
     p1, p2, p3 = art("pourquoi-chien-penche-tete"), art("pourquoi-chat-fait-des-pattes"), art("choisir-nourriture-chien")
@@ -473,9 +535,9 @@ def build_home():
       </div>
     </div>
     <div class="collage" aria-hidden="true">
-      <div class="polaroid p1"><div class="imgbox"><img src="{img(p1, 700)}" alt=""></div><div class="cap">{t("Pourquoi penche-t-il la tête?", "Why the head tilt?")}</div></div>
-      <div class="polaroid p2"><div class="imgbox"><img src="{img(p2, 700)}" alt=""></div><div class="cap">{t("Le mystère du pétrissage", "The kneading mystery")}</div></div>
-      <div class="polaroid p3"><div class="imgbox"><img src="{img(p3, 700)}" alt=""></div><div class="cap">{t("Bien lire l'étiquette", "Reading the label")}</div></div>
+      <div class="polaroid p1"><div class="imgbox"><img sizes="(max-width: 767px) 45vw, 300px" src="{img(p1, 700)}" alt=""></div><div class="cap">{t("Pourquoi penche-t-il la tête?", "Why the head tilt?")}</div></div>
+      <div class="polaroid p2"><div class="imgbox"><img sizes="(max-width: 767px) 45vw, 300px" src="{img(p2, 700)}" alt=""></div><div class="cap">{t("Le mystère du pétrissage", "The kneading mystery")}</div></div>
+      <div class="polaroid p3"><div class="imgbox"><img sizes="(max-width: 767px) 45vw, 300px" src="{img(p3, 700)}" alt=""></div><div class="cap">{t("Bien lire l'étiquette", "Reading the label")}</div></div>
       <div class="sticker"><span>{t("Vérifié.<br>Expliqué.<br>Choisi 🐾", "Checked.<br>Explained.<br>Chosen 🐾")}</span></div>
     </div>
   </div>
@@ -488,17 +550,17 @@ def build_home():
   <div class="species">
     <a class="sp dog reveal" href="{u("chiens")}"><div><h3>{t("Chiens", "Dogs")}</h3><p>{t("Promenades, gâteries, bains, harnais et petits comportements attachants.", "Walks, treats, baths, harnesses and endearing little habits.")}</p></div>
       <div class="pills"><span>{cat("sante")}</span><span>{cat("alimentation")}</span><span>{cat("comportement")}</span><span>{cat("toilettage")}</span></div>
-      <div class="arrow">{ARROW}</div><img src="{img(dog_img, 600)}" alt="{e(dog_img["alt"])}" loading="lazy"></a>
+      <div class="arrow">{ARROW}</div><img sizes="(max-width: 767px) 60vw, 360px" src="{img(dog_img, 600)}" alt="{e(dog_img["alt"])}" loading="lazy"></a>
     <a class="sp cat reveal" href="{u("chats")}"><div><h3>{t("Chats", "Cats")}</h3><p>{t("Hydratation, litière, soins dentaires et langage félin enfin décodé.", "Hydration, litter, dental care and feline body language, finally decoded.")}</p></div>
       <div class="pills"><span>{cat("sante")}</span><span>{cat("produits")}</span><span>{cat("comportement")}</span></div>
-      <div class="arrow">{ARROW}</div><img src="{img(cat_img, 600)}" alt="{e(cat_img["alt"])}" loading="lazy"></a>
+      <div class="arrow">{ARROW}</div><img sizes="(max-width: 767px) 60vw, 360px" src="{img(cat_img, 600)}" alt="{e(cat_img["alt"])}" loading="lazy"></a>
   </div>
 </div></section>
 
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Tout frais", "Just published")}</span><h2 class="sec">{t("Le dernier <em>article</em>", "The latest <em>article</em>")}</h2></div></div>
   <a class="featured reveal" href="{art_url(f)}">
-    <div class="img"><img src="{img(f, 1200)}" alt="{e(f["alt"])}"></div>
+    <div class="img"><img sizes="(max-width: 767px) calc(100vw - 32px), 640px" src="{img(f, 1200)}" alt="{e(f["alt"])}"></div>
     <div class="body"><span class="tag t-{f["sp"]}" style="align-self:flex-start">{spl(f["sp"])} · {cat(f["cat"])}</span>
       <h3>{e(f["t"])}</h3><p class="lead" style="font-size:1.02rem">{e(f["s"])}</p>
       <span class="meta">{fmt(f["d"])}</span><span class="btn btn-primary" style="align-self:flex-start">{t("Lire l'article", "Read the article")} {ARROW}</span></div>
@@ -558,6 +620,7 @@ def build_species(sp):
 </div></section>
 <section class="block" id="liste"><div class="wrap">
   {list_tools(lst, False)}
+  <h2 class="sr-only">{t("Articles", "Articles")}</h2>
   <div class="grid" data-list>{"".join(card(a) for a in lst)}</div>
   {empty_msg()}
 </div></section>
@@ -586,6 +649,7 @@ def build_conseils():
   <p class="lead">{t(f"{len(A)} articles pour chiens et chats. Filtrez par animal ou par sujet, ou cherchez un mot.", f"{len(A)} articles for dogs and cats. Filter by animal or topic, or search for a word.")}</p></div></div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
   {list_tools(A, True)}
+  <h2 class="sr-only">{t("Tous les articles", "All articles")}</h2>
   <div class="grid" data-list>{"".join(card(a) for a in A)}</div>
   {empty_msg()}
 </div></section>
@@ -877,7 +941,7 @@ def build_article(i, a, A):
 <article>
 <div class="wrap art-hero"><div class="art-head">{crumbs(items)}
   <h1>{e(a["t"])}</h1><p class="lead">{e(a["s"])}</p><div class="art-meta">{meta}</div></div>
-  <div class="art-cover"><img src="{img(a, 1400)}" alt="{e(a["alt"])}" width="1400" height="700"></div>
+  <div class="art-cover"><img fetchpriority="high" src="{img(a, 1400)}" alt="{e(a["alt"])}" width="1400" height="700"></div>
 </div>
 <div class="wrap art-layout">
   <div style="min-width:0"><div class="prose">{b}</div>

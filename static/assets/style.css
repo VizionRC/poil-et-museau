@@ -1,11 +1,14 @@
+@font-face{font-family:"Fraunces";font-style:normal;font-display:swap;font-weight:100 900;src:url(../fonts/fraunces-latin-soft-normal.woff2) format("woff2-variations"),url(../fonts/fraunces-latin-soft-normal.woff2) format("woff2")}
+@font-face{font-family:"Fraunces";font-style:italic;font-display:swap;font-weight:100 900;src:url(../fonts/fraunces-latin-soft-italic.woff2) format("woff2-variations"),url(../fonts/fraunces-latin-soft-italic.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-display:swap;font-weight:200 800;src:url(../fonts/plus-jakarta-sans-latin-wght-normal.woff2) format("woff2-variations"),url(../fonts/plus-jakarta-sans-latin-wght-normal.woff2) format("woff2")}
 /* Poil & Museau — feuille de style commune
    Concept : carnet de terrain chaleureux, collages photo inclinés, pastilles colorées par espèce.
    Chien = beurre (jaune), Chat = menthe (sky), accent = corail. */
 :root{
   --bg:#FBF5EC; --bg-2:#F4EADB; --card:#FFFFFF; --ink:#2B1E14; --ink-2:#5E5044; --line:#E6DAC6;
-  --forest:#4A5A2E; --coral:#B5651D; --coral-ink:#7A3A12; --butter:#EBB54F; --sky:#BCC79F; --blush:#F3B9A3;
+  --forest:#4A5A2E; --coral:#A65815; --coral-ink:#7A3A12; --butter:#EBB54F; --sky:#BCC79F; --blush:#F3B9A3;
   --on-color:#2B1E14;
-  --brand-brown:#6B3410; --brand-gold:#D08C3C; --brand-sage:#667548;
+  --brand-brown:#6B3410; --brand-gold:#D08C3C; --brand-sage:#4F5C35;
   --shadow:0 20px 50px -20px rgba(90,58,24,.22);
   --r:22px;
   --f-display:"Fraunces",Georgia,"Times New Roman",serif;
@@ -28,7 +31,7 @@
 html{scroll-behavior:smooth;scroll-padding-top:96px}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.6;overflow-x:hidden;transition:background .4s,color .4s}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:3px solid var(--coral);outline-offset:3px;border-radius:6px}
 h1,h2,h3,h4{text-wrap:balance}
@@ -123,7 +126,7 @@ section.block{padding-block:80px}
 .hero h1.display{margin-block:22px}
 .swap{display:inline-block;color:var(--coral);font-style:italic}
 .swap span{display:inline-block;animation:wordIn .6s cubic-bezier(.2,1.4,.4,1) both}
-@keyframes wordIn{from{opacity:0;transform:translateY(40%) rotate(-6deg)}to{opacity:1;transform:none}}
+@keyframes wordIn{from{transform:translateY(40%) rotate(-6deg)}to{transform:none}}
 .underline{position:relative}
 .underline svg{position:absolute;left:0;bottom:-6px;width:100%;height:16px}
 .underline path{stroke:var(--butter);stroke-width:7;fill:none;stroke-linecap:round;stroke-dasharray:400;stroke-dashoffset:400;animation:draw 1.2s .6s forwards}
@@ -196,7 +199,7 @@ section.block{padding-block:80px}
 .chip{border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:8px 16px;border-radius:999px;font-weight:600;font-size:.88rem;cursor:pointer;font-family:inherit;transition:all .2s}
 .chip:hover{border-color:var(--ink)}
 .chip.on{background:var(--coral);border-color:var(--coral);color:#fff}
-.chip .n{opacity:.6;font-weight:700;margin-left:4px;font-variant-numeric:tabular-nums}
+.chip .n{opacity:1;font-weight:700;margin-left:4px;font-variant-numeric:tabular-nums}
 .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:0 18px;height:48px;min-width:0;width:100%;max-width:360px}
 .search input{border:0;background:none;outline:none;font-family:inherit;font-size:.95rem;color:var(--ink);width:100%;min-width:0}
 .search:focus-within{border-color:var(--coral)}
@@ -221,7 +224,7 @@ section.block{padding-block:80px}
 .count-line{color:var(--ink-2);font-weight:600;font-size:.9rem;margin-bottom:18px}
 
 /* Outil aliments */
-.checker{background:var(--forest);color:#F4EDE1;border-radius:36px;padding:48px 24px;position:relative;overflow:hidden}
+.checker{background:#3B4923;color:#F4EDE1;border-radius:36px;padding:48px 24px;position:relative;overflow:hidden}
 :root[data-theme="dark"] .checker{background:#2E3820}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .checker{background:#2E3820}}
 @media(min-width:768px){.checker{padding:64px}}
@@ -239,7 +242,7 @@ section.block{padding-block:80px}
 .verdict .big{font-size:4rem;line-height:1}
 .verdict h3{font-family:var(--f-display);font-size:2rem;letter-spacing:-.02em}
 .verdict .badge{align-self:flex-start;padding:6px 14px;border-radius:999px;font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
-.bad{background:#F9D3C6;color:#A3341A}.ok{background:#DDE5C8;color:#4A5A2E}.care{background:#FBE7B5;color:#7A5A0A}
+.bad{background:#F9D3C6;color:#8E2C14}.ok{background:#DDE5C8;color:#4A5A2E}.care{background:#FBE7B5;color:#7A5A0A}
 .verdict small{color:#5E5044}
 .verdict a{color:#7A3A12;font-weight:700}
 .bump{animation:bump .45s cubic-bezier(.3,1.6,.5,1)}
@@ -294,7 +297,7 @@ section.block{padding-block:80px}
 .news input:focus{box-shadow:0 0 0 4px rgba(29,43,38,.15)}
 .news .btn{background:#2B1E14;color:#fff;justify-content:center;height:58px}
 .news .ok-msg{font-weight:700}
-.news small{font-size:.8rem;opacity:.8}
+.news small{font-size:.8rem;color:#3E3329}
 .perks{display:flex;flex-direction:column;gap:10px;margin-top:20px;font-weight:600}
 
 /* Page article */
@@ -325,7 +328,7 @@ section.block{padding-block:80px}
 .prose ul,.prose ol{padding-left:1.4em;display:flex;flex-direction:column;gap:.4em}
 .prose li::marker{color:var(--coral)}
 .prose strong{font-weight:700}
-.prose img{border-radius:20px;margin-inline:auto}
+.prose img{border-radius:20px;margin-inline:auto;height:auto}
 .prose .figure{text-align:center}
 .prose table{width:100%;border-collapse:collapse;font-size:.95rem}
 .prose .tbl{overflow-x:auto;border:1px solid var(--line);border-radius:18px;background:var(--card)}
@@ -381,14 +384,19 @@ footer.site ul a:hover{color:var(--coral-ink)}
 .bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:50px;padding-top:24px;border-top:1px solid var(--line);color:var(--ink-2);font-size:.85rem}
 
 /* Apparition au défilement : visible sans JS, animée seulement si JS actif */
-.js .reveal{opacity:0;transform:translateY(32px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
-.js .reveal.in{opacity:1;transform:none}
+.reveal{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.js-reveal .reveal:not(.in){opacity:0;transform:translateY(32px)}
+.reveal.in{opacity:1;transform:none}
 #top{position:fixed;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;opacity:0;pointer-events:none;transition:all .3s;background:var(--coral);color:#fff;border:0}
 #top.show{opacity:1;pointer-events:auto}
-@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.js .reveal{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}.js-reveal .reveal:not(.in){opacity:1;transform:none}}
 
 /* Repli lorsqu'une photo ne peut pas être chargée */
 .img-off{position:relative;background:radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--butter) 45%,var(--bg-2)),var(--bg-2) 70%)}
 .img-off img{visibility:hidden}
 .img-off::after{content:"🐾";position:absolute;inset:0;display:grid;place-items:center;font-size:2.6rem;opacity:.4}
 .card[data-sp="chat"] .img-off,.page-hero.cat .img-off{background:radial-gradient(circle at 30% 30%,color-mix(in srgb,#BCC79F 60%,var(--bg-2)),var(--bg-2) 70%)}
+
+/* Animations décoratives en pause jusqu'à la première interaction (vitesse d'affichage) */
+html:not(.live) .blob,html:not(.live) .sticker,html:not(.live) .sticker span,html:not(.live) .track,html:not(.live) .dot{animation-play-state:paused}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

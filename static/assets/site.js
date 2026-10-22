@@ -1,8 +1,9 @@
 /* Poil & Museau — comportements communs à toutes les pages */
 (function(){
   var root=document.documentElement;
-  root.classList.add("js");
-  try{var t=localStorage.getItem("pm-theme");if(t)root.dataset.theme=t;}catch(e){}
+  /* Animations décoratives en continu : lancées à la première interaction seulement */
+  function live(){root.classList.add("live");["pointerdown","keydown","touchstart","wheel","mousemove"].forEach(function(ev){removeEventListener(ev,live);});}
+  ["pointerdown","keydown","touchstart","wheel","mousemove"].forEach(function(ev){addEventListener(ev,live,{passive:true,once:true});});
 
   /* Image introuvable ou bloquée : on garde la mise en page avec un repli */
   document.addEventListener("error",function(ev){
@@ -36,15 +37,18 @@
       if(top)top.classList.toggle("show",y>800);
       if(prog)prog.style.width=(h>0?y/h*100:0)+"%";
     }
-    addEventListener("scroll",onScroll,{passive:true});onScroll();
+    addEventListener("scroll",onScroll,{passive:true});requestAnimationFrame(onScroll);
     if(top)top.addEventListener("click",function(){scrollTo({top:0,behavior:"smooth"});});
 
     /* Apparition au défilement */
     var els=document.querySelectorAll(".reveal");
     if("IntersectionObserver" in window){
       var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{threshold:.08});
-      els.forEach(function(el){io.observe(el);});
-      setTimeout(function(){els.forEach(function(el){el.classList.add("in");});},2500);
+      /* Ce qui est déjà à l'écran reste visible dès le premier affichage */
+      var vh=innerHeight;
+      els.forEach(function(el){if(el.getBoundingClientRect().top<vh)el.classList.add("in");else io.observe(el);});
+      root.classList.add("js-reveal");
+      setTimeout(function(){els.forEach(function(el){if(!el.classList.contains("in")){el.style.transition="none";el.classList.add("in");}});},2500);
     }else els.forEach(function(el){el.classList.add("in");});
 
     /* Compteurs */
