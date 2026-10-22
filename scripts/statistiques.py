@@ -73,10 +73,16 @@ def main():
     if not TOKEN:
         sys.exit("CF_API_TOKEN manquant : ajoute-le dans GitHub > Settings > Secrets and variables > Actions.")
     # Semaine complète précédente, du lundi 00:00 au lundi 00:00 (UTC)
-    auj = dt.datetime.now(dt.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
-    lundi = auj - dt.timedelta(days=auj.weekday())
-    sem = periode(lundi - dt.timedelta(days=7), lundi)
-    prec = periode(lundi - dt.timedelta(days=14), lundi - dt.timedelta(days=7))
+    if os.environ.get("PERIODE") == "7-derniers-jours":
+        # Mode test : les 7 derniers jours jusqu'à maintenant
+        fin = dt.datetime.now(dt.timezone.utc).replace(minute=0, second=0, microsecond=0) + dt.timedelta(hours=1)
+        sem = periode(fin - dt.timedelta(days=7), fin)
+        prec = periode(fin - dt.timedelta(days=14), fin - dt.timedelta(days=7))
+    else:
+        auj = dt.datetime.now(dt.timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+        lundi = auj - dt.timedelta(days=auj.weekday())
+        sem = periode(lundi - dt.timedelta(days=7), lundi)
+        prec = periode(lundi - dt.timedelta(days=14), lundi - dt.timedelta(days=7))
     out = {"site": "poiletmuseau.com", "genere_le": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
            "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
            "semaine": sem, "semaine_precedente": prec}
