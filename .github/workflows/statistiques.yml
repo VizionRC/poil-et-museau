@@ -1,0 +1,40 @@
+name: Statistiques hebdomadaires
+
+# Chaque lundi vers 7 h (heure de l'Est) : lit Cloudflare Web Analytics et dépose
+# stats/derniere-semaine.json dans la branche « statistiques ». Le courriel est
+# rédigé et envoyé ensuite par une tâche planifiée Claude.
+on:
+  schedule:
+    - cron: "7 11 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lire les statistiques Cloudflare
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+        run: python3 scripts/statistiques.py
+      - name: Déposer dans la branche « statistiques »
+        run: |
+          cp stats/derniere-semaine.json /tmp/derniere-semaine.json
+          git config user.name "poil-et-museau-stats"
+          git config user.email "actions@users.noreply.github.com"
+          git fetch origin statistiques || true
+          if git rev-parse --verify origin/statistiques >/dev/null 2>&1; then
+            git checkout -B statistiques origin/statistiques
+          else
+            git checkout --orphan statistiques
+            git rm -rf . >/dev/null
+          fi
+          mkdir -p stats
+          cp /tmp/derniere-semaine.json stats/derniere-semaine.json
+          cp /tmp/derniere-semaine.json "stats/semaine-$(python3 -c "import json;print(json.load(open('/tmp/derniere-semaine.json'))['semaine']['debut'])").json"
+          git add stats
+          git commit -m "Statistiques de la semaine" || echo "Aucun changement"
+          git push origin statistiques
