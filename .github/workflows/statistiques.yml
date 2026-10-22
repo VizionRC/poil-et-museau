@@ -30,6 +30,7 @@ jobs:
       - name: Déposer dans la branche « statistiques »
         run: |
           cp stats/derniere-semaine.json /tmp/derniere-semaine.json
+          rm -rf stats
           git config user.name "poil-et-museau-stats"
           git config user.email "actions@users.noreply.github.com"
           git fetch origin statistiques || true
