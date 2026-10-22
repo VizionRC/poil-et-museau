@@ -1,0 +1,128 @@
+{
+  "site": "poiletmuseau.com",
+  "genere_le": "2026-10-22T20:30:38+00:00",
+  "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
+  "semaine": {
+    "debut": "2026-10-15",
+    "fin": "2026-10-21",
+    "visites": 21,
+    "pages_vues": 86,
+    "pages": [
+      {
+        "page": "/",
+        "vues": 41,
+        "visites": 17
+      },
+      {
+        "page": "/chiens",
+        "vues": 4,
+        "visites": 0
+      },
+      {
+        "page": "/chats",
+        "vues": 4,
+        "visites": 1
+      },
+      {
+        "page": "/articles/fontaine-eau-chat-plastique-ceramique-acier-inoxydable",
+        "vues": 3,
+        "visites": 0
+      },
+      {
+        "page": "/conseils",
+        "vues": 3,
+        "visites": 1
+      },
+      {
+        "page": "/contact",
+        "vues": 3,
+        "visites": 0
+      },
+      {
+        "page": "/divulgation",
+        "vues": 3,
+        "visites": 0
+      },
+      {
+        "page": "/en/",
+        "vues": 3,
+        "visites": 1
+      },
+      {
+        "page": "/recommandations",
+        "vues": 3,
+        "visites": 0
+      },
+      {
+        "page": "/articles/que-faire-si-mon-chien-ou-mon-chat-mange-un-aliment-dangereux",
+        "vues": 3,
+        "visites": 0
+      }
+    ],
+    "sources": [
+      {
+        "source": "(accès direct)",
+        "visites": 17
+      },
+      {
+        "source": "www.pinterest.com",
+        "visites": 3
+      },
+      {
+        "source": "l.instagram.com",
+        "visites": 1
+      },
+      {
+        "source": "www.poiletmuseau.com",
+        "visites": 0
+      },
+      {
+        "source": "poiletmuseau.com",
+        "visites": 0
+      }
+    ],
+    "pays": [
+      {
+        "pays": "CA",
+        "visites": 17
+      },
+      {
+        "pays": "US",
+        "visites": 4
+      }
+    ],
+    "appareils": [
+      {
+        "appareil": "desktop",
+        "visites": 11
+      },
+      {
+        "appareil": "mobile",
+        "visites": 10
+      }
+    ],
+    "par_jour": [
+      {
+        "date": "2026-10-21",
+        "visites": 11,
+        "pages_vues": 63
+      },
+      {
+        "date": "2026-10-22",
+        "visites": 10,
+        "pages_vues": 23
+      }
+    ]
+  },
+  "semaine_precedente": {
+    "debut": "2026-10-08",
+    "fin": "2026-10-14",
+    "visites": 0,
+    "pages_vues": 0,
+    "pages": [],
+    "sources": [],
+    "pays": [],
+    "appareils": [],
+    "par_jour": []
+  }
+}
