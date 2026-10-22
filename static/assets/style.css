@@ -408,3 +408,22 @@ html:not(.live) .blob,html:not(.live) .sticker,html:not(.live) .sticker span,htm
 .consent .btn{min-height:44px;padding:0 22px}
 .linklike{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left}
 .linklike:hover{text-decoration:underline}
+
+/* Affiliation Amazon : divulgation, boutons, encadré de produits */
+.aff-note{display:flex;gap:10px;align-items:flex-start;margin-top:18px;padding:12px 16px;border-radius:14px;background:var(--bg-2);color:var(--ink-2);font-size:.86rem;line-height:1.5;max-width:720px}
+.aff-note a{color:var(--coral-ink);font-weight:700;text-decoration:underline}
+.prose a.amz{color:var(--coral-ink);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.prose p.cta-p{margin:14px 0 22px}
+.prose a.amz-cta{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:10px 22px;border-radius:999px;background:var(--coral);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 10px 24px -12px var(--coral)}
+.prose a.amz-cta::after{content:"↗";font-weight:700}
+.prose a.amz-cta strong{color:inherit}
+.prose a.amz-cta:hover{transform:translateY(-2px)}
+.amz-box{margin:40px 0 8px;padding:24px;border-radius:24px;background:var(--card);border:1.5px solid var(--line);box-shadow:var(--shadow)}
+.amz-box h2{font-family:var(--f-display);font-size:1.45rem;letter-spacing:-.01em;margin-bottom:4px}
+.amz-box ul{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.amz-box li{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line)}
+.amz-box li:first-child{border-top:0}
+.amz-name{font-weight:600}
+.amz-box .btn{min-height:44px;padding:0 18px;white-space:nowrap;flex-shrink:0;font-size:.9rem}
+@media(max-width:520px){.amz-box li{flex-direction:column;align-items:stretch}.amz-box .btn{justify-content:center}}
+.amz-jump{display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 16px;min-height:44px;border-radius:14px;background:var(--coral);color:#fff;font-weight:700;font-size:.9rem}

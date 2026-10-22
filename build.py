@@ -879,7 +879,9 @@ def clean_body(b):
     b = re.sub(r"<h2([^>]*)>(.*?)</h2>", h2, b, flags=re.S)
     b = re.sub(r'href="(?:https?:?/+(?:www\.)?(?:poiletmuseau\.com)?)?/?blogs/actualites/([\w-]+)/?"', r'href="\1.html"', b)
     b = re.sub(r'<a ([^>]*href="https://(?:amzn\.to|link\.amazon|(?:www\.)?amazon\.(?:ca|com))[^"]*"[^>]*)>',
-               lambda m: "<a " + re.sub(r'\srel="[^"]*"', "", m.group(1)) + ' rel="nofollow sponsored noopener">', b)
+               lambda m: "<a " + re.sub(r'\s(?:rel|target|class)="[^"]*"', "", m.group(1)) + ' class="amz" target="_blank" rel="nofollow sponsored noopener">', b)
+    # Une ligne « 👉 lien » devient un vrai bouton d'appel à l'action
+    b = re.sub(r'<p>\s*(?:<strong>)?\s*👉\s*(?:</strong>)?\s*(<a [^>]*?)class="amz"', r'<p class="cta-p">\1class="amz amz-cta"', b)
     shop_pages = {"produits-chiens": "chiens", "chiens-produits": "chiens", "produits-chats": "chats", "chats-produits": "chats",
                   "contact": "contact", "divulgation-daffiliation": "divulgation", "nos-recommandations": "reco", "produits": "reco"}
     b = re.sub(r'href="(?:https?://(?:www\.)?poiletmuseau\.com)?/pages/([\w-]+)/?"',
@@ -895,6 +897,24 @@ def localize_links(b):
         return b
     return re.sub(r'href="([\w-]+)\.html(#[\w-]*)?"', lambda m: f'href="{FR2EN[m.group(1)]["h"]}.html{m.group(2) or ""}"' if m.group(1) in FR2EN
                   else (f'href="../../articles/{m.group(1)}.html{m.group(2) or ""}"' if m.group(1) in BY_FR else m.group(0)), b)
+
+AMZ_RE = re.compile(r'<a ([^>]*href="(https://(?:amzn\.to|link\.amazon|(?:www\.)?amazon\.[a-z.]+)[^"]*)"[^>]*)>(.*?)</a>', re.S)
+CTA_WORDS = re.compile(r"^(voir|see|view|découvrir|discover)\s+(le |la |les |l'|un |une |des |the |a |an )?", re.I)
+
+def amazon_products(b, limit=10):
+    """Liste (nom, lien) des produits Amazon cités dans l'article, sans doublons."""
+    out, seen, names = [], set(), set()
+    for attrs, href, text in AMZ_RE.findall(b):
+        tm = re.search(r'title="([^"]+)"', attrs)
+        name = html.unescape(tm.group(1) if tm else re.sub(r"<[^>]+>", "", text)).strip()
+        name = re.sub(r"\s+(sur|on) Amazon$", "", CTA_WORDS.sub("", name), flags=re.I).strip(" .:")
+        if not name or href in seen or name.lower() in names:
+            continue
+        seen.add(href); names.add(name.lower())
+        out.append((name[:1].upper() + name[1:], href))
+        if len(out) >= limit:
+            break
+    return out
 
 def faq_from(b):
     """Questions = intertitres H2/H3 qui se terminent par « ? » ; réponse = texte qui suit, jusqu'au prochain intertitre."""
@@ -934,6 +954,16 @@ def build_article(i, a, A):
                   if hid not in skip and not re.sub(r"<[^>]+>", "", ht).strip().lower().startswith(("sources", "à lire", "read ", "related")))
     aside = f'''<aside class="toc" aria-label="{t("Dans cet article", "In this article")}">{f"<h2>{t('Dans cet article', 'In this article')}</h2><ol>" + toc + "</ol>" if toc else f"<h2>{t('Partager', 'Share')}</h2>"}
   <div class="share"><button class="btn btn-ghost" type="button" data-copy="url">{t("Copier le lien", "Copy link")}</button></div></aside>'''
+    prods = amazon_products(b)
+    aff_note = ""
+    prod_box = ""
+    if prods:
+        aff_note = (f'<p class="aff-note"><span aria-hidden="true">🛒</span><span>{t("Cet article contient des liens affiliés Amazon : si vous achetez par ces liens, nous recevons une petite commission, sans frais supplémentaires pour vous. En tant que Partenaire d&#x27;Amazon, je réalise un bénéfice sur les achats remplissant les conditions requises.", "This article contains Amazon affiliate links (Amazon.ca): if you buy through them, we earn a small commission at no extra cost to you. As an Amazon Associate, I earn from qualifying purchases.")} '
+                    f'<a href="{u("divulgation")}">{t("En savoir plus", "Learn more")}</a></span></p>')
+        rows = "".join(f'<li><span class="amz-name">{e(n)}</span><a class="btn btn-primary amz" href="{e(h)}" target="_blank" rel="nofollow sponsored noopener">{t("Voir sur Amazon", "View on Amazon")} <span aria-hidden="true">↗</span></a></li>' for n, h in prods)
+        prod_box = (f'<section class="amz-box" id="{t("produits-mentionnes", "products-mentioned")}" aria-labelledby="amz-h"><h2 id="amz-h">{t("Les produits mentionnés dans cet article", "Products mentioned in this article")}</h2>'
+                    f'<p class="meta">{t("Liens vers Amazon.ca. Les prix et la disponibilité sont affichés sur Amazon.", "Links go to Amazon.ca. Prices and availability are shown on Amazon.")}</p><ul>{rows}</ul></section>')
+        aside = aside.replace("</aside>", f'<a class="amz-jump" href="#{t("produits-mentionnes", "products-mentioned")}"><span aria-hidden="true">🛒</span> {t("Produits mentionnés", "Products mentioned")} ({len(prods)})</a></aside>')
     pager = f'<nav class="pager" aria-label="{t("Articles précédent et suivant", "Previous and next articles")}">'
     pager += f'<a href="{older["h"]}.html"><small>{t("← Article précédent", "← Previous article")}</small><b>{e(older["t"])}</b></a>' if older else "<span></span>"
     pager += f'<a class="next" href="{newer["h"]}.html"><small>{t("Article suivant →", "Next article →")}</small><b>{e(newer["t"])}</b></a>' if newer else ""
@@ -943,11 +973,12 @@ def build_article(i, a, A):
     body = f'''
 <article>
 <div class="wrap art-hero"><div class="art-head">{crumbs(items)}
-  <h1>{e(a["t"])}</h1><p class="lead">{e(a["s"])}</p><div class="art-meta">{meta}</div></div>
+  <h1>{e(a["t"])}</h1><p class="lead">{e(a["s"])}</p><div class="art-meta">{meta}</div>{aff_note}</div>
   <div class="art-cover"><img fetchpriority="high" src="{img(a, 1400)}" alt="{e(a["alt"])}" width="1400" height="700"></div>
 </div>
 <div class="wrap art-layout">
   <div style="min-width:0"><div class="prose">{b}</div>
+    {prod_box}
     <div class="vet-note"><span aria-hidden="true">🩺</span><span>{t("Cet article est informatif et ne remplace pas l'avis d'un vétérinaire. En cas de doute sur la santé de votre animal, consultez un professionnel.",
                                                                      "This article is for information only and does not replace a veterinarian's advice. If you have any doubt about your pet's health, consult a professional.")}</span></div>
     {pager}

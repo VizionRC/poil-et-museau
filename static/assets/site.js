@@ -37,6 +37,14 @@
     document.querySelectorAll("[data-consent-open]").forEach(function(x){x.addEventListener("click",function(){banner(b);});});
   });
 
+  /* Clics vers Amazon : événement Google Analytics (si consentement) */
+  document.addEventListener("click",function(ev){
+    var a=ev.target.closest&&ev.target.closest('a[href*="amzn.to"],a[href*="link.amazon"],a[href*="amazon."]');
+    if(!a||typeof window.gtag!=="function")return;
+    gtag("event","clic_amazon",{link_url:a.href,link_text:(a.textContent||"").trim().slice(0,100),
+      emplacement:a.closest(".amz-box")?"encadre_produits":a.classList.contains("amz-cta")?"bouton":"texte",transport_type:"beacon"});
+  },true);
+
   /* Image introuvable ou bloquée : on garde la mise en page avec un repli */
   document.addEventListener("error",function(ev){
     var im=ev.target;if(!im||im.tagName!=="IMG")return;
