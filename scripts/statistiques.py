@@ -11,7 +11,14 @@ import sys
 import urllib.request
 
 ACCOUNT = os.environ.get("CF_ACCOUNT_ID", "9bf11d8f11a15713801f848266c7afcd")
-TOKEN = os.environ.get("CF_API_TOKEN", "")
+def _clef(brut):
+    """Extrait la clé même si le secret contient une commande curl entière ou des sauts de ligne."""
+    import re
+    morceaux = re.findall(r"[A-Za-z0-9_\-]{30,}", brut or "")
+    return max(morceaux, key=len) if morceaux else ""
+
+
+TOKEN = _clef(os.environ.get("CF_API_TOKEN", ""))
 HOSTS = ["poiletmuseau.com", "www.poiletmuseau.com"]
 TZ = dt.timezone(dt.timedelta(hours=-5))  # heure de l'Est (approx.), pour les libellés seulement
 
