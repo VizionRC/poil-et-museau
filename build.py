@@ -20,6 +20,22 @@ LOCAL = "--local" in sys.argv          # aperçu hors ligne : liens en .html
 OUT = os.path.abspath(ARGS[0]) if ARGS else os.path.join(HERE, "dist")
 CONTENT = os.path.join(HERE, "content")
 SITE = "https://poiletmuseau.com"
+AMAZON_TAG = "poiletmusea0b-20"  # identifiant Partenaires Amazon.ca (a0b : chiffre zéro)
+_LIENS_AMZ = None
+def amz_url(href):
+    """Lien Amazon final avec notre identifiant : liens courts résolus via data/liens-amazon.json, autres liens retagués."""
+    global _LIENS_AMZ
+    if _LIENS_AMZ is None:
+        f = os.path.join(HERE, "data", "liens-amazon.json")
+        _LIENS_AMZ = json.load(open(f, encoding="utf-8")) if os.path.exists(f) else {}
+    h = html.unescape(href)
+    info = _LIENS_AMZ.get(h.split("?")[0])
+    if info and info.get("asin"):
+        return f"https://www.amazon.ca/dp/{info['asin']}?tag={AMAZON_TAG}"
+    if re.match(r"https://(?:www\.)?amazon\.", h):
+        h = re.sub(r"([?&])tag=[^&]*&?", r"\1", h).rstrip("?&")
+        return h + ("&" if "?" in h else "?") + f"tag={AMAZON_TAG}"
+    return href  # lien court pas encore résolu : laissé tel quel
 INDEXNOW_KEY = "335dae8f3c5381b7c2a8cc06ef6f104d"  # clé publique IndexNow (Bing, Yandex, Seznam…), servie à /<clé>.txt
 e = html.escape
 
@@ -888,7 +904,7 @@ def clean_body(b):
     b = re.sub(r"<h2([^>]*)>(.*?)</h2>", h2, b, flags=re.S)
     b = re.sub(r'href="(?:https?:?/+(?:www\.)?(?:poiletmuseau\.com)?)?/?blogs/actualites/([\w-]+)/?"', r'href="\1.html"', b)
     b = re.sub(r'<a ([^>]*href="https://(?:amzn\.to|link\.amazon|(?:www\.)?amazon\.(?:ca|com))[^"]*"[^>]*)>',
-               lambda m: "<a " + re.sub(r'\s(?:rel|target|class)="[^"]*"', "", m.group(1)) + ' class="amz" target="_blank" rel="nofollow sponsored noopener">', b)
+               lambda m: "<a " + re.sub(r'href="([^"]+)"', lambda h: f'href="{html.escape(amz_url(h.group(1)))}"', re.sub(r'\s(?:rel|target|class)="[^"]*"', "", m.group(1)), count=1) + ' class="amz" target="_blank" rel="nofollow sponsored noopener">', b)
     # Une ligne « 👉 lien » devient un vrai bouton d'appel à l'action
     b = re.sub(r'<p>\s*(?:<strong>)?\s*👉\s*(?:</strong>)?\s*(<a [^>]*?)class="amz"', r'<p class="cta-p">\1class="amz amz-cta"', b)
     shop_pages = {"produits-chiens": "chiens", "chiens-produits": "chiens", "produits-chats": "chats", "chats-produits": "chats",

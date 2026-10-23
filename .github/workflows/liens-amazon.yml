@@ -1,0 +1,28 @@
+name: Résoudre les liens Amazon
+
+# Retrouve le produit (ASIN) derrière chaque lien court amzn.to / link.amazon
+# et met à jour data/liens-amazon.json. Lancé à la main, et automatiquement
+# quand un article est ajouté ou modifié.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["content/**"]
+
+permissions:
+  contents: write
+
+jobs:
+  resoudre:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Résoudre les liens courts
+        run: python3 scripts/liens_amazon.py
+      - name: Enregistrer
+        run: |
+          git config user.name "poil-et-museau-liens"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/liens-amazon.json
+          git commit -m "Liens Amazon : correspondances mises à jour" || echo "Aucun changement"
+          git push
