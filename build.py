@@ -329,6 +329,7 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 <meta name="twitter:description" content="{e(desc)}">
 <meta name="twitter:image" content="{e(og_img)}">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="p:domain_verify" content="4cdde340e5e5469e253da14d133abd59">
 <link rel="alternate" type="application/rss+xml" title="{t("Poil &amp; Museau : derniers articles", "Poil &amp; Museau: latest articles")}" href="{ROOT}{t("feed.xml", "en/feed.xml")}">
 <link rel="icon" type="image/png" href="{ROOT}images/favicon.png">
 <link rel="apple-touch-icon" href="{ROOT}images/apple-touch-icon.png">
