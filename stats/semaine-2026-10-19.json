@@ -1,0 +1,155 @@
+{
+  "site": "poiletmuseau.com",
+  "genere_le": "2026-10-26T17:16:50+00:00",
+  "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
+  "semaine": {
+    "debut": "2026-10-19",
+    "fin": "2026-10-25",
+    "visites": 49,
+    "pages_vues": 188,
+    "pages": [
+      {
+        "page": "/",
+        "vues": 77,
+        "visites": 39
+      },
+      {
+        "page": "/chiens",
+        "vues": 18,
+        "visites": 0
+      },
+      {
+        "page": "/recommandations",
+        "vues": 12,
+        "visites": 0
+      },
+      {
+        "page": "/chats",
+        "vues": 10,
+        "visites": 1
+      },
+      {
+        "page": "/conseils",
+        "vues": 7,
+        "visites": 1
+      },
+      {
+        "page": "/aliments-dangereux",
+        "vues": 7,
+        "visites": 0
+      },
+      {
+        "page": "/divulgation",
+        "vues": 6,
+        "visites": 0
+      },
+      {
+        "page": "/contact",
+        "vues": 4,
+        "visites": 0
+      },
+      {
+        "page": "/a-propos",
+        "vues": 4,
+        "visites": 0
+      },
+      {
+        "page": "/en/",
+        "vues": 4,
+        "visites": 1
+      }
+    ],
+    "sources": [
+      {
+        "source": "(accès direct)",
+        "visites": 44
+      },
+      {
+        "source": "www.pinterest.com",
+        "visites": 3
+      },
+      {
+        "source": "l.instagram.com",
+        "visites": 1
+      },
+      {
+        "source": "www.google.com",
+        "visites": 1
+      },
+      {
+        "source": "www.poiletmuseau.com",
+        "visites": 0
+      },
+      {
+        "source": "poiletmuseau.com",
+        "visites": 0
+      }
+    ],
+    "pays": [
+      {
+        "pays": "CA",
+        "visites": 33
+      },
+      {
+        "pays": "US",
+        "visites": 14
+      },
+      {
+        "pays": "BR",
+        "visites": 1
+      },
+      {
+        "pays": "CO",
+        "visites": 1
+      }
+    ],
+    "appareils": [
+      {
+        "appareil": "desktop",
+        "visites": 31
+      },
+      {
+        "appareil": "mobile",
+        "visites": 18
+      }
+    ],
+    "par_jour": [
+      {
+        "date": "2026-10-21",
+        "visites": 11,
+        "pages_vues": 63
+      },
+      {
+        "date": "2026-10-22",
+        "visites": 14,
+        "pages_vues": 36
+      },
+      {
+        "date": "2026-10-23",
+        "visites": 9,
+        "pages_vues": 39
+      },
+      {
+        "date": "2026-10-24",
+        "visites": 8,
+        "pages_vues": 27
+      },
+      {
+        "date": "2026-10-25",
+        "visites": 7,
+        "pages_vues": 23
+      }
+    ]
+  },
+  "semaine_precedente": {
+    "debut": "2026-10-12",
+    "fin": "2026-10-18",
+    "visites": 0,
+    "pages_vues": 0,
+    "pages": [],
+    "sources": [],
+    "pays": [],
+    "appareils": [],
+    "par_jour": []
+  }
+}

@@ -1,68 +1,68 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-10-22T20:30:38+00:00",
+  "genere_le": "2026-10-26T17:16:50+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
-    "debut": "2026-10-15",
-    "fin": "2026-10-21",
-    "visites": 21,
-    "pages_vues": 86,
+    "debut": "2026-10-19",
+    "fin": "2026-10-25",
+    "visites": 49,
+    "pages_vues": 188,
     "pages": [
       {
         "page": "/",
-        "vues": 41,
-        "visites": 17
+        "vues": 77,
+        "visites": 39
       },
       {
         "page": "/chiens",
-        "vues": 4,
+        "vues": 18,
+        "visites": 0
+      },
+      {
+        "page": "/recommandations",
+        "vues": 12,
         "visites": 0
       },
       {
         "page": "/chats",
-        "vues": 4,
+        "vues": 10,
         "visites": 1
-      },
-      {
-        "page": "/articles/fontaine-eau-chat-plastique-ceramique-acier-inoxydable",
-        "vues": 3,
-        "visites": 0
       },
       {
         "page": "/conseils",
-        "vues": 3,
+        "vues": 7,
         "visites": 1
       },
       {
-        "page": "/contact",
-        "vues": 3,
+        "page": "/aliments-dangereux",
+        "vues": 7,
         "visites": 0
       },
       {
         "page": "/divulgation",
-        "vues": 3,
+        "vues": 6,
+        "visites": 0
+      },
+      {
+        "page": "/contact",
+        "vues": 4,
+        "visites": 0
+      },
+      {
+        "page": "/a-propos",
+        "vues": 4,
         "visites": 0
       },
       {
         "page": "/en/",
-        "vues": 3,
+        "vues": 4,
         "visites": 1
-      },
-      {
-        "page": "/recommandations",
-        "vues": 3,
-        "visites": 0
-      },
-      {
-        "page": "/articles/que-faire-si-mon-chien-ou-mon-chat-mange-un-aliment-dangereux",
-        "vues": 3,
-        "visites": 0
       }
     ],
     "sources": [
       {
         "source": "(accès direct)",
-        "visites": 17
+        "visites": 44
       },
       {
         "source": "www.pinterest.com",
@@ -70,6 +70,10 @@
       },
       {
         "source": "l.instagram.com",
+        "visites": 1
+      },
+      {
+        "source": "www.google.com",
         "visites": 1
       },
       {
@@ -84,21 +88,29 @@
     "pays": [
       {
         "pays": "CA",
-        "visites": 17
+        "visites": 33
       },
       {
         "pays": "US",
-        "visites": 4
+        "visites": 14
+      },
+      {
+        "pays": "BR",
+        "visites": 1
+      },
+      {
+        "pays": "CO",
+        "visites": 1
       }
     ],
     "appareils": [
       {
         "appareil": "desktop",
-        "visites": 11
+        "visites": 31
       },
       {
         "appareil": "mobile",
-        "visites": 10
+        "visites": 18
       }
     ],
     "par_jour": [
@@ -109,14 +121,29 @@
       },
       {
         "date": "2026-10-22",
-        "visites": 10,
+        "visites": 14,
+        "pages_vues": 36
+      },
+      {
+        "date": "2026-10-23",
+        "visites": 9,
+        "pages_vues": 39
+      },
+      {
+        "date": "2026-10-24",
+        "visites": 8,
+        "pages_vues": 27
+      },
+      {
+        "date": "2026-10-25",
+        "visites": 7,
         "pages_vues": 23
       }
     ]
   },
   "semaine_precedente": {
-    "debut": "2026-10-08",
-    "fin": "2026-10-14",
+    "debut": "2026-10-12",
+    "fin": "2026-10-18",
     "visites": 0,
     "pages_vues": 0,
     "pages": [],
