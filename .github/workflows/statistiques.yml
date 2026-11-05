@@ -21,11 +21,18 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   stats:
     runs-on: ubuntu-latest
     steps:
+      # GitHub désactive les tâches planifiées d'un dépôt public après 60 jours
+      # sans activité. Réactiver le flux à chaque exécution l'en empêche.
+      - name: Garder la tâche planifiée active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/statistiques.yml/enable" || true
       - uses: actions/checkout@v4
       - name: Lire les statistiques Cloudflare
         env:
