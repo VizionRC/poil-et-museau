@@ -5,10 +5,14 @@
 {
   "name": "poil-et-museau",
   "compatibility_date": "2026-10-01",
+  // Petit script : sert le fichier de validation Google sans redirection
+  "main": "./worker/index.js",
   // Le site est servi uniquement sur poiletmuseau.com (pas de copie sur workers.dev)
   "workers_dev": false,
   "preview_urls": false,
   "assets": {
+    "binding": "ASSETS",
+    "run_worker_first": ["/googlec2a3e0344ac0125c.html"],
     "directory": "./dist",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
