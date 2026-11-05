@@ -1,76 +1,37 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-11-02T20:43:05+00:00",
+  "genere_le": "2026-11-05T18:54:34+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
     "debut": "2026-10-26",
     "fin": "2026-11-01",
-    "visites": 18,
-    "pages_vues": 38,
+    "visites": 20,
+    "pages_vues": 30,
     "pages": [
       {
-        "page": "/",
-        "vues": 21,
-        "visites": 15
-      },
-      {
-        "page": "/chiens",
-        "vues": 3,
-        "visites": 0
-      },
-      {
-        "page": "/aliments-dangereux",
-        "vues": 2,
-        "visites": 0
-      },
-      {
-        "page": "/articles/pourquoi-chat-fait-des-pattes",
-        "vues": 2,
-        "visites": 0
-      },
-      {
-        "page": "/recommandations",
-        "vues": 2,
-        "visites": 0
-      },
-      {
-        "page": "/en/articles/why-do-cats-knead",
-        "vues": 1,
-        "visites": 0
-      },
-      {
-        "page": "/en/articles/make-dog-meals-more-stimulating",
-        "vues": 1,
-        "visites": 1
-      },
-      {
-        "page": "/articles/aliments-dangereux-chien-chat",
-        "vues": 1,
-        "visites": 0
-      },
-      {
-        "page": "/conseils",
-        "vues": 1,
-        "visites": 0
-      },
-      {
         "page": "/en/articles/should-you-brush-your-cats-teeth",
-        "vues": 1,
-        "visites": 1
+        "vues": 10,
+        "visites": 10
+      },
+      {
+        "page": "/articles/choisir-nourriture-chien",
+        "vues": 10,
+        "visites": 0
+      },
+      {
+        "page": "/",
+        "vues": 10,
+        "visites": 10
       }
     ],
     "sources": [
       {
-        "source": "(accès direct)",
-        "visites": 11
-      },
-      {
-        "source": "bing.com",
-        "visites": 4
-      },
-      {
         "source": "www.google.com",
-        "visites": 3
+        "visites": 10
+      },
+      {
+        "source": "(accès direct)",
+        "visites": 10
       },
       {
         "source": "poiletmuseau.com",
@@ -79,62 +40,43 @@
     ],
     "pays": [
       {
+        "pays": "AU",
+        "visites": 10
+      },
+      {
         "pays": "US",
-        "visites": 13
+        "visites": 10
       },
       {
         "pays": "CA",
-        "visites": 3
-      },
-      {
-        "pays": "AU",
-        "visites": 1
-      },
-      {
-        "pays": "MX",
-        "visites": 1
+        "visites": 0
       }
     ],
     "appareils": [
       {
         "appareil": "desktop",
-        "visites": 15
+        "visites": 10
       },
       {
         "appareil": "mobile",
-        "visites": 3
+        "visites": 10
       }
     ],
     "par_jour": [
       {
-        "date": "2026-10-26",
-        "visites": 2,
-        "pages_vues": 9
-      },
-      {
-        "date": "2026-10-27",
-        "visites": 3,
-        "pages_vues": 4
-      },
-      {
         "date": "2026-10-29",
-        "visites": 7,
-        "pages_vues": 7
+        "visites": 10,
+        "pages_vues": 10
       },
       {
         "date": "2026-10-30",
-        "visites": 2,
-        "pages_vues": 2
+        "visites": 10,
+        "pages_vues": 10
       },
       {
         "date": "2026-10-31",
-        "visites": 2,
-        "pages_vues": 13
-      },
-      {
-        "date": "2026-11-01",
-        "visites": 2,
-        "pages_vues": 3
+        "visites": 0,
+        "pages_vues": 10
       }
     ]
   },
