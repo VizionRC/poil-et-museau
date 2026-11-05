@@ -4,7 +4,12 @@ name: Statistiques hebdomadaires
 # stats/derniere-semaine.json dans la branche « statistiques ». Le courriel est
 # rédigé et envoyé ensuite par une tâche planifiée Claude.
 on:
+  # GitHub retarde souvent les tâches planifiées de plusieurs heures (jusqu'à
+  # 9 h observé). Trois essais le lundi : le premier qui passe dépose les
+  # chiffres, les suivants les rafraîchissent (même semaine, sans danger).
   schedule:
+    - cron: "17 5 * * 1"
+    - cron: "47 7 * * 1"
     - cron: "7 11 * * 1"
   workflow_dispatch:
     inputs:
