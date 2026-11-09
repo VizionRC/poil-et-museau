@@ -1,6 +1,6 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-11-09T17:50:36+00:00",
+  "genere_le": "2026-11-09T21:23:36+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
     "debut": "2026-11-02",
@@ -29,9 +29,9 @@
         "visites": 2
       },
       {
-        "page": "/chiens",
+        "page": "/articles/pourquoi-chat-fait-des-pattes",
         "vues": 4,
-        "visites": 2
+        "visites": 3
       },
       {
         "page": "/a-propos",
@@ -44,9 +44,9 @@
         "visites": 2
       },
       {
-        "page": "/articles/pourquoi-chat-fait-des-pattes",
+        "page": "/chiens",
         "vues": 4,
-        "visites": 3
+        "visites": 2
       },
       {
         "page": "/en/about",
@@ -54,9 +54,9 @@
         "visites": 2
       },
       {
-        "page": "/recommandations",
+        "page": "/en/articles/self-cleaning-litter-box-is-it-worth-the-price",
         "vues": 3,
-        "visites": 2
+        "visites": 3
       }
     ],
     "sources": [
@@ -83,11 +83,11 @@
         "visites": 174
       },
       {
-        "pays": "CA",
+        "pays": "AR",
         "visites": 2
       },
       {
-        "pays": "AR",
+        "pays": "CA",
         "visites": 2
       },
       {
