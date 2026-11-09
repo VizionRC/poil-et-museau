@@ -1,8 +1,160 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-11-05T18:54:34+00:00",
+  "genere_le": "2026-11-09T13:55:37+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
+    "debut": "2026-11-02",
+    "fin": "2026-11-08",
+    "visites": 184,
+    "pages_vues": 202,
+    "pages": [
+      {
+        "page": "/",
+        "vues": 12,
+        "visites": 10
+      },
+      {
+        "page": "/en/articles/how-to-choose-the-right-food-for-your-dog",
+        "vues": 8,
+        "visites": 8
+      },
+      {
+        "page": "/aliments-dangereux",
+        "vues": 6,
+        "visites": 2
+      },
+      {
+        "page": "/chats",
+        "vues": 5,
+        "visites": 2
+      },
+      {
+        "page": "/chiens",
+        "vues": 4,
+        "visites": 2
+      },
+      {
+        "page": "/a-propos",
+        "vues": 4,
+        "visites": 2
+      },
+      {
+        "page": "/conseils",
+        "vues": 4,
+        "visites": 2
+      },
+      {
+        "page": "/articles/pourquoi-chat-fait-des-pattes",
+        "vues": 4,
+        "visites": 3
+      },
+      {
+        "page": "/en/about",
+        "vues": 3,
+        "visites": 2
+      },
+      {
+        "page": "/recommandations",
+        "vues": 3,
+        "visites": 2
+      }
+    ],
+    "sources": [
+      {
+        "source": "(accès direct)",
+        "visites": 182
+      },
+      {
+        "source": "com.pinterest",
+        "visites": 1
+      },
+      {
+        "source": "www.google.com",
+        "visites": 1
+      },
+      {
+        "source": "poiletmuseau.com",
+        "visites": 0
+      }
+    ],
+    "pays": [
+      {
+        "pays": "US",
+        "visites": 174
+      },
+      {
+        "pays": "CA",
+        "visites": 2
+      },
+      {
+        "pays": "AR",
+        "visites": 2
+      },
+      {
+        "pays": "PE",
+        "visites": 1
+      },
+      {
+        "pays": "BO",
+        "visites": 1
+      },
+      {
+        "pays": "CO",
+        "visites": 1
+      },
+      {
+        "pays": "EC",
+        "visites": 1
+      },
+      {
+        "pays": "BR",
+        "visites": 1
+      }
+    ],
+    "appareils": [
+      {
+        "appareil": "desktop",
+        "visites": 179
+      },
+      {
+        "appareil": "mobile",
+        "visites": 5
+      }
+    ],
+    "par_jour": [
+      {
+        "date": "2026-11-03",
+        "visites": 4,
+        "pages_vues": 4
+      },
+      {
+        "date": "2026-11-04",
+        "visites": 1,
+        "pages_vues": 1
+      },
+      {
+        "date": "2026-11-05",
+        "visites": 3,
+        "pages_vues": 20
+      },
+      {
+        "date": "2026-11-06",
+        "visites": 0,
+        "pages_vues": 1
+      },
+      {
+        "date": "2026-11-07",
+        "visites": 172,
+        "pages_vues": 172
+      },
+      {
+        "date": "2026-11-08",
+        "visites": 4,
+        "pages_vues": 4
+      }
+    ]
+  },
+  "semaine_precedente": {
     "debut": "2026-10-26",
     "fin": "2026-11-01",
     "visites": 20,
@@ -77,111 +229,6 @@
         "date": "2026-10-31",
         "visites": 0,
         "pages_vues": 10
-      }
-    ]
-  },
-  "semaine_precedente": {
-    "debut": "2026-10-19",
-    "fin": "2026-10-25",
-    "visites": 50,
-    "pages_vues": 210,
-    "pages": [
-      {
-        "page": "/",
-        "vues": 70,
-        "visites": 30
-      },
-      {
-        "page": "/chats",
-        "vues": 30,
-        "visites": 10
-      },
-      {
-        "page": "/chiens",
-        "vues": 30,
-        "visites": 0
-      },
-      {
-        "page": "/en/",
-        "vues": 20,
-        "visites": 10
-      },
-      {
-        "page": "/contact",
-        "vues": 20,
-        "visites": 0
-      },
-      {
-        "page": "/articles/fontaine-eau-chat-plastique-ceramique-acier-inoxydable",
-        "vues": 20,
-        "visites": 0
-      },
-      {
-        "page": "/articles/que-faire-si-mon-chien-ou-mon-chat-mange-un-aliment-dangereux",
-        "vues": 10,
-        "visites": 0
-      },
-      {
-        "page": "/a-propos",
-        "vues": 10,
-        "visites": 0
-      }
-    ],
-    "sources": [
-      {
-        "source": "(accès direct)",
-        "visites": 50
-      },
-      {
-        "source": "poiletmuseau.com",
-        "visites": 0
-      }
-    ],
-    "pays": [
-      {
-        "pays": "CA",
-        "visites": 30
-      },
-      {
-        "pays": "US",
-        "visites": 20
-      }
-    ],
-    "appareils": [
-      {
-        "appareil": "desktop",
-        "visites": 50
-      },
-      {
-        "appareil": "mobile",
-        "visites": 0
-      }
-    ],
-    "par_jour": [
-      {
-        "date": "2026-10-21",
-        "visites": 10,
-        "pages_vues": 50
-      },
-      {
-        "date": "2026-10-22",
-        "visites": 10,
-        "pages_vues": 60
-      },
-      {
-        "date": "2026-10-23",
-        "visites": 0,
-        "pages_vues": 40
-      },
-      {
-        "date": "2026-10-24",
-        "visites": 30,
-        "pages_vues": 40
-      },
-      {
-        "date": "2026-10-25",
-        "visites": 0,
-        "pages_vues": 20
       }
     ]
   }
