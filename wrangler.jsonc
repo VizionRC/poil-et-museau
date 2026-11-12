@@ -12,7 +12,9 @@
   "preview_urls": false,
   "assets": {
     "binding": "ASSETS",
-    "run_worker_first": ["/googlec2a3e0344ac0125c.html"],
+    // Le script passe en premier seulement pour ces adresses (validation Google, anciennes adresses techniques Shopify)
+    "run_worker_first": ["/googlec2a3e0344ac0125c.html", "/password", "/agents.md", "/api/*", "/v1/*", "/wpm*", "/web-pixels*",
+      "/services/*", "/customer_authentication*", "/checkout*", "/cdn/*", "/apps/*", "/sf_private_access_tokens*", "/.well-known/shopify*"],
     "directory": "./dist",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"

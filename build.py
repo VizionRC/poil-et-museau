@@ -1142,10 +1142,37 @@ def llms():
         lines.append("")
     LANG = "fr"
     lines += ["## Pages", f"- [Aliments à éviter / Foods to avoid]({canon(path_of('aliments'))}): outil interactif sur les aliments sécuritaires ou toxiques pour chiens et chats",
-              f"- [À propos]({canon(path_of('apropos'))})", f"- [Divulgation d'affiliation]({canon(path_of('divulgation'))})",
+              f"- [À propos]({canon(path_of('apropos'))})", f"- [Texte intégral des articles / Full text]({SITE}/llms-full.txt)", f"- [Divulgation d'affiliation]({canon(path_of('divulgation'))})",
               f"- [Politique de confidentialité]({canon(path_of('confidentialite'))})", ""]
     open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write("\n".join(lines))
 llms()
+
+# llms-full.txt : texte intégral des articles pour les moteurs génératifs
+def html_to_md(h):
+    import html as _h
+    h = re.sub(r"(?is)<(script|style|figure)[^>]*>.*?</\1>", "", h)
+    h = re.sub(r"(?i)<h([1-6])[^>]*>", lambda m: "\n\n" + "#" * (int(m.group(1)) + 1) + " ", h)
+    h = re.sub(r"(?i)</h[1-6]>", "\n\n", h)
+    h = re.sub(r"(?i)<li[^>]*>", "\n- ", h)
+    h = re.sub(r"(?i)<br\s*/?>", "\n", h)
+    h = re.sub(r"(?i)<tr[^>]*>", "\n| ", h)
+    h = re.sub(r"(?i)</t[dh]>", " | ", h)
+    h = re.sub(r"(?i)</(p|ul|ol|div|blockquote)>", "\n\n", h)
+    h = _h.unescape(re.sub(r"<[^>]+>", "", h))
+    h = re.sub(r"[ \t\u00a0]+", " ", h)
+    return re.sub(r"\n\s*\n+", "\n\n", h).strip()
+
+def llms_full():
+    global LANG
+    out = ["# Poil & Museau : texte intégral des articles / full text of articles", "",
+           "> Conseils pour chiens et chats, en français et en anglais. Ne remplace pas l'avis d'un vétérinaire.", ""]
+    for lang, items in (("fr", A_FR), ("en", A_EN)):
+        LANG = lang
+        for a in items:
+            out += [f"## {a['t']}", "", f"URL : {canon(art_path(a))}", "", html_to_md(a["body"]), ""]
+    LANG = "fr"
+    open(os.path.join(OUT, "llms-full.txt"), "w", encoding="utf-8").write("\n".join(out))
+llms_full()
 
 # Redirections des anciennes adresses Shopify vers les nouvelles pages.
 # Une ligne explicite par ancienne adresse : aucune règle générique ne chevauche une règle précise.
