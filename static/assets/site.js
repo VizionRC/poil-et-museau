@@ -81,6 +81,26 @@
     var bg=document.getElementById("burger"),mm=document.getElementById("mm");
     if(bg&&mm)bg.addEventListener("click",function(){
       mm.hidden=!mm.hidden;bg.setAttribute("aria-expanded",String(!mm.hidden));
+      if(sb&&!mm.hidden){sb.hidden=true;if(sbtn)sbtn.setAttribute("aria-expanded","false");}
+    });
+
+    /* Menus déroulants Chiens / Chats */
+    document.querySelectorAll(".dd").forEach(function(d){
+      var b=d.querySelector(".dd-btn");if(!b)return;
+      b.addEventListener("click",function(e){e.stopPropagation();var o=!d.classList.contains("open");
+        document.querySelectorAll(".dd.open").forEach(function(x){x.classList.remove("open");x.querySelector(".dd-btn").setAttribute("aria-expanded","false");});
+        d.classList.toggle("open",o);b.setAttribute("aria-expanded",String(o));});
+    });
+    document.addEventListener("click",function(e){if(!e.target.closest(".dd"))document.querySelectorAll(".dd.open").forEach(function(x){x.classList.remove("open");x.querySelector(".dd-btn").setAttribute("aria-expanded","false");});});
+    document.addEventListener("keydown",function(e){if(e.key==="Escape"){document.querySelectorAll(".dd.open").forEach(function(x){x.classList.remove("open");});if(sb&&!sb.hidden){sb.hidden=true;if(sbtn){sbtn.setAttribute("aria-expanded","false");sbtn.focus();}}}});
+
+    /* Barre de recherche de l'en-tête */
+    var sbtn=document.getElementById("sbtn"),sb=document.getElementById("sbar"),sq=document.getElementById("sq");
+    if(sbtn&&sb)sbtn.addEventListener("click",function(e){
+      var pq=document.getElementById("seg")&&document.getElementById("q");
+      if(pq){e.preventDefault();pq.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(function(){pq.focus();},300);return;}
+      e.preventDefault();sb.hidden=!sb.hidden;sbtn.setAttribute("aria-expanded",String(!sb.hidden));
+      if(!sb.hidden){if(mm){mm.hidden=true;if(bg)bg.setAttribute("aria-expanded","false");}if(sq)sq.focus();}
     });
 
     /* En-tête, progression, retour en haut */

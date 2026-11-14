@@ -187,9 +187,27 @@ ARROW = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="cur
 PAWBG = '<svg class="paw-bg" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10.2" cy="5.2" rx="2.2" ry="2.8"/><ellipse cx="14.8" cy="5.2" rx="2.2" ry="2.8"/><ellipse cx="19" cy="9" rx="2.2" ry="2.8"/><path d="M12.5 11c-3.2 0-6.2 3.6-6.2 6.4 0 2 1.6 3 3.4 3 1.2 0 2-.6 2.8-.6s1.6.6 2.8.6c1.8 0 3.4-1 3.4-3 0-2.8-3-6.4-6.2-6.4z"/></svg>'
 
 def NAV():
-    return [("home", t("Accueil", "Home")), ("chiens", t("Chiens", "Dogs")), ("chats", t("Chats", "Cats")),
-            ("conseils", t("Conseils", "Advice")), ("aliments", t("Aliments à éviter", "Foods to avoid")),
-            ("reco", t("Recommandations", "Recommendations")), ("apropos", t("À propos", "About"))]
+    return [("chiens", t("Chiens", "Dogs")), ("chats", t("Chats", "Cats")), ("reco", t("Guides d'achat", "Buying guides")),
+            ("aliments", t("Aliments à éviter", "Foods to avoid")), ("apropos", t("À propos", "About"))]
+
+# Pages de catégorie par animal (/chiens/sante, /en/dogs/health…), créées dès qu'il y a au moins 2 articles.
+CAT_ORDER = ["sante", "alimentation", "comportement", "toilettage", "produits"]
+CAT_SLUG_EN = {"sante": "health", "alimentation": "nutrition", "comportement": "behaviour", "toilettage": "grooming", "produits": "products"}
+SP_KEY = {"chien": "chiens", "chat": "chats"}
+def sp_arts(sp, A=None):
+    return [a for a in (A or arts()) if a["sp"] in (sp, "both")]
+def cat_keys(sp):
+    L = sp_arts(sp, A_FR)
+    return [k for k in CAT_ORDER if sum(1 for a in L if a["cat"] == k) >= 2]
+def cat_path(sp, k, lang=None):
+    lang = lang or LANG
+    return f"chiens/{k}.html" if lang == "fr" and sp == "chien" else f"chats/{k}.html" if lang == "fr" else \
+           f"en/{'dogs' if sp == 'chien' else 'cats'}/{CAT_SLUG_EN[k]}.html"
+def cat_url(sp, k):
+    return ROOT + cat_path(sp, k)
+ICON_DOWN = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>'
+ICON_SEARCH = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
+
 
 # ---------------------------------------------------------------- gabarit commun
 def logo():
@@ -198,9 +216,25 @@ def logo():
             '<span class="wm"><span class="w1">Poil</span><span class="amp">&amp;</span><span class="w2">Museau</span></span></a>')
 
 def header(active, alt_href):
+    """active : clé de la page (« chiens ») ou « chiens/sante » pour une page de catégorie."""
+    top = active.split("/")[0]
     cur = lambda k: ' aria-current="page"' if k == active else ""
-    links = "".join(f'<a href="{u(k)}"{cur(k)}>{l}</a>' for k, l in NAV())
-    mob = links + f'<a href="{u("contact")}"{cur("contact")}>{t("Nous joindre", "Contact us")}</a>'
+    links, mob = "", ""
+    for k, l in NAV():
+        top_cur = ' aria-current="page"' if k == top else ""
+        if k in ("chiens", "chats"):
+            sp = "chien" if k == "chiens" else "chat"
+            subs = [(cat_url(sp, c), cat(c), cur(f"{k}/{c}")) for c in cat_keys(sp)]
+            all_l = t(f"Tous les articles {'chiens' if sp == 'chien' else 'chats'} →", f"All {'dog' if sp == 'chien' else 'cat'} articles →")
+            menu = "".join(f'<a href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs) + f'<a class="dd-all" href="{u(k)}">{all_l}</a>'
+            links += (f'<div class="dd"><a href="{u(k)}"{top_cur}>{l}</a><button class="dd-btn" type="button" aria-expanded="false" aria-controls="dd-{k}" '
+                      f'aria-label="{t("Sous-menu", "Submenu")} {l}">{ICON_DOWN}</button><div class="dd-menu" id="dd-{k}">{menu}</div></div>')
+            mob += f'<a href="{u(k)}"{cur(k)}>{l}</a>' + "".join(f'<a class="sub" href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs)
+        else:
+            links += f'<a href="{u(k)}"{top_cur}>{l}</a>'
+            mob += f'<a href="{u(k)}"{top_cur}>{l}</a>'
+    mob += f'<a href="{u("conseils")}"{cur("conseils")}>{t("Tous les conseils", "All advice")}</a>'
+    mob += f'<a href="{u("contact")}"{cur("contact")}>{t("Nous joindre", "Contact us")}</a>'
     other, other_lang, other_name = ("EN", "en", "English") if LANG == "fr" else ("FR", "fr", "Français")
     return f'''<a class="skip" href="#contenu">{t("Aller au contenu", "Skip to content")}</a>
 <div id="progress" aria-hidden="true"></div>
@@ -209,12 +243,16 @@ def header(active, alt_href):
     {logo()}
     <nav class="links" aria-label="{t("Navigation principale", "Main navigation")}">{links}</nav>
     <div class="nav-right">
+      <a class="icon-btn" id="sbtn" href="{u("conseils")}#q" aria-label="{t("Rechercher un article", "Search articles")}" aria-controls="sbar" aria-expanded="false">{ICON_SEARCH}</a>
       <a class="lang-btn" href="{alt_href}" hreflang="{other_lang}" lang="{other_lang}" title="{other_name}" aria-label="{other} : {other_name}">{other}</a>
       <button class="icon-btn" id="theme" type="button" aria-label="{t("Changer le thème clair ou sombre", "Switch light or dark theme")}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
       <button class="icon-btn burger" id="burger" type="button" aria-label="{t("Ouvrir le menu", "Open menu")}" aria-expanded="false" aria-controls="mm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
     </div>
   </div>
   <nav class="mobile-menu" id="mm" hidden aria-label="{t("Menu mobile", "Mobile menu")}">{mob}</nav>
+  <div class="sbar" id="sbar" hidden><form role="search" action="{u("conseils")}" method="get">
+    <input type="search" name="q" id="sq" placeholder="{t("Rechercher : harnais, litière, vomit…", "Search: harness, litter, vomiting…")}" aria-label="{t("Rechercher un article", "Search articles")}" autocomplete="off">
+    <button type="submit">{t("Rechercher", "Search")}</button></form></div>
 </header>'''
 
 def footer():
@@ -227,12 +265,10 @@ def footer():
         <p style="margin-top:16px;font-weight:700">info@poiletmuseau.com</p>
       </div>
       <div><h2>{t("Chiens", "Dogs")}</h2><ul>
-        <li><a href="{u("chiens", "#sante")}">{cat("sante")}</a></li><li><a href="{u("chiens", "#alimentation")}">{cat("alimentation")}</a></li>
-        <li><a href="{u("chiens", "#comportement")}">{cat("comportement")}</a></li><li><a href="{u("chiens", "#toilettage")}">{cat("toilettage")}</a></li>
-        <li><a href="{u("chiens", "#produits")}">{cat("produits")}</a></li></ul></div>
+        {"".join(f'<li><a href="{cat_url("chien", c)}">{cat(c)}</a></li>' for c in cat_keys("chien"))}</ul></div>
       <div><h2>{t("Chats", "Cats")}</h2><ul>
-        <li><a href="{u("chats", "#sante")}">{cat("sante")}</a></li><li><a href="{u("chats", "#comportement")}">{cat("comportement")}</a></li>
-        <li><a href="{u("chats", "#produits")}">{cat("produits")}</a></li><li><a href="{u("aliments")}">{t("Aliments à éviter", "Foods to avoid")}</a></li></ul></div>
+        {"".join(f'<li><a href="{cat_url("chat", c)}">{cat(c)}</a></li>' for c in cat_keys("chat"))}
+        <li><a href="{u("aliments")}">{t("Aliments à éviter", "Foods to avoid")}</a></li><li><a href="{u("conseils")}">{t("Tous les conseils", "All advice")}</a></li></ul></div>
       <div><h2>{t("Infos", "Info")}</h2><ul>
         <li><a href="{u("apropos")}">{t("À propos", "About")}</a></li><li><a href="{u("contact")}">{t("Nous joindre", "Contact us")}</a></li>
         <li><a href="{u("divulgation")}">{t("Divulgation d'affiliation", "Affiliate disclosure")}</a></li>
@@ -533,8 +569,10 @@ def build_home():
     facts_html = ""
     for em, h, fr, en in FACTS:
         q, ans = fr if LANG == "fr" else en
-        facts_html += (f'<div class="flip reveal" tabindex="0" role="button"><div class="in"><div class="face front"><span class="e" aria-hidden="true">{em}</span>'
-                       f'<span class="q">{e(q)}</span><small>{t("Touchez pour retourner ↻", "Tap to flip ↻")}</small></div><div class="face back"><p>{e(ans)}</p>'
+        fa = art(h)
+        facts_html += (f'<div class="flip reveal" tabindex="0" role="button"><div class="in"><div class="face front">'
+                       f'<div class="fimg"><img loading="lazy" src="{img(fa)}" alt="{e(fa["alt"])}" width="720" height="495"><span class="e" aria-hidden="true">{em}</span></div>'
+                       f'<div class="ft"><span class="q">{e(q)}</span><small>{t("Touchez pour retourner ↻", "Tap to flip ↻")}</small></div></div><div class="face back"><p>{e(ans)}</p>'
                        f'<a href="{art_url(art(h))}">{t("Lire l&#x27;article complet →", "Read the full article →")}</a></div></div></div>')
     p1, p2, p3 = art("pourquoi-chien-penche-tete"), art("pourquoi-chat-fait-des-pattes"), art("choisir-nourriture-chien")
     dog_img, cat_img = art("comment-choisir-le-bon-lit-pour-votre-chien"), art("chat-boit-il-assez-deau")
@@ -643,6 +681,7 @@ def build_species(sp):
     <h1 class="display">{t("Tout pour votre", "Everything for your")} <em>{animal}</em></h1>
     <p class="lead">{intro}</p>
     <div class="cta-row"><a class="btn btn-ghost" style="border-color:#2B1E14;color:#2B1E14" href="#liste">{t(f"{len(lst)} conseils à lire ↓", f"{len(lst)} articles to read ↓")}</a></div>
+    {topics(sp)}
   </div>
   <div class="hero-photo"><img src="{img(hero_a, 900)}" alt="{e(hero_a["alt"])}"></div>
 </div></section>
@@ -654,7 +693,7 @@ def build_species(sp):
 </div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
-  <a class="link-arrow" href="{u("reco")}">{t("Toutes nos recommandations →", "All our recommendations →")}</a></div>
+  <a class="link-arrow" href="{u("reco")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
   <div class="reco" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">{guides_html}</div>
 </div></section>
 {newsletter()}'''
@@ -664,6 +703,77 @@ def build_species(sp):
               f"Cat care advice: health, hydration, behaviour and buying guides. {len(lst)} clear, well-researched articles."))
     page(path, t(f"Conseils pour {'chiens' if dog else 'chats'}", f"{'Dog' if dog else 'Cat'} care advice"), desc, body, key,
          image=abs_img(hero_a), jsonld=[crumbs_ld([(None, label)])], alt=path_of(key, "en" if LANG == "fr" else "fr"))
+
+# ---------------------------------------------------------------- catégories par animal
+def topics(sp, active=None):
+    key = SP_KEY[sp]
+    L = sp_arts(sp)
+    out = "".join(f'<a href="{cat_url(sp, c)}"{" aria-current=\"page\"" if c == active else ""}>{cat(c)}<span class="n">{sum(1 for a in L if a["cat"] == c)}</span></a>' for c in cat_keys(sp))
+    return f'<nav class="topics" aria-label="{t("Sujets", "Topics")}">{out}</nav>'
+
+CAT_TXT = {
+    ("chien", "sante"): (("La santé de votre <em>chien</em>", "Santé du chien : signes à surveiller et bons réflexes"),
+        ("Your <em>dog's</em> health", "Dog health: warning signs and good habits"),
+        "Vomissements, aliments toxiques, coussinets brûlés, chaleur : reconnaître les signes qui inquiètent et savoir quand consulter le vétérinaire.",
+        "Vomiting, toxic foods, burnt paw pads, heat: recognize the warning signs and know when to see the vet."),
+    ("chien", "alimentation"): (("L'alimentation de votre <em>chien</em>", "Alimentation du chien : bien choisir et bien nourrir"),
+        ("Feeding your <em>dog</em>", "Dog nutrition: choosing and feeding well"),
+        "Lire une étiquette, choisir sa nourriture, rendre les repas plus stimulants et éviter les aliments dangereux.",
+        "Reading a label, choosing food, making meals more stimulating and avoiding dangerous foods."),
+    ("chien", "comportement"): (("Comprendre votre <em>chien</em>", "Comportement du chien : comprendre et réagir"),
+        ("Understanding your <em>dog</em>", "Dog behaviour: understand and respond"),
+        "Pourquoi il penche la tête, vous suit partout, renifle tout ou manque de stimulation : des explications claires et des pistes concrètes.",
+        "Why your dog tilts its head, follows you everywhere, sniffs everything or lacks stimulation: clear explanations and practical tips."),
+    ("chien", "toilettage"): (("Le toilettage de votre <em>chien</em>", "Toilettage du chien à la maison"),
+        ("Grooming your <em>dog</em>", "Grooming your dog at home"),
+        "Bain, brossage, griffes, oreilles : à quelle fréquence et comment s'y prendre à la maison, étape par étape.",
+        "Bathing, brushing, nails, ears: how often and how to do it at home, step by step."),
+    ("chien", "produits"): (("Guides d'achat pour <em>chiens</em>", "Guides d'achat pour chiens"),
+        ("Buying guides for <em>dogs</em>", "Dog buying guides"),
+        "Harnais, lit, sac de voyage, accessoires du quotidien : les critères qui comptent vraiment avant d'acheter.",
+        "Harness, bed, travel bag, everyday accessories: the criteria that really matter before you buy."),
+    ("chat", "sante"): (("La santé de votre <em>chat</em>", "Santé du chat : signes à surveiller et bons réflexes"),
+        ("Your <em>cat's</em> health", "Cat health: warning signs and good habits"),
+        "Hydratation, soins dentaires, vomissements, aliments toxiques : repérer ce qui doit inquiéter et prendre soin de votre chat au quotidien.",
+        "Hydration, dental care, vomiting, toxic foods: spot what should worry you and care for your cat every day."),
+    ("chat", "comportement"): (("Comprendre votre <em>chat</em>", "Comportement du chat : comprendre et réagir"),
+        ("Understanding your <em>cat</em>", "Cat behaviour: understand and respond"),
+        "Pétrissage, regards insistants, griffades et autres habitudes : ce qu'elles signifient et comment réagir.",
+        "Kneading, long stares, scratching and other habits: what they mean and how to respond."),
+    ("chat", "produits"): (("Guides d'achat pour <em>chats</em>", "Guides d'achat pour chats"),
+        ("Buying guides for <em>cats</em>", "Cat buying guides"),
+        "Fontaine à eau, litière autonettoyante, essentiels du quotidien : bien choisir avant d'acheter.",
+        "Water fountain, self-cleaning litter box, everyday essentials: choose well before you buy."),
+}
+
+def build_category(sp, c):
+    key = SP_KEY[sp]
+    path = begin(cat_path(sp, c))
+    lst = [a for a in sp_arts(sp) if a["cat"] == c]
+    fr, en, dfr, den = CAT_TXT.get((sp, c), ((cat(c), cat(c)), (cat(c), cat(c)), "", ""))
+    h1, title = fr if LANG == "fr" else en
+    lead = t(dfr, den)
+    sp_label = t("Chiens", "Dogs") if sp == "chien" else t("Chats", "Cats")
+    items = [(path_of(key), sp_label), (None, cat(c))]
+    body = f'''
+<section class="page-hero {"dog" if sp == "chien" else "cat"}"><div class="wrap"><div>
+  {crumbs(items)}
+  <h1 class="display">{h1}</h1>
+  <p class="lead">{lead}</p>
+  {topics(sp, c)}
+</div></div></section>
+<section class="block" id="liste"><div class="wrap">
+  <p class="count-line">{len(lst)} {t("articles", "articles") if len(lst) > 1 else "article"}</p>
+  <h2 class="sr-only">{t("Articles", "Articles")}</h2>
+  <div class="grid">{"".join(card(a) for a in lst)}</div>
+  <p style="margin-top:28px"><a class="link-arrow" href="{u(key)}">{t(f"Tous les articles {'chiens' if sp == 'chien' else 'chats'} →", f"All {'dog' if sp == 'chien' else 'cat'} articles →")}</a></p>
+</div></section>
+{newsletter()}'''
+    page(path, title, (lead + " " + t(f"{len(lst)} articles clairs et vérifiés.", f"{len(lst)} clear, well-researched articles."))[:300], body, f"{key}/{c}",
+         image=abs_img(lst[0]), jsonld=[crumbs_ld(items), {"@context": "https://schema.org", "@type": "CollectionPage", "url": canon(path),
+             "name": re.sub(r"<[^>]+>", "", h1), "inLanguage": t("fr-CA", "en-CA"), "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst),
+             "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": canon(art_path(x)), "name": x["t"]} for i, x in enumerate(lst)]}}],
+         alt=cat_path(sp, c, "en" if LANG == "fr" else "fr"))
 
 # ---------------------------------------------------------------- conseils
 def build_conseils():
@@ -749,7 +859,7 @@ RECO = [  # emoji, fond, animal, article FR, (titre FR, critères FR), (titre EN
 ]
 def build_reco():
     path = begin(path_of("reco"))
-    label = t("Recommandations", "Recommendations")
+    label = t("Guides d'achat", "Buying guides")
     cards = ""
     for ic, bg, sp, h, fr, en in RECO:
         title, crit = fr if LANG == "fr" else en
@@ -759,7 +869,7 @@ def build_reco():
     body = f'''
 <section class="page-hero"><div class="blob" style="width:380px;height:380px;background:var(--blush);top:-160px;right:-60px" aria-hidden="true"></div>
 <div class="wrap"><div>{crumbs([(None, label)])}
-  <span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h1 class="display">{t("Nos <em>recommandations</em>", "Our <em>recommendations</em>")}</h1>
+  <span class="kicker">{t("Nos recommandations", "Our recommendations")}</span><h1 class="display">{t("Guides <em>d'achat</em>", "Buying <em>guides</em>")}</h1>
   <p class="lead">{t("Avant de recommander un produit, on explique comment le choisir. Chaque guide présente les critères qui comptent vraiment, puis des modèles à considérer.",
                      "Before recommending a product, we explain how to choose one. Each guide covers the criteria that really matter, then models worth considering.")}</p></div></div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
@@ -776,7 +886,7 @@ def build_reco():
   </div>
 </div></section>
 {newsletter()}'''
-    page(path, t("Nos recommandations", "Our recommendations"),
+    page(path, t("Guides d'achat pour chiens et chats", "Buying guides for dogs and cats"),
          t("Guides d'achat pour chiens et chats : fontaine à eau, litière autonettoyante, harnais, lit, toilettage et nourriture. Les critères qui comptent vraiment.",
            "Buying guides for dogs and cats: water fountain, self-cleaning litter box, harness, bed, grooming and food. The criteria that really matter."),
          body, "reco", jsonld=[crumbs_ld([(None, label)])], alt=path_of("reco", "en" if LANG == "fr" else "fr"))
@@ -967,7 +1077,10 @@ def build_article(i, a, A):
     path = begin(art_path(a))
     sp_key = "chiens" if a["sp"] == "chien" else "chats" if a["sp"] == "chat" else "conseils"
     sp_label = {"chiens": t("Chiens", "Dogs"), "chats": t("Chats", "Cats"), "conseils": t("Conseils", "Advice")}[sp_key]
-    items = [(path_of(sp_key), sp_label), (None, a["t"])]
+    items = [(path_of(sp_key), sp_label)]
+    if a["sp"] in SP_KEY and a["cat"] in cat_keys(a["sp"]):
+        items.append((cat_path(a["sp"], a["cat"]), cat(a["cat"])))
+    items.append((None, a["t"]))
     newer = A[i-1] if i > 0 else None
     older = A[i+1] if i + 1 < len(A) else None
     b = localize_links(clean_body(a["body"])).replace('src="/images/', f'src="{ROOT}images/').replace('href="/images/', f'href="{ROOT}images/')
@@ -1093,6 +1206,9 @@ for LANG in ("fr", "en"):
     build_text_pages()
     build_home(); build_species("chien"); build_species("chat"); build_conseils(); build_aliments()
     build_reco(); build_apropos(); build_contact(); build_divulgation()
+    for sp_ in ("chien", "chat"):
+        for c_ in cat_keys(sp_):
+            build_category(sp_, c_)
     A_ = arts()
     for i, a in enumerate(A_):
         build_article(i, a, A_)
@@ -1180,11 +1296,11 @@ redir = [f"/blogs/actualites/{a['h']} /articles/{a['h']} 301" for a in A_FR]
 redir += [f"/blogs/actualites/{a['h']}/ /articles/{a['h']} 301" for a in A_FR]
 shopify_pages = {
     "contact": "/contact", "divulgation-daffiliation": "/divulgation", "produits-chiens-chats": "/a-propos",
-    "produits-chiens": "/chiens", "chiens-produits": "/chiens", "chiens-sante": "/chiens#sante",
-    "chiens-alimentation": "/chiens#alimentation", "chiens-comportement": "/chiens#comportement",
-    "chiens-toilettage": "/chiens#toilettage", "produits-chats": "/chats", "chats-produits": "/chats",
-    "chats-sante": "/chats#sante", "chats-alimentation": "/chats#alimentation",
-    "chats-comportement": "/chats#comportement", "chats-toilettage": "/chats",
+    "produits-chiens": "/chiens/produits", "chiens-produits": "/chiens/produits", "chiens-sante": "/chiens/sante",
+    "chiens-alimentation": "/chiens/alimentation", "chiens-comportement": "/chiens/comportement",
+    "chiens-toilettage": "/chiens/toilettage", "produits-chats": "/chats/produits", "chats-produits": "/chats/produits",
+    "chats-sante": "/chats/sante", "chats-alimentation": "/chats",
+    "chats-comportement": "/chats/comportement", "chats-toilettage": "/chats",
     "nos-recommandations": "/recommandations", "nos-recommandations-pour-chiens-et-chats": "/recommandations",
     "essentiels-chien": "/recommandations", "essentiels-chat": "/recommandations", "produits": "/recommandations"}
 redir += [f"/pages/{k} {v} 301" for k, v in shopify_pages.items()]
