@@ -651,7 +651,7 @@ def build_species(sp):
                "Hydration, litter, dental care, kneading and long stares: clear answers to help you understand your cat."))
     animal = t("chien", "dog") if dog else t("chat", "cat")
     guides = [a for a in lst if a["cat"] == "produits"][:3]
-    guides_html = "".join(f'<a class="rc reveal" href="{art_url(a)}"><span class="ic" style="background:{"#FBE7B5" if dog else "#DDE5C8"}" aria-hidden="true">{"🦮" if dog else "🐈"}</span><h3>{e(a["t"])}</h3><p>{e(a["s"])}</p><span class="go">{t("Voir le guide →", "See the guide →")}</span></a>' for a in guides)
+    guides_html = "".join(f'<a class="rc rc-photo reveal" href="{art_url(a)}"><span class="rc-img"><img loading="lazy" src="{img(a)}" alt="{e(a["alt"])}" width="720" height="495"></span><h3>{e(a["t"])}</h3><p>{e(a["s"])}</p><span class="go">{t("Voir le guide →", "See the guide →")}</span></a>' for a in guides)
     body = f'''
 <section class="page-hero {"dog" if dog else "cat"}"><div class="wrap split">
   <div>{crumbs([(None, label)])}
@@ -672,6 +672,11 @@ def build_species(sp):
   <div class="sec-head reveal"><div><span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
   <a class="link-arrow" href="{u("reco")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
   <div class="reco" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">{guides_html}</div>
+</div></section>
+<section class="block" style="padding-top:0"><div class="wrap">
+  <div class="sec-head reveal"><div><span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h2 class="sec">{t("Nos produits recommandés pour votre", "Our recommended products for your")} <em>{animal}</em></h2></div>
+  <a class="link-arrow" href="{u("reco", "#produits")}">{t("Tous les produits →", "All products →")}</a></div>
+  <div class="pgrid">{product_cards(sp)}</div>
 </div></section>'''
     desc = (t(f"Conseils pour chiens : santé, alimentation, comportement, toilettage et guides d'achat. {len(lst)} articles clairs et vérifiés.",
               f"Dog care advice: health, nutrition, behaviour, grooming and buying guides. {len(lst)} clear, well-researched articles.") if dog else
@@ -831,13 +836,66 @@ RECO = [  # emoji, fond, animal, article FR, (titre FR, critères FR), (titre EN
   ("Nourriture pour chien", ["Mention « complète et équilibrée »", "Stade de vie indiqué", "Fabricant transparent"]),
   ("Dog food", ["“Complete and balanced” statement", "Life stage on the label", "Transparent manufacturer"])),
 ]
+# Produits recommandés (repris de l'ancienne page Shopify « Nos recommandations »)
+# image, animal, lien Amazon, article lié, (nom FR, description FR), (nom EN, description EN)
+PRODUCTS = [
+ ("kong", "chien", "https://amzn.to/41T2shd", "signes-chien-manque-stimulation",
+  ("KONG Classique", "Un jouet résistant à garnir de croquettes ou de gâteries pour occuper votre chien et rendre les périodes de jeu plus stimulantes."),
+  ("KONG Classic", "A durable toy to stuff with kibble or treats that keeps your dog busy and makes playtime more stimulating.")),
+ ("bol-anti-glouton", "chien", "https://amzn.to/4cuGSG2", "repas-chien-plus-stimulants",
+  ("Bol anti-glouton", "Un bol conçu pour ralentir le repas des chiens qui ont tendance à manger trop rapidement."),
+  ("Slow feeder bowl", "A bowl designed to slow down dogs that tend to eat too fast.")),
+ ("brosse-autonettoyante", "chien", "https://amzn.to/4d8t4Bb", "toiletter-chien-maison",
+  ("Brosse autonettoyante", "Une brosse pratique pour retirer les poils morts et faciliter le toilettage de votre chien à la maison."),
+  ("Self-cleaning brush", "A handy brush that removes loose hair and makes grooming your dog at home easier.")),
+ ("harnais", "chien", "https://amzn.to/4ugx4VR", "comment-choisir-harnais-pour-chien",
+  ("Harnais pour chien", "Un harnais réglable avec attaches avant et arrière pour les promenades et un meilleur contrôle de votre chien."),
+  ("Dog harness", "An adjustable harness with front and back clips for walks and better control of your dog.")),
+ ("bouteille-eau", "chien", "https://amzn.to/49hzQ5q", "canicule-et-chien-comment-aider-votre-compagnon-a-rester-au-frais",
+  ("Bouteille d'eau portable", "Une bouteille pratique pour offrir de l'eau à votre chien pendant les promenades, les sorties et les déplacements."),
+  ("Portable water bottle", "A handy bottle to give your dog water during walks, outings and trips.")),
+ ("lit-orthopedique", "chien", "https://amzn.to/43d8l9O", "comment-choisir-le-bon-lit-pour-votre-chien",
+  ("Lit orthopédique", "Un lit avec mousse de soutien conçu pour offrir une surface confortable où votre chien peut se reposer."),
+  ("Orthopedic bed", "A bed with supportive foam that gives your dog a comfortable place to rest.")),
+ ("fontaine-inox", "chat", "https://amzn.to/4vPwkI4", "fontaine-eau-chat-plastique-ceramique-acier-inoxydable",
+  ("Fontaine en acier inoxydable", "Une fontaine qui garde l'eau en mouvement et peut encourager votre chat à boire davantage, avec une surface en acier inoxydable facile à nettoyer."),
+  ("Stainless steel fountain", "A fountain that keeps water moving and may encourage your cat to drink more, with an easy-to-clean stainless steel surface.")),
+ ("litiere-autonettoyante", "chat", "https://link.amazon/B0a3s40Lr", "litiere-autonettoyante-chat",
+  ("Litière autonettoyante", "Une litière autonettoyante conçue pour faciliter l'entretien du bac et garder la litière propre plus longtemps."),
+  ("Self-cleaning litter box", "A self-cleaning litter box designed to make upkeep easier and keep the litter clean longer.")),
+ ("kit-dentaire-chat", "chat", "https://link.amazon/B05lzg91J", "brosser-dents-chat-soins-dentaires",
+  ("Kit dentaire pour chat", "Un kit pratique pour prendre soin des dents de votre chat et intégrer progressivement le brossage à sa routine."),
+  ("Cat dental kit", "A handy kit to care for your cat's teeth and gradually make brushing part of its routine.")),
+ ("griffoir-l", "chat", "https://amzn.to/3PiQQ4j", "les-comportements-les-plus-frequents-chez-le-chat-et-comment-reagir-efficacement",
+  ("Griffoir en L", "Un griffoir qui offre à votre chat une surface pour faire ses griffes, s'étirer et grimper."),
+  ("L-shaped scratcher", "A scratcher that gives your cat a surface to scratch, stretch and climb.")),
+ ("arbre-a-chat", "chat", "https://link.amazon/B00ePJKyK", "les-comportements-les-plus-frequents-chez-le-chat-et-comment-reagir-efficacement",
+  ("Arbre à chat", "Un espace à plusieurs niveaux où votre chat peut grimper, faire ses griffes, jouer et se reposer."),
+  ("Cat tree", "A multi-level space where your cat can climb, scratch, play and rest.")),
+]
+
+def product_cards(sp=None):
+    out = ""
+    for im, psp, link, h, fr, en in PRODUCTS:
+        if sp and psp != sp:
+            continue
+        name, desc = fr if LANG == "fr" else en
+        a = art(h)
+        src = f"{ROOT}images/reco/{im}.webp" if os.path.exists(os.path.join(HERE, "images", "reco", im + ".webp")) else img(a)
+        out += (f'<article class="pc reveal" data-sp="{psp}"><div class="pc-img"><img loading="lazy" src="{src}" alt="{e(name)}" width="720" height="480">'
+                f'<span class="tag t-{psp}">{spl(psp)}</span></div><div class="pc-b"><h3>{e(name)}</h3><p>{e(desc)}</p>'
+                f'<div class="pc-cta"><a class="btn btn-primary amz-cta" href="{amz_url(link)}" target="_blank" rel="nofollow sponsored noopener">{t("Voir sur Amazon", "See on Amazon")}</a>'
+                f'<a class="pc-more" href="{art_url(a)}">{t("Lire nos conseils →", "Read our advice →")}</a></div></div></article>')
+    return out
+
 def build_reco():
     path = begin(path_of("reco"))
     label = t("Guides d'achat", "Buying guides")
     cards = ""
     for ic, bg, sp, h, fr, en in RECO:
         title, crit = fr if LANG == "fr" else en
-        cards += (f'<a class="rc reveal" href="{art_url(art(h))}" data-sp="{sp}"><span class="ic" style="background:{bg}" aria-hidden="true">{ic}</span>'
+        ga = art(h)
+        cards += (f'<a class="rc rc-photo reveal" href="{art_url(ga)}" data-sp="{sp}"><span class="rc-img"><img loading="lazy" src="{img(ga)}" alt="{e(ga["alt"])}" width="720" height="495"></span>'
                   f'<span class="tag t-{sp}" style="align-self:flex-start">{spl(sp)}</span><h3>{e(title)}</h3><ul>{"".join(f"<li>{e(c)}</li>" for c in crit)}</ul>'
                   f'<span class="go">{t("Lire le guide →", "Read the guide →")}</span></a>')
     body = f'''
@@ -848,6 +906,13 @@ def build_reco():
                      "Before recommending a product, we explain how to choose one. Each guide covers the criteria that really matter, then models worth considering.")}</p></div></div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="reco four">{cards}</div>
+</div></section>
+<section class="block" style="padding-top:0" id="produits"><div class="wrap">
+  <div class="sec-head reveal"><div><span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h2 class="sec">{t("Nos produits <em>recommandés</em>", "Our recommended <em>products</em>")}</h2></div></div>
+  <h3 class="pc-group">{t("Pour votre chien", "For your dog")}</h3>
+  <div class="pgrid">{product_cards("chien")}</div>
+  <h3 class="pc-group">{t("Pour votre chat", "For your cat")}</h3>
+  <div class="pgrid">{product_cards("chat")}</div>
   <p class="disclose reveal"><span aria-hidden="true">ℹ️</span><span>{t("Certains liens de nos guides sont des liens d'affiliation, notamment avec le programme Partenaires d'Amazon. Si vous achetez par leur entremise, Poil &amp; Museau peut recevoir une commission, sans frais supplémentaires pour vous.",
                                                                          "Some links in our guides are affiliate links, including through the Amazon Associates program. If you buy through them, Poil &amp; Museau may earn a commission at no extra cost to you.")} <a href="{u("divulgation")}">{t("Lire notre divulgation", "Read our disclosure")}</a></span></p>
 </div></section>

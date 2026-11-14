@@ -466,3 +466,24 @@ html:not(.live) .blob,html:not(.live) .sticker,html:not(.live) .sticker span,htm
 @media(max-width:370px){#theme{display:none}}
 footer.site .linklike{font-weight:600}
 @media(min-width:768px){footer.site ul{flex-direction:row;flex-wrap:wrap;gap:8px 28px}}
+/* Produits recommandés */
+.pc-group{font-family:var(--f-display);font-size:1.35rem;margin:10px 0 16px}
+.pgrid{display:grid;gap:18px;margin-bottom:34px;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr))}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;transition:transform .3s,border-color .3s}
+.pc:hover{transform:translateY(-4px);border-color:var(--coral)}
+.pc-img{position:relative;aspect-ratio:3/2;overflow:hidden;background:var(--bg-2)}
+.pc-img img{width:100%;height:100%;object-fit:cover;display:block}
+.pc-img .tag{position:absolute;top:12px;left:12px}
+.pc-b{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.pc-b h3{font-family:var(--f-display);font-size:1.2rem;line-height:1.2}
+.pc-b p{color:var(--ink-2);font-size:.92rem}
+.pc-cta{margin-top:auto;display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.pc-cta .btn{justify-content:center;width:100%}
+.pc-more{color:var(--coral-ink);font-weight:700;font-size:.9rem}
+.rc-photo{padding:0;overflow:hidden}
+.rc-photo .rc-img{display:block;aspect-ratio:16/10;overflow:hidden;margin-bottom:4px}
+.rc-photo .rc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.rc-photo:hover .rc-img img{transform:scale(1.05)}
+.rc-photo>*:not(.rc-img){margin-inline:22px}
+.rc-photo .go{margin-bottom:22px}
+.rc-photo .tag{margin-top:4px}

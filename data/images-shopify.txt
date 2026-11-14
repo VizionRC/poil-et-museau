@@ -1,0 +1,12 @@
+# destination  adresse Shopify (téléchargées par .github/workflows/images-shopify.yml)
+images/reco/kong.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/7_signes_que_votre_chien_manque_de_stimulation3.webp?width=900
+images/reco/bol-anti-glouton.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/7_facons_simples_de_rendre_les_repas_de_votre_chien_plus_stimulants3.webp?width=900
+images/reco/brosse-autonettoyante.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Toiletter_son_chien_a_la_maison4.webp?width=900
+images/reco/harnais.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Comment_choisir_le_bon_harnais_pour_votre_chien1.webp?width=900
+images/reco/bouteille-eau.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Pattes_de_chien_en_ete_3.webp?width=900
+images/reco/lit-orthopedique.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Comment_choisir_le_bon_lit_pour_son_chien1.webp?width=900
+images/reco/fontaine-inox.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Fontaine_a_eau_pour_chat_1.webp?width=900
+images/reco/litiere-autonettoyante.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Litiere_autonettoyante_pour_chat_vaut-elle_vraiment_le_prix1_81092061-9fa1-4e0e-8826-1cb8e5039297.webp?width=900
+images/reco/kit-dentaire-chat.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Faut-il_brosser_les_dents_de_son_chat1.webp?width=900
+images/reco/griffoir-l.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Griffoir_en_L.webp?width=900
+images/reco/arbre-a-chat.webp https://17pzrt-hz.myshopify.com/cdn/shop/files/Arbre_a_chat.webp?width=900
