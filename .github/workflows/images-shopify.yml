@@ -24,6 +24,22 @@ jobs:
             mkdir -p "$(dirname "$dest")"
             curl -fsSL -A "Mozilla/5.0" -o "$dest" "$url" && echo "OK $dest" || echo "ÉCHEC $dest"
           done
+      - name: Convertir en WebP (900 px)
+        run: |
+          pip install -q pillow
+          python3 - <<'PY'
+          import glob
+          from PIL import Image
+          for f in glob.glob("images/reco/*.webp") + glob.glob("images/produits/*.webp"):
+              im = Image.open(f)
+              if im.format == "WEBP" and im.width <= 900:
+                  continue
+              im = im.convert("RGB")
+              if im.width > 900:
+                  im = im.resize((900, round(im.height * 900 / im.width)), Image.LANCZOS)
+              im.save(f, "WEBP", quality=80, method=6)
+              print("converti", f)
+          PY
       - name: Enregistrer
         run: |
           git config user.name "poil-et-museau-images"

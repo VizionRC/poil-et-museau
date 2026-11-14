@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["content/**", "build.py"]
+    paths: ["content/**", "build.py", "data/produits.json"]
 
 permissions:
   contents: write

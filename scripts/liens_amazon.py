@@ -50,7 +50,8 @@ def suivre(url, n=6):
 
 def main():
     liens = set()
-    liens |= set(SHORT.findall(open(os.path.join(HERE, "build.py"), encoding="utf-8").read()))
+    for f_ in ("build.py", os.path.join("data", "produits.json")):
+        liens |= set(SHORT.findall(open(os.path.join(HERE, f_), encoding="utf-8").read()))
     for root, _, files in os.walk(os.path.join(HERE, "content")):
         for f in files:
             if f.endswith(".html"):

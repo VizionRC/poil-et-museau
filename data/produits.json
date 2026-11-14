@@ -1,0 +1,359 @@
+{
+ "chien": [
+  {
+   "fr": "Jeux et occupation",
+   "en": "Play and enrichment",
+   "items": [
+    {
+     "id": "tapis-lechage",
+     "fr": "Tapis de léchage",
+     "en": "Lick mat",
+     "link": "https://amzn.to/48hzzyU",
+     "img": "repas-stimulant-chien-tapis-lechage.jpg"
+    },
+    {
+     "id": "jouet-distributeur",
+     "fr": "Jouet distributeur de friandises",
+     "en": "Treat-dispensing toy",
+     "link": "https://amzn.to/4tvQ5ni",
+     "img": "Chien_avec_jouet_distributeur.webp"
+    },
+    {
+     "id": "puzzle-interactif",
+     "fr": "Puzzle interactif",
+     "en": "Interactive puzzle",
+     "link": "https://amzn.to/3QroQfa",
+     "img": "Chien_doodle_avec_jouet.webp"
+    },
+    {
+     "id": "kong",
+     "fr": "KONG classique",
+     "en": "KONG Classic",
+     "link": "https://amzn.to/41T2shd",
+     "img": "7_signes_que_votre_chien_manque_de_stimulation3.webp"
+    },
+    {
+     "id": "tapis-fouille",
+     "fr": "Tapis de fouille",
+     "en": "Snuffle mat",
+     "link": "https://amzn.to/42PUeXG",
+     "img": "chien-tapis-fouille-gateries.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Repas",
+   "en": "Mealtime",
+   "items": [
+    {
+     "id": "bol-anti-glouton",
+     "fr": "Bol anti-glouton",
+     "en": "Slow feeder bowl",
+     "link": "https://amzn.to/4cuGSG2",
+     "img": "Bol_anti-glouton.webp"
+    },
+    {
+     "id": "contenants-hermetiques",
+     "fr": "Contenants hermétiques",
+     "en": "Airtight food containers",
+     "link": "https://amzn.to/4tUztFr",
+     "img": "Contenants_hermetiques.webp"
+    },
+    {
+     "id": "tapis-alimentation",
+     "fr": "Tapis d'alimentation",
+     "en": "Feeding mat",
+     "link": "https://amzn.to/4fqxp4e",
+     "img": "Tapis_d_alimentation.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Confort et repos",
+   "en": "Comfort and rest",
+   "items": [
+    {
+     "id": "lit-apaisant",
+     "fr": "Lit apaisant",
+     "en": "Calming bed",
+     "link": "https://amzn.to/4tQfDeY",
+     "img": "Chien_doodle_confortable_dans_son_lit.webp"
+    },
+    {
+     "id": "couverture-impermeable",
+     "fr": "Couverture imperméable",
+     "en": "Waterproof blanket",
+     "link": "https://amzn.to/4t0StRZ",
+     "img": "Couverture_impermeable_reversible.webp"
+    },
+    {
+     "id": "lit-orthopedique",
+     "fr": "Lit orthopédique",
+     "en": "Orthopedic bed",
+     "link": "https://amzn.to/43d8l9O",
+     "img": "Comment_choisir_le_bon_lit_pour_son_chien1.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Hygiène et entretien",
+   "en": "Hygiene and grooming",
+   "items": [
+    {
+     "id": "shampoing-sans-rincage",
+     "fr": "Shampoing sans rinçage",
+     "en": "No-rinse shampoo",
+     "link": "https://amzn.to/4db2XZ3",
+     "img": "Shampoing_sans_rincage.webp"
+    },
+    {
+     "id": "brosse-toilettage-chien",
+     "fr": "Brosse de toilettage",
+     "en": "Grooming brush",
+     "link": "https://amzn.to/4d8t4Bb",
+     "img": "Toiletter_son_chien_a_la_maison4.webp"
+    },
+    {
+     "id": "coupe-griffes-chien",
+     "fr": "Coupe-griffes",
+     "en": "Nail clippers",
+     "link": "https://amzn.to/4umyKgU",
+     "img": "Coupe-griffes.webp"
+    },
+    {
+     "id": "lingettes-chien",
+     "fr": "Lingettes nettoyantes",
+     "en": "Cleaning wipes",
+     "link": "https://amzn.to/4tXkon4",
+     "img": "Lingettes_nettoyantes_chien.webp"
+    },
+    {
+     "id": "nettoyeur-pattes",
+     "fr": "Nettoyeur de pattes",
+     "en": "Paw cleaner",
+     "link": "https://amzn.to/3PzRaMq",
+     "img": "Nettoyeur_de_pattes.webp"
+    },
+    {
+     "id": "serviette-microfibre",
+     "fr": "Serviette en microfibre",
+     "en": "Microfibre towel",
+     "link": "https://amzn.to/4urEk1C",
+     "img": "Serviette_en_microfibre.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Promenade et sorties",
+   "en": "Walks and outings",
+   "items": [
+    {
+     "id": "harnais",
+     "fr": "Harnais",
+     "en": "Harness",
+     "link": "https://amzn.to/4ugx4VR",
+     "img": "Comment_choisir_le_bon_harnais_pour_votre_chien1.webp"
+    },
+    {
+     "id": "laisse-double-poignee",
+     "fr": "Laisse à double poignée",
+     "en": "Double-handle leash",
+     "link": "https://amzn.to/4enYGE9",
+     "img": "Laisse_a_double_poignee.webp"
+    },
+    {
+     "id": "laisse-longue",
+     "fr": "Laisse longue",
+     "en": "Long training leash",
+     "link": "https://amzn.to/42RrGwU",
+     "img": "Laisse_longue.webp"
+    },
+    {
+     "id": "bouteille-eau",
+     "fr": "Bouteille d'eau portable",
+     "en": "Portable water bottle",
+     "link": "https://amzn.to/49hzQ5q",
+     "img": "Pattes_de_chien_en_ete_3.webp"
+    },
+    {
+     "id": "gamelle-pliable",
+     "fr": "Gamelle pliable",
+     "en": "Collapsible bowl",
+     "link": "https://amzn.to/4wasD05",
+     "img": "Gamelle_pliable.webp"
+    },
+    {
+     "id": "sacs-crottes",
+     "fr": "Sacs à crottes",
+     "en": "Poop bags",
+     "link": "https://amzn.to/4tBGLyk",
+     "img": "Sacs_a_crottes.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Soins des pattes",
+   "en": "Paw care",
+   "items": [
+    {
+     "id": "baume-pattes",
+     "fr": "Baume pour pattes et museau",
+     "en": "Paw and nose balm",
+     "link": "https://amzn.to/4dR2U4X",
+     "img": "Baume_pour_pattes_et_museau.webp"
+    },
+    {
+     "id": "bottines",
+     "fr": "Bottines",
+     "en": "Dog boots",
+     "link": "https://amzn.to/4u9frqT",
+     "img": "Bottines_pour_chien.webp"
+    },
+    {
+     "id": "protege-coussinets",
+     "fr": "Protège-coussinets adhésifs",
+     "en": "Adhesive paw pad protectors",
+     "link": "https://amzn.to/4aKjjrw",
+     "img": "Protege-coussinets_adhesifs.webp"
+    }
+   ]
+  }
+ ],
+ "chat": [
+  {
+   "fr": "Jeux et occupation",
+   "en": "Play and enrichment",
+   "items": [
+    {
+     "id": "griffoir-l",
+     "fr": "Griffoir",
+     "en": "Scratcher",
+     "link": "https://amzn.to/3PiQQ4j",
+     "img": "Griffoir_en_L.webp"
+    },
+    {
+     "id": "canne-peche",
+     "fr": "Canne à pêche",
+     "en": "Wand toy",
+     "link": "https://amzn.to/4d4qsDg",
+     "img": "Canne_a_peche_chat.webp"
+    },
+    {
+     "id": "puzzle-chat",
+     "fr": "Jouet puzzle",
+     "en": "Puzzle toy",
+     "link": "https://amzn.to/3PkwNT4",
+     "img": "Jouet_puzzle_chat.webp"
+    },
+    {
+     "id": "tunnel",
+     "fr": "Tunnel de jeu",
+     "en": "Play tunnel",
+     "link": "https://amzn.to/4f9cmmC",
+     "img": "Tunnel_de_jeu_chat.webp"
+    },
+    {
+     "id": "arbre-a-chat",
+     "fr": "Arbre à chat",
+     "en": "Cat tree",
+     "link": "https://link.amazon/B00ePJKyK",
+     "img": "Arbre_a_chat.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Repas et hydratation",
+   "en": "Food and water",
+   "items": [
+    {
+     "id": "fontaine-inox",
+     "fr": "Fontaine à eau en inox",
+     "en": "Stainless steel water fountain",
+     "link": "https://amzn.to/4vPwkI4",
+     "img": "Fontaine_a_eau_pour_chat_1.webp"
+    },
+    {
+     "id": "gamelle-inox-chat",
+     "fr": "Gamelle antidérapante en inox",
+     "en": "Non-slip stainless steel bowl",
+     "link": "https://amzn.to/4vMp1kS",
+     "img": "Gamelle_antiderapante_chat.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Litière",
+   "en": "Litter",
+   "items": [
+    {
+     "id": "bac-litiere",
+     "fr": "Grand bac à litière avec pelle",
+     "en": "Large litter box with scoop",
+     "link": "https://amzn.to/3ODmZn6",
+     "img": "Bac_a_litiere_avec_pelle.webp"
+    },
+    {
+     "id": "tapis-litiere",
+     "fr": "Tapis de litière nid d'abeilles",
+     "en": "Honeycomb litter mat",
+     "link": "https://amzn.to/4uoOdNl",
+     "img": "Tapis_de_litiere_nid_d_abeilles.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Repos et confort",
+   "en": "Rest and comfort",
+   "items": [
+    {
+     "id": "lit-douillet-chat",
+     "fr": "Lit douillet",
+     "en": "Cozy bed",
+     "link": "https://amzn.to/4tQfDeY",
+     "img": "Lit_douillet_pour_chat.webp"
+    },
+    {
+     "id": "perchoir-fenetre",
+     "fr": "Perchoir de fenêtre",
+     "en": "Window perch",
+     "link": "https://amzn.to/3Rfy7Yq",
+     "img": "Perchoir_de_fenetre.webp"
+    },
+    {
+     "id": "cachette",
+     "fr": "Cachette fermée",
+     "en": "Cat cave",
+     "link": "https://amzn.to/4p1Td98",
+     "img": "Cachette_fermee_pour_chat.webp"
+    }
+   ]
+  },
+  {
+   "fr": "Toilettage et hygiène",
+   "en": "Grooming and hygiene",
+   "items": [
+    {
+     "id": "brosse-chat",
+     "fr": "Brosse de toilettage",
+     "en": "Grooming brush",
+     "link": "https://amzn.to/42p7K4l",
+     "img": "Brosse_de_toilettage_pour_chat.webp"
+    },
+    {
+     "id": "peigne-inox",
+     "fr": "Peigne en acier inoxydable",
+     "en": "Stainless steel comb",
+     "link": "https://amzn.to/4b039dH",
+     "img": "Peigne_en_acier_inoxydable_chat_2.webp"
+    },
+    {
+     "id": "coupe-griffes-chat",
+     "fr": "Coupe-griffes",
+     "en": "Nail clippers",
+     "link": "https://link.amazon/B03XYlzXr",
+     "img": "Coupe-griffes_pour_chat2.webp"
+    }
+   ]
+  }
+ ]
+}
