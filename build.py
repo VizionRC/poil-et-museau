@@ -346,6 +346,22 @@ def responsive_imgs(doc):
 PAGES = []
 TODAY = datetime.date.today().isoformat()
 
+def pet_picker(active):
+    """Petite fenêtre « Chien ou chat? » (après 4 s, une seule fois) qui mène directement aux produits de l'animal choisi."""
+    if active.split("/")[0] not in ("home", "conseils", "aliments"):
+        return ""
+    dog_img, cat_img = prod_img("lit-apaisant"), prod_img("griffoir-l")
+    return f'''<aside class="pet" id="pet" hidden role="dialog" aria-labelledby="pet-t">
+  <button class="pet-x" type="button" data-pet-close aria-label="{t("Fermer", "Close")}">×</button>
+  <p class="pet-k">{t("Pour vous guider", "To guide you")}</p>
+  <h2 id="pet-t">{t("Vous avez un chien ou un chat?", "Do you have a dog or a cat?")}</h2>
+  <div class="pet-o">
+    <a href="{u("produits_chiens")}" data-pet="chien"><img loading="lazy" src="{dog_img}" alt="" width="160" height="160"><span>{t("Chien", "Dog")}</span></a>
+    <a href="{u("produits_chats")}" data-pet="chat"><img loading="lazy" src="{cat_img}" alt="" width="160" height="160"><span>{t("Chat", "Cat")}</span></a>
+  </div>
+  <p class="pet-s">{t("Découvrez nos produits recommandés pour lui.", "See the products we recommend for your pet.")} <a href="{u("reco")}" data-pet="les-deux">{t("Les deux!", "Both!")}</a></p>
+</aside>'''
+
 def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, img_alt=None, published=None, modified=None):
     """alt : chemin (depuis la racine) de la même page dans l'autre langue."""
     other = "en" if LANG == "fr" else "fr"
@@ -398,6 +414,7 @@ def page(path, title, desc, body, active="", image=None, jsonld=None, alt=None, 
 {body}
 </main>
 {footer()}
+{pet_picker(active)}
 </body>
 </html>
 '''

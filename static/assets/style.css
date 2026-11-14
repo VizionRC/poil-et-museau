@@ -502,3 +502,17 @@ footer.site .linklike{font-weight:600}
 .hc-t{font-family:var(--f-display);font-size:1.9rem;line-height:1.1;font-weight:700}
 .hc-l{font-size:.93rem;color:#3A2C20}
 .hc-b .go{font-weight:800;margin-top:6px}
+/* Fenêtre « Chien ou chat? » */
+.pet{position:fixed;right:20px;bottom:20px;z-index:70;width:min(370px,calc(100vw - 32px));background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:26px;box-shadow:0 24px 60px -20px rgba(43,30,20,.45);padding:22px 22px 18px;opacity:0;transform:translateY(24px);transition:opacity .35s,transform .45s cubic-bezier(.3,1.3,.5,1)}
+.pet.show{opacity:1;transform:none}
+.pet-x{position:absolute;top:10px;right:12px;width:34px;height:34px;border-radius:50%;border:0;background:var(--bg-2);color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer}
+.pet-k{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral)}
+.pet h2{font-family:var(--f-display);font-size:1.45rem;line-height:1.15;margin:4px 34px 14px 0}
+.pet-o{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pet-o a{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 10px 14px;border-radius:20px;border:2px solid var(--line);font-weight:800;font-size:1.05rem;transition:border-color .2s,transform .2s,background .2s}
+.pet-o a:hover,.pet-o a:focus-visible{border-color:var(--coral);background:var(--bg-2);transform:translateY(-3px)}
+.pet-o img{width:84px;height:84px;border-radius:50%;object-fit:cover}
+.pet-s{margin-top:12px;font-size:.88rem;color:var(--ink-2);text-align:center}
+.pet-s a{font-weight:800;color:var(--coral-ink);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:560px){.pet{left:12px;right:12px;bottom:12px;width:auto;padding:18px 16px 14px}.pet h2{font-size:1.3rem}.pet-o img{width:68px;height:68px}}
+@media(prefers-reduced-motion:reduce){.pet{transition:none}}

@@ -84,6 +84,31 @@
       if(sb&&!mm.hidden){sb.hidden=true;if(sbtn)sbtn.setAttribute("aria-expanded","false");}
     });
 
+
+    /* Fenêtre « Chien ou chat? » : une fois par visiteur, 4 s après l'arrivée, jamais par-dessus le bandeau des cookies */
+    var pet=document.getElementById("pet");
+    if(pet){
+      var PK="pm-pet",seen=null;try{seen=localStorage.getItem(PK);}catch(e){}
+      var skipOk=seen&&seen.indexOf("ferme:")===0&&(Date.now()-(+seen.slice(6)))>7*864e5;
+      if(!seen||skipOk){
+        var t0=Date.now(),hadBanner=false;
+        var tryShow=function(){
+          var c=document.getElementById("consent");
+          if(c&&!c.hidden&&c.getClientRects().length){hadBanner=true;setTimeout(tryShow,700);return;}
+          var wait=Math.max(hadBanner?2000:0,4000-(Date.now()-t0));
+          setTimeout(function(){pet.hidden=false;requestAnimationFrame(function(){pet.classList.add("show");});
+            if(typeof window.gtag==="function")gtag("event","choix_animal_vu");},wait);
+        };
+        setTimeout(tryShow,1500);
+        var closePet=function(){pet.classList.remove("show");setTimeout(function(){pet.hidden=true;},350);try{localStorage.setItem(PK,"ferme:"+Date.now());}catch(e){}
+          if(typeof window.gtag==="function")gtag("event","choix_animal",{animal:"ferme"});};
+        pet.querySelector("[data-pet-close]").addEventListener("click",closePet);
+        document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!pet.hidden)closePet();});
+        pet.querySelectorAll("[data-pet]").forEach(function(a){a.addEventListener("click",function(){
+          try{localStorage.setItem(PK,a.dataset.pet);}catch(e){}
+          if(typeof window.gtag==="function")gtag("event","choix_animal",{animal:a.dataset.pet,transport_type:"beacon"});});});
+      }
+    }
     /* Menus déroulants Chiens / Chats */
     document.querySelectorAll(".dd").forEach(function(d){
       var b=d.querySelector(".dd-btn");if(!b)return;
