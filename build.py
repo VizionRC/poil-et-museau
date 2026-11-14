@@ -575,7 +575,6 @@ def build_home():
   <div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div><div class="blob b3" aria-hidden="true"></div>
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span> {t("Nouvel article chaque lundi", "New article every Monday")}</span>
       <h1 class="display">{hero_title}<svg viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11 C 70 3, 150 3, 297 9"/></svg></span></h1>
       <p class="lead">{t("Santé, alimentation, comportement, toilettage : des guides clairs, vérifiés et sans jargon pour mieux comprendre votre chien ou votre chat, et choisir les bons produits sans vous perdre dans le marketing.",
                          "Health, nutrition, behaviour, grooming: clear, well-researched, jargon-free guides to help you understand your dog or cat and choose the right products without getting lost in the marketing.")}</p>
