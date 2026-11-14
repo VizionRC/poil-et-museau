@@ -1050,30 +1050,15 @@ def build_apropos():
 def build_contact():
     path = begin(path_of("contact"))
     label = t("Nous joindre", "Contact us")
-    opts = t(["Question sur un article", "Suggestion d'article", "Question sur un produit recommandé", "Partenariat", "Autre"],
-             ["Question about an article", "Article suggestion", "Question about a recommended product", "Partnership", "Other"])
     body = f'''
 <section class="page-hero"><div class="blob" style="width:380px;height:380px;background:var(--butter);top:-160px;right:-60px" aria-hidden="true"></div>
 <div class="wrap"><div>{crumbs([(None, label)])}
   <span class="kicker">{label}</span><h1 class="display">{t("Écrivez-<em>nous</em>", "Write <em>to us</em>")}</h1>
   <p class="lead">{t("Merci de votre visite chez Poil &amp; Museau 🐾 Une question, une idée d'article ou un commentaire sur un produit? On vous répond avec plaisir.",
                      "Thanks for visiting Poil &amp; Museau 🐾 A question, an article idea or a comment about a product? We're happy to answer.")}</p></div></div></section>
-<div class="wrap"><div class="text-page">
-  <form class="form side-card" data-demo style="padding:30px">
-    <label for="c-nom">{t("Nom", "Name")}<input id="c-nom" type="text" autocomplete="name" required></label>
-    <label for="c-courriel">{t("Courriel", "Email")}<input id="c-courriel" type="email" autocomplete="email" required></label>
-    <label for="c-sujet">{t("Sujet", "Subject")}<select id="c-sujet">{"".join(f"<option>{e(o)}</option>" for o in opts)}</select></label>
-    <label for="c-msg">Message<textarea id="c-msg" required></textarea></label>
-    <button class="btn btn-primary" type="submit" style="justify-content:center">{t("Envoyer le message", "Send message")}</button>
-    <p class="notice" data-ok hidden>{t("Merci! Votre message a bien été pris en note.", "Thank you! Your message has been noted.")} 💛</p>
-  </form>
-  <aside style="display:flex;flex-direction:column;gap:16px">
-    <div class="side-card"><h2>{t("Par courriel", "By email")}</h2>
-      <div class="copybox"><span>info@poiletmuseau.com</span><button class="btn btn-primary" type="button" data-copy="info@poiletmuseau.com">{t("Copier", "Copy")}</button></div></div>
-    <div class="side-card"><h2>{t("Une commande?", "About an order?")}</h2><p class="meta">{t("Nous recommandons des produits par l'entremise de partenaires de confiance. Pour une question sur une commande, une livraison ou un retour, communiquez directement avec le marchand concerné.",
-                                                                                            "We recommend products through trusted partners. For questions about an order, delivery or return, please contact the merchant directly.")}</p>
-      <a class="link-arrow" href="{u("divulgation")}">{t("Notre divulgation d'affiliation →", "Our affiliate disclosure →")}</a></div>
-  </aside>
+<div class="wrap" style="padding-bottom:70px"><div class="side-card" style="max-width:560px">
+  <h2>{t("Par courriel", "By email")}</h2>
+  <div class="copybox"><a href="mailto:info@poiletmuseau.com" style="font-weight:700">info@poiletmuseau.com</a><button class="btn btn-primary" type="button" data-copy="info@poiletmuseau.com">{t("Copier", "Copy")}</button></div>
 </div></div>'''
     page(path, label, t("Une question, une idée d'article ou un commentaire? Écrivez à Poil & Museau à info@poiletmuseau.com.",
                         "A question, an article idea or a comment? Write to Poil & Museau at info@poiletmuseau.com."),
