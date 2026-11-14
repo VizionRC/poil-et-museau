@@ -49,7 +49,8 @@ def t(fr, en):
 SLUGS = {  # clé: (fichier français, fichier anglais)
     "home": ("index.html", "index.html"), "chiens": ("chiens.html", "dogs.html"), "chats": ("chats.html", "cats.html"),
     "conseils": ("conseils.html", "advice.html"), "aliments": ("aliments-dangereux.html", "dangerous-foods.html"),
-    "reco": ("recommandations.html", "recommendations.html"), "apropos": ("a-propos.html", "about.html"),
+    "reco": ("recommandations.html", "recommendations.html"),
+    "produits_chiens": ("produits/chiens.html", "products/dogs.html"), "produits_chats": ("produits/chats.html", "products/cats.html"), "apropos": ("a-propos.html", "about.html"),
     "contact": ("contact.html", "contact.html"), "divulgation": ("divulgation.html", "affiliate-disclosure.html"),
     "confidentialite": ("politique-de-confidentialite.html", "privacy-policy.html"),
     "conditions": ("conditions-utilisation.html", "terms-of-use.html"),
@@ -153,7 +154,7 @@ def art_url(a):
 
 # ---------------------------------------------------------------- libellés
 CATS = {"sante": ("Santé", "Health"), "alimentation": ("Alimentation", "Nutrition"), "comportement": ("Comportement", "Behaviour"),
-        "produits": ("Produits", "Products"), "toilettage": ("Toilettage", "Grooming")}
+        "produits": ("Guides d'achat", "Buying guides"), "toilettage": ("Toilettage", "Grooming")}
 SPL = {"chien": ("Chien", "Dog"), "chat": ("Chat", "Cat"), "both": ("Chien et chat", "Dog & cat")}
 def cat(k): return t(*CATS[k])
 def spl(k): return t(*SPL[k])
@@ -187,12 +188,13 @@ ARROW = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="cur
 PAWBG = '<svg class="paw-bg" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><ellipse cx="6" cy="9" rx="2.2" ry="2.8"/><ellipse cx="10.2" cy="5.2" rx="2.2" ry="2.8"/><ellipse cx="14.8" cy="5.2" rx="2.2" ry="2.8"/><ellipse cx="19" cy="9" rx="2.2" ry="2.8"/><path d="M12.5 11c-3.2 0-6.2 3.6-6.2 6.4 0 2 1.6 3 3.4 3 1.2 0 2-.6 2.8-.6s1.6.6 2.8.6c1.8 0 3.4-1 3.4-3 0-2.8-3-6.4-6.2-6.4z"/></svg>'
 
 def NAV():
-    return [("chiens", t("Chiens", "Dogs")), ("chats", t("Chats", "Cats")), ("reco", t("Guides d'achat", "Buying guides")),
+    return [("chiens", t("Chiens", "Dogs")), ("chats", t("Chats", "Cats")), ("reco", t("Produits", "Products")),
             ("aliments", t("Aliments à éviter", "Foods to avoid")), ("apropos", t("À propos", "About"))]
 
 # Pages de catégorie par animal (/chiens/sante, /en/dogs/health…), créées dès qu'il y a au moins 2 articles.
 CAT_ORDER = ["sante", "alimentation", "comportement", "toilettage", "produits"]
-CAT_SLUG_EN = {"sante": "health", "alimentation": "nutrition", "comportement": "behaviour", "toilettage": "grooming", "produits": "products"}
+CAT_SLUG_FR = {"produits": "guides-achat"}
+CAT_SLUG_EN = {"sante": "health", "alimentation": "nutrition", "comportement": "behaviour", "toilettage": "grooming", "produits": "buying-guides"}
 SP_KEY = {"chien": "chiens", "chat": "chats"}
 def sp_arts(sp, A=None):
     return [a for a in (A or arts()) if a["sp"] in (sp, "both")]
@@ -201,7 +203,8 @@ def cat_keys(sp):
     return [k for k in CAT_ORDER if sum(1 for a in L if a["cat"] == k) >= 2]
 def cat_path(sp, k, lang=None):
     lang = lang or LANG
-    return f"chiens/{k}.html" if lang == "fr" and sp == "chien" else f"chats/{k}.html" if lang == "fr" else \
+    kf = CAT_SLUG_FR.get(k, k)
+    return f"chiens/{kf}.html" if lang == "fr" and sp == "chien" else f"chats/{kf}.html" if lang == "fr" else \
            f"en/{'dogs' if sp == 'chien' else 'cats'}/{CAT_SLUG_EN[k]}.html"
 def cat_url(sp, k):
     return ROOT + cat_path(sp, k)
@@ -229,6 +232,14 @@ def header(active, alt_href):
             menu = "".join(f'<a href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs) + f'<a class="dd-all" href="{u(k)}">{all_l}</a>'
             links += f'<div class="dd"><a class="has-dd" href="{u(k)}"{top_cur}>{l}{ICON_DOWN}</a><div class="dd-menu" id="dd-{k}">{menu}</div></div>'
             mob += f'<a href="{u(k)}"{cur(k)}>{l}</a>' + "".join(f'<a class="sub" href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs)
+        elif k == "reco":
+            on = top in ("reco", "produits_chiens", "produits_chats")
+            top_cur = ' aria-current="page"' if on else ""
+            subs = [(u("produits_chiens"), t("Pour votre chien", "For your dog"), cur("produits_chiens")),
+                    (u("produits_chats"), t("Pour votre chat", "For your cat"), cur("produits_chats"))]
+            menu = "".join(f'<a href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs) + f'<a class="dd-all" href="{u("reco")}">{t("Nos coups de cœur →", "Our top picks →")}</a>'
+            links += f'<div class="dd"><a class="has-dd" href="{u("reco")}"{top_cur}>{l}{ICON_DOWN}</a><div class="dd-menu" id="dd-reco">{menu}</div></div>'
+            mob += f'<a href="{u("reco")}"{cur("reco")}>{l}</a>' + "".join(f'<a class="sub" href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs)
         else:
             links += f'<a href="{u(k)}"{top_cur}>{l}</a>'
             mob += f'<a href="{u(k)}"{top_cur}>{l}</a>'
@@ -670,12 +681,12 @@ def build_species(sp):
 </div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
-  <a class="link-arrow" href="{u("reco")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
+  <a class="link-arrow" href="{cat_url(sp, "produits")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
   <div class="reco" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">{guides_html}</div>
 </div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h2 class="sec">{t("Nos produits recommandés pour votre", "Our recommended products for your")} <em>{animal}</em></h2></div>
-  <a class="link-arrow" href="{u("reco", "#produits")}">{t("Tous les produits →", "All products →")}</a></div>
+  <a class="link-arrow" href="{u("produits_chiens" if dog else "produits_chats")}">{t("Tous les produits →", "All products →")}</a></div>
   <div class="pgrid">{product_cards(sp)}</div>
 </div></section>'''
     desc = (t(f"Conseils pour chiens : santé, alimentation, comportement, toilettage et guides d'achat. {len(lst)} articles clairs et vérifiés.",
@@ -874,6 +885,68 @@ PRODUCTS = [
   ("Cat tree", "A multi-level space where your cat can climb, scratch, play and rest.")),
 ]
 
+CATALOGUE = json.load(open(os.path.join(HERE, "data", "produits.json"), encoding="utf-8"))
+
+def prod_img(pid, fallback=""):
+    for d in ("produits", "reco"):
+        if os.path.exists(os.path.join(HERE, "images", d, pid + ".webp")):
+            return f"{ROOT}images/{d}/{pid}.webp"
+    return fallback
+
+def pcard(name, desc, link, src, sp, more=None, h="h3"):
+    im = (f'<img loading="lazy" src="{src}" alt="{e(name)}" width="720" height="480">' if src else '<span class="pc-ph" aria-hidden="true">🐾</span>')
+    return (f'<article class="pc reveal" data-sp="{sp}"><div class="pc-img">{im}</div><div class="pc-b"><{h}>{e(name)}</{h}>'
+            + (f'<p>{e(desc)}</p>' if desc else "")
+            + f'<div class="pc-cta"><a class="btn btn-primary amz-cta" href="{amz_url(link)}" target="_blank" rel="nofollow sponsored noopener">{t("Voir sur Amazon", "See on Amazon")}</a>'
+            + (f'<a class="pc-more" href="{more}">{t("Lire nos conseils →", "Read our advice →")}</a>' if more else "") + '</div></div></article>')
+
+def build_products(sp):
+    key = "produits_chiens" if sp == "chien" else "produits_chats"
+    path = begin(path_of(key))
+    dog = sp == "chien"
+    cats = CATALOGUE[sp]
+    n = sum(len(c["items"]) for c in cats)
+    fav = {amz_url(x[2]): x for x in PRODUCTS}
+    label = t("Pour votre chien", "For your dog") if dog else t("Pour votre chat", "For your cat")
+    items = [(path_of("reco"), t("Produits", "Products")), (None, label)]
+    pills = "".join(f'<a href="#{slug(c["fr"])}">{e(t(c["fr"], c["en"]))}<span class="n">{len(c["items"])}</span></a>' for c in cats)
+    secs = ""
+    for c in cats:
+        cards = ""
+        for it in c["items"]:
+            f = fav.get(amz_url(it["link"]))
+            desc = ""
+            more = art_url(art(f[3])) if f else None
+            cards += pcard(t(it["fr"], it["en"]), desc, it["link"], prod_img(it["id"]), sp, more)
+        secs += (f'<section class="block" style="padding-top:0" id="{slug(c["fr"])}"><div class="wrap"><h2 class="pc-group">{e(t(c["fr"], c["en"]))}</h2>'
+                 f'<div class="pgrid">{cards}</div></div></section>')
+    animal = t("chien", "dog") if dog else t("chat", "cat")
+    lead = (t("Une sélection de produits utiles pour les repas, les promenades, l'occupation, le repos et l'entretien de votre chien.",
+              "A selection of useful products for your dog's meals, walks, play, rest and care.") if dog else
+            t("Une sélection de produits utiles pour les repas, le jeu, le repos, l'hygiène et l'entretien de votre chat.",
+              "A selection of useful products for your cat's meals, play, rest, hygiene and care."))
+    body = f'''
+<section class="page-hero {"dog" if dog else "cat"}"><div class="wrap"><div>
+  {crumbs(items)}
+  <span class="kicker">{t("Produits recommandés", "Recommended products")}</span>
+  <h1 class="display">{t("Les essentiels pour votre", "Essentials for your")} <em>{animal}</em></h1>
+  <p class="lead">{lead}</p>
+  <nav class="topics" aria-label="{t("Catégories de produits", "Product categories")}">{pills}</nav>
+</div></div></section>
+<div style="height:40px"></div>
+{secs}
+<section class="block" style="padding-top:0"><div class="wrap">
+  <p class="disclose"><span aria-hidden="true">ℹ️</span><span>{t("Certains liens de cette page sont des liens d'affiliation. Poil &amp; Museau peut recevoir une commission si vous effectuez un achat, sans frais supplémentaires pour vous.",
+     "Some links on this page are affiliate links. Poil &amp; Museau may earn a commission if you make a purchase, at no extra cost to you.")} <a href="{u("divulgation")}">{t("Lire notre divulgation", "Read our disclosure")}</a></span></p>
+  <p style="margin-top:22px"><a class="link-arrow" href="{cat_url(sp, "produits")}">{t(f"Nos guides d'achat pour {'chiens' if dog else 'chats'} →", f"Our {'dog' if dog else 'cat'} buying guides →")}</a></p>
+</div></section>'''
+    page(path, t(f"Produits recommandés pour {'chiens' if dog else 'chats'}", f"Recommended {'dog' if dog else 'cat'} products"),
+         lead + " " + t(f"{n} produits choisis par Poil & Museau.", f"{n} products picked by Poil & Museau."), body, key,
+         image=SITE + "/" + prod_img(cats[0]["items"][0]["id"]).replace(ROOT, "", 1) if prod_img(cats[0]["items"][0]["id"]) else None,
+         jsonld=[crumbs_ld(items), {"@context": "https://schema.org", "@type": "CollectionPage", "url": canon(path), "inLanguage": t("fr-CA", "en-CA"),
+                 "name": t(f"Produits recommandés pour {'chiens' if dog else 'chats'}", f"Recommended {'dog' if dog else 'cat'} products")}],
+         alt=path_of(key, "en" if LANG == "fr" else "fr"))
+
 def product_cards(sp=None):
     out = ""
     for im, psp, link, h, fr, en in PRODUCTS:
@@ -881,18 +954,21 @@ def product_cards(sp=None):
             continue
         name, desc = fr if LANG == "fr" else en
         a = art(h)
-        src = f"{ROOT}images/reco/{im}.webp" if os.path.exists(os.path.join(HERE, "images", "reco", im + ".webp")) else img(a)
-        out += (f'<article class="pc reveal" data-sp="{psp}"><div class="pc-img"><img loading="lazy" src="{src}" alt="{e(name)}" width="720" height="480">'
-                f'<span class="tag t-{psp}">{spl(psp)}</span></div><div class="pc-b"><h3>{e(name)}</h3><p>{e(desc)}</p>'
-                f'<div class="pc-cta"><a class="btn btn-primary amz-cta" href="{amz_url(link)}" target="_blank" rel="nofollow sponsored noopener">{t("Voir sur Amazon", "See on Amazon")}</a>'
-                f'<a class="pc-more" href="{art_url(a)}">{t("Lire nos conseils →", "Read our advice →")}</a></div></div></article>')
+        out += pcard(name, desc, link, prod_img(im, img(a)), psp, art_url(a))
     return out
 
 def build_reco():
     path = begin(path_of("reco"))
-    label = t("Guides d'achat", "Buying guides")
+    label = t("Produits recommandés", "Recommended products")
     cards = ""
-    for ic, bg, sp, h, fr, en in RECO:
+    for sp_ in ("chien", "chat"):
+        k_ = "produits_chiens" if sp_ == "chien" else "produits_chats"
+        n_ = sum(len(c["items"]) for c in CATALOGUE[sp_])
+        first = CATALOGUE[sp_][0]["items"][0]["id"] if sp_ == "chat" else "lit-apaisant"
+        cards += (f'<a class="hubcard {"dog" if sp_ == "chien" else "cat"} reveal" href="{u(k_)}"><span class="hc-img"><img loading="lazy" src="{prod_img(first, img(A_FR[0]))}" alt="" width="720" height="480"></span>'
+                  f'<span class="hc-b"><span class="kicker">{n_} {t("produits", "products")}</span><span class="hc-t">{t("Pour votre chien", "For your dog") if sp_ == "chien" else t("Pour votre chat", "For your cat")}</span>'
+                  f'<span class="hc-l">{" · ".join(e(t(c["fr"], c["en"])) for c in CATALOGUE[sp_])}</span><span class="go">{t("Voir les produits →", "See the products →")}</span></span></a>')
+    for ic, bg, sp, h, fr, en in []:
         title, crit = fr if LANG == "fr" else en
         ga = art(h)
         cards += (f'<a class="rc rc-photo reveal" href="{art_url(ga)}" data-sp="{sp}"><span class="rc-img"><img loading="lazy" src="{img(ga)}" alt="{e(ga["alt"])}" width="720" height="495"></span>'
@@ -901,18 +977,19 @@ def build_reco():
     body = f'''
 <section class="page-hero"><div class="blob" style="width:380px;height:380px;background:var(--blush);top:-160px;right:-60px" aria-hidden="true"></div>
 <div class="wrap"><div>{crumbs([(None, label)])}
-  <span class="kicker">{t("Nos recommandations", "Our recommendations")}</span><h1 class="display">{t("Guides <em>d'achat</em>", "Buying <em>guides</em>")}</h1>
-  <p class="lead">{t("Avant de recommander un produit, on explique comment le choisir. Chaque guide présente les critères qui comptent vraiment, puis des modèles à considérer.",
-                     "Before recommending a product, we explain how to choose one. Each guide covers the criteria that really matter, then models worth considering.")}</p></div></div></section>
+  <span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h1 class="display">{t("Produits <em>recommandés</em>", "Recommended <em>products</em>")}</h1>
+  <p class="lead">{t("Des produits utiles, choisis pour le bien-être des chiens et des chats : repas, jeu, promenade, repos et entretien.",
+                     "Useful products picked for the well-being of dogs and cats: meals, play, walks, rest and care.")}</p></div></div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
-  <div class="reco four">{cards}</div>
+  <div class="hubgrid">{cards}</div>
 </div></section>
 <section class="block" style="padding-top:0" id="produits"><div class="wrap">
-  <div class="sec-head reveal"><div><span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h2 class="sec">{t("Nos produits <em>recommandés</em>", "Our recommended <em>products</em>")}</h2></div></div>
+  <div class="sec-head reveal"><div><span class="kicker">{t("Sélection Poil &amp; Museau", "Poil &amp; Museau picks")}</span><h2 class="sec">{t("Nos <em>coups de cœur</em>", "Our <em>top picks</em>")}</h2></div></div>
   <h3 class="pc-group">{t("Pour votre chien", "For your dog")}</h3>
   <div class="pgrid">{product_cards("chien")}</div>
   <h3 class="pc-group">{t("Pour votre chat", "For your cat")}</h3>
   <div class="pgrid">{product_cards("chat")}</div>
+  <p style="margin:6px 0 26px;display:flex;gap:24px;flex-wrap:wrap"><a class="link-arrow" href="{cat_url("chien", "produits")}">{t("Nos guides d'achat pour chiens →", "Our dog buying guides →")}</a><a class="link-arrow" href="{cat_url("chat", "produits")}">{t("Nos guides d'achat pour chats →", "Our cat buying guides →")}</a></p>
   <p class="disclose reveal"><span aria-hidden="true">ℹ️</span><span>{t("Certains liens de nos guides sont des liens d'affiliation, notamment avec le programme Partenaires d'Amazon. Si vous achetez par leur entremise, Poil &amp; Museau peut recevoir une commission, sans frais supplémentaires pour vous.",
                                                                          "Some links in our guides are affiliate links, including through the Amazon Associates program. If you buy through them, Poil &amp; Museau may earn a commission at no extra cost to you.")} <a href="{u("divulgation")}">{t("Lire notre divulgation", "Read our disclosure")}</a></span></p>
 </div></section>
@@ -924,9 +1001,9 @@ def build_reco():
     <div class="value reveal"><span class="ic" aria-hidden="true">🤝</span><h3>{t("On reste transparents", "We stay transparent")}</h3><p>{t("Les liens d'affiliation sont toujours identifiés et ne changent pas nos critères.", "Affiliate links are always identified and never change our criteria.")}</p></div>
   </div>
 </div></section>'''
-    page(path, t("Guides d'achat pour chiens et chats", "Buying guides for dogs and cats"),
-         t("Guides d'achat pour chiens et chats : fontaine à eau, litière autonettoyante, harnais, lit, toilettage et nourriture. Les critères qui comptent vraiment.",
-           "Buying guides for dogs and cats: water fountain, self-cleaning litter box, harness, bed, grooming and food. The criteria that really matter."),
+    page(path, t("Produits recommandés pour chiens et chats", "Recommended products for dogs and cats"),
+         t("Produits recommandés pour chiens et chats : jeux, repas, promenade, repos, litière et toilettage. Notre sélection, classée par animal et par usage.",
+           "Recommended products for dogs and cats: toys, meals, walks, rest, litter and grooming. Our picks, sorted by pet and use."),
          body, "reco", jsonld=[crumbs_ld([(None, label)])], alt=path_of("reco", "en" if LANG == "fr" else "fr"))
 
 # ---------------------------------------------------------------- à propos
@@ -1246,6 +1323,7 @@ for LANG in ("fr", "en"):
     for sp_ in ("chien", "chat"):
         for c_ in cat_keys(sp_):
             build_category(sp_, c_)
+        build_products(sp_)
     A_ = arts()
     for i, a in enumerate(A_):
         build_article(i, a, A_)
@@ -1333,14 +1411,16 @@ redir = [f"/blogs/actualites/{a['h']} /articles/{a['h']} 301" for a in A_FR]
 redir += [f"/blogs/actualites/{a['h']}/ /articles/{a['h']} 301" for a in A_FR]
 shopify_pages = {
     "contact": "/contact", "divulgation-daffiliation": "/divulgation", "produits-chiens-chats": "/a-propos",
-    "produits-chiens": "/chiens/produits", "chiens-produits": "/chiens/produits", "chiens-sante": "/chiens/sante",
+    "produits-chiens": "/produits/chiens", "chiens-produits": "/produits/chiens", "chiens-sante": "/chiens/sante",
     "chiens-alimentation": "/chiens/alimentation", "chiens-comportement": "/chiens/comportement",
-    "chiens-toilettage": "/chiens/toilettage", "produits-chats": "/chats/produits", "chats-produits": "/chats/produits",
+    "chiens-toilettage": "/chiens/toilettage", "produits-chats": "/produits/chats", "chats-produits": "/produits/chats",
     "chats-sante": "/chats/sante", "chats-alimentation": "/chats",
     "chats-comportement": "/chats/comportement", "chats-toilettage": "/chats",
     "nos-recommandations": "/recommandations", "nos-recommandations-pour-chiens-et-chats": "/recommandations",
-    "essentiels-chien": "/recommandations", "essentiels-chat": "/recommandations", "produits": "/recommandations"}
+    "essentiels-chien": "/produits/chiens", "essentiels-chat": "/produits/chats", "produits": "/recommandations"}
 redir += [f"/pages/{k} {v} 301" for k, v in shopify_pages.items()]
+redir += ["/chiens/produits /chiens/guides-achat 301", "/chats/produits /chats/guides-achat 301",
+          "/en/dogs/products /en/dogs/buying-guides 301", "/en/cats/products /en/cats/buying-guides 301"]
 policies = {"privacy-policy": "/politique-de-confidentialite", "terms-of-service": "/conditions-utilisation",
             "legal-notice": "/conditions-utilisation", "contact-information": "/contact",
             "refund-policy": "/divulgation", "shipping-policy": "/divulgation", "divulgation-affiliation": "/divulgation"}

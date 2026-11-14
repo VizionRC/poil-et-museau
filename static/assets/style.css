@@ -487,3 +487,18 @@ footer.site .linklike{font-weight:600}
 .rc-photo>*:not(.rc-img){margin-inline:22px}
 .rc-photo .go{margin-bottom:22px}
 .rc-photo .tag{margin-top:4px}
+.pc-ph{display:grid;place-items:center;width:100%;height:100%;font-size:2.4rem;opacity:.4}
+.pc-b h2,.pc-b h3{font-family:var(--f-display);font-size:1.15rem;line-height:1.2}
+.hubgrid{display:grid;gap:20px}
+@media(min-width:768px){.hubgrid{grid-template-columns:1fr 1fr}}
+.hubcard{display:flex;flex-direction:column;border-radius:28px;overflow:hidden;color:#2B1E14;transition:transform .3s}
+.hubcard:hover{transform:translateY(-4px)}
+.hubcard.dog{background:var(--butter)}.hubcard.cat{background:#BCC79F}
+.hc-img{aspect-ratio:16/9;overflow:hidden;display:block}
+.hc-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.hubcard:hover .hc-img img{transform:scale(1.04)}
+.hc-b{padding:22px 26px 26px;display:flex;flex-direction:column;gap:8px}
+.hc-b .kicker{color:#5A3A1A}
+.hc-t{font-family:var(--f-display);font-size:1.9rem;line-height:1.1;font-weight:700}
+.hc-l{font-size:.93rem;color:#3A2C20}
+.hc-b .go{font-weight:800;margin-top:6px}
