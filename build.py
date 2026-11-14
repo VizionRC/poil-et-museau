@@ -613,7 +613,7 @@ def build_home():
     </div>
   </div>
 </section>
-<div class="marquee" aria-hidden="true"><div class="track"><span>{topics}</span><span>{topics}</span></div></div>
+<div class="marquee" aria-hidden="true"><div class="track"><span>{(topics + " ") * 3}</span><span>{(topics + " ") * 3}</span></div></div>
 
 <section class="block"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Par où commencer?", "Where to start?")}</span><h2 class="sec">{t("Votre compagnon,<br><em>votre parcours.</em>", "Your companion,<br><em>your path.</em>")}</h2></div>
