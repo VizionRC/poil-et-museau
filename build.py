@@ -426,7 +426,7 @@ def pretty_links(doc):
         else:
             url = url[:-5]
         return f'{attr}="{url}{frag}"'
-    return re.sub(r'(href)="([^"#?]+)(#[^"]*)?"', fix, doc)
+    return re.sub(r'(href|action)="([^"#?]+)(#[^"]*)?"', fix, doc)
 
 def card(a):
     return f'''<a class="card" href="{art_url(a)}" data-sp="{a["sp"]}" data-cat="{a["cat"]}">
