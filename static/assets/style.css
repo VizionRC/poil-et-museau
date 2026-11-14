@@ -402,7 +402,8 @@ section.block{padding-block:80px}
 /* Pied de page */
 footer.site{padding-block:70px 40px;border-top:1px solid var(--line);margin-top:40px}
 .fgrid{display:grid;gap:36px}
-@media(min-width:768px){.fgrid{grid-template-columns:1.5fr 1fr 1fr 1fr}}
+footer.site{padding-block:44px 32px}
+
 footer.site h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px;color:var(--ink-2);font-family:var(--f-body)}
 footer.site ul{list-style:none;display:flex;flex-direction:column;gap:8px}
 footer.site ul a{font-weight:600}
@@ -464,3 +465,5 @@ html:not(.live) .blob,html:not(.live) .sticker,html:not(.live) .sticker span,htm
 .sh-pin:hover,.sh-fb:hover{filter:brightness(1.1);color:#fff}
 @media(max-width:480px){.nav{gap:8px}.nav-right{gap:5px}.icon-btn,.lang-btn{width:38px;height:38px;min-width:38px;padding:0}.logo{font-size:1.2rem;gap:5px}.logo img{height:36px}}
 @media(max-width:370px){#theme{display:none}}
+footer.site .linklike{font-weight:600}
+@media(min-width:768px){footer.site ul{flex-direction:row;flex-wrap:wrap;gap:8px 28px}}

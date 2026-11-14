@@ -259,16 +259,6 @@ def footer():
     return f'''<footer class="site">
   <div class="wrap">
     <div class="fgrid">
-      <div>
-        <a href="{u("home")}" aria-label="Poil &amp; Museau"><img class="flogo" src="{ROOT}images/logo.webp" alt="{t("Poil &amp; Museau, complice de vos animaux", "Poil &amp; Museau logo")}" width="240" height="183" loading="lazy"></a>
-        <p class="meta" style="margin-top:12px;max-width:320px">{t("Conseils et produits choisis pour le bien-être des chiens et des chats. Fait au Québec.", "Advice and carefully chosen products for the well-being of dogs and cats. Made in Québec.")}</p>
-        <p style="margin-top:16px;font-weight:700">info@poiletmuseau.com</p>
-      </div>
-      <div><h2>{t("Chiens", "Dogs")}</h2><ul>
-        {"".join(f'<li><a href="{cat_url("chien", c)}">{cat(c)}</a></li>' for c in cat_keys("chien"))}</ul></div>
-      <div><h2>{t("Chats", "Cats")}</h2><ul>
-        {"".join(f'<li><a href="{cat_url("chat", c)}">{cat(c)}</a></li>' for c in cat_keys("chat"))}
-        <li><a href="{u("aliments")}">{t("Aliments à éviter", "Foods to avoid")}</a></li><li><a href="{u("conseils")}">{t("Tous les conseils", "All advice")}</a></li></ul></div>
       <div><h2>{t("Infos", "Info")}</h2><ul>
         <li><a href="{u("apropos")}">{t("À propos", "About")}</a></li><li><a href="{u("contact")}">{t("Nous joindre", "Contact us")}</a></li>
         <li><a href="{u("divulgation")}">{t("Divulgation d'affiliation", "Affiliate disclosure")}</a></li>
