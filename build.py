@@ -549,7 +549,7 @@ def build_home():
         q, ans = fr if LANG == "fr" else en
         fa = art(h)
         facts_html += (f'<div class="flip reveal" tabindex="0" role="button"><div class="in"><div class="face front">'
-                       f'<div class="fimg"><img loading="lazy" src="{img(fa)}" alt="{e(fa["alt"])}" width="720" height="495"><span class="e" aria-hidden="true">{em}</span></div>'
+                       f'<div class="fimg"><img loading="lazy" src="{img(fa)}" alt="{e(fa["alt"])}" width="720" height="495"></div>'
                        f'<div class="ft"><span class="q">{e(q)}</span><small>{t("Touchez pour retourner ↻", "Tap to flip ↻")}</small></div></div><div class="face back"><p>{e(ans)}</p>'
                        f'<a href="{art_url(art(h))}">{t("Lire l&#x27;article complet →", "Read the full article →")}</a></div></div></div>')
     p1, p2, p3 = art("pourquoi-chien-penche-tete"), art("pourquoi-chat-fait-des-pattes"), art("choisir-nourriture-chien")
