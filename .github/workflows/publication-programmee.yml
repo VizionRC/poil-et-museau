@@ -1,0 +1,79 @@
+name: Publication programmée (lundi 8 h)
+
+# Les articles dont la date (et l'heure, 8 h par défaut) est dans le futur restent cachés.
+# Le lundi, ce workflow relance la mise en ligne Cloudflare à 8 h (heure de Montréal)
+# pour faire apparaître les articles prévus ce jour-là, puis les signale à IndexNow.
+# Deux horaires couvrent l'heure normale (13 h UTC) et l'heure avancée (12 h UTC).
+on:
+  schedule:
+    - cron: "5 12 * * 1"
+    - cron: "5 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Articles à publier maintenant
+        id: liste
+        run: |
+          python3 - <<'PY' > a_publier.txt
+          import datetime, os, re
+          from zoneinfo import ZoneInfo
+          tz = ZoneInfo("America/Toronto"); now = datetime.datetime.now(tz)
+          for f in sorted(os.listdir("content/articles")):
+              if not f.endswith(".html"): continue
+              head = open("content/articles/" + f, encoding="utf-8").read(2000)
+              m = dict(re.findall(r"^(\w+):\s*(.+)$", head.split("-->")[0], re.M))
+              if m.get("brouillon", "non").lower() in ("oui", "yes", "true"): continue
+              try:
+                  quand = datetime.datetime.fromisoformat(f'{m["date"]}T{m.get("heure", "08:00")}').replace(tzinfo=tz)
+              except Exception:
+                  continue
+              if quand <= now and quand.date() == now.date():
+                  print(f[:-5])
+          PY
+          cat a_publier.txt
+          echo "n=$(grep -c . a_publier.txt || true)" >> "$GITHUB_OUTPUT"
+      - name: Déjà en ligne?
+        id: enligne
+        if: steps.liste.outputs.n != '0'
+        run: |
+          manque=0
+          while read -r h; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -A "Mozilla/5.0" "https://poiletmuseau.com/articles/$h")
+            echo "$h : $code"; [ "$code" != "200" ] && manque=1
+          done < a_publier.txt
+          echo "manque=$manque" >> "$GITHUB_OUTPUT"
+      - name: Relancer la mise en ligne
+        if: steps.liste.outputs.n != '0' && steps.enligne.outputs.manque == '1'
+        run: |
+          git config user.name "poil-et-museau-publication"
+          git config user.email "actions@users.noreply.github.com"
+          git commit --allow-empty -m "Publication programmée : $(paste -sd ', ' a_publier.txt)"
+          git push
+      - name: Signaler à IndexNow
+        if: steps.liste.outputs.n != '0' && steps.enligne.outputs.manque == '1'
+        run: |
+          sleep 240
+          python3 - <<'PY'
+          import json, re, urllib.request
+          key = re.search(r'INDEXNOW_KEY = "([0-9a-f]+)"', open("build.py").read()).group(1)
+          urls = []
+          for h in open("a_publier.txt").read().split():
+              urls.append(f"https://poiletmuseau.com/articles/{h}")
+          import os
+          for f in os.listdir("content/en/articles"):
+              t = open("content/en/articles/" + f, encoding="utf-8").read(2000)
+              m = re.search(r"^traduction_de:\s*(\S+)", t, re.M)
+              if m and m.group(1) in open("a_publier.txt").read().split():
+                  urls.append(f"https://poiletmuseau.com/en/articles/{f[:-5]}")
+          urls += ["https://poiletmuseau.com/", "https://poiletmuseau.com/en/", "https://poiletmuseau.com/conseils", "https://poiletmuseau.com/en/advice"]
+          body = json.dumps({"host": "poiletmuseau.com", "key": key, "keyLocation": f"https://poiletmuseau.com/{key}.txt", "urlList": urls}).encode()
+          r = urllib.request.urlopen(urllib.request.Request("https://api.indexnow.org/indexnow", data=body, headers={"Content-Type": "application/json; charset=utf-8"}), timeout=30)
+          print("IndexNow", r.status, len(urls), "adresses")
+          PY

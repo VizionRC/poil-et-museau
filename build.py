@@ -17,6 +17,7 @@ import json, re, sys, html, os, datetime, shutil, unicodedata
 HERE = os.path.dirname(os.path.abspath(__file__))
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 LOCAL = "--local" in sys.argv          # aperçu hors ligne : liens en .html
+APERCU = "--apercu" in sys.argv        # aperçu : inclut les brouillons et les articles programmés
 OUT = os.path.abspath(ARGS[0]) if ARGS else os.path.join(HERE, "dist")
 CONTENT = os.path.join(HERE, "content")
 SITE = "https://poiletmuseau.com"
@@ -95,12 +96,31 @@ def html_files(folder):
         return []
     return [f for f in sorted(os.listdir(folder)) if f.endswith(".html") and not f.startswith("_")]
 
+def programme(meta):
+    """Vrai si l'article est programmé pour plus tard (date + heure, fuseau de Montréal ; 8 h par défaut)."""
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo("America/Toronto")
+    except Exception:  # base de fuseaux absente : heure normale de l'Est (prudent : jamais en avance)
+        tz = datetime.timezone(datetime.timedelta(hours=-5))
+    try:
+        quand = datetime.datetime.fromisoformat(f'{meta["date"]}T{meta.get("heure", "08:00")}').replace(tzinfo=tz)
+    except (KeyError, ValueError):
+        return False
+    return quand > datetime.datetime.now(tz)
+
+def cache(meta):
+    return not APERCU and (meta.get("brouillon", "non").lower() in ("oui", "yes", "true") or programme(meta))
+
+CACHES_FR = set()
+
 def load_fr():
     out = []
     folder = os.path.join(CONTENT, "articles")
     for f in html_files(folder):
         meta, body = read_doc(os.path.join(folder, f))
-        if meta.get("brouillon", "non").lower() in ("oui", "yes", "true"):
+        if cache(meta):
+            CACHES_FR.add(f[:-5])
             continue
         missing = [k for k in REQUIRED_FR if not meta.get(k)]
         if missing:
@@ -119,7 +139,7 @@ def load_en(by_fr):
     folder = os.path.join(CONTENT, "en", "articles")
     for f in html_files(folder):
         meta, body = read_doc(os.path.join(folder, f))
-        if meta.get("brouillon", "no").lower() in ("oui", "yes", "true"):
+        if cache(meta) or meta.get("traduction_de") in CACHES_FR:
             continue
         missing = [k for k in REQUIRED_EN if not meta.get(k)]
         if missing:
