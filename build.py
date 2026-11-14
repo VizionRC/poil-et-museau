@@ -1149,6 +1149,7 @@ def clean_body(b):
         return f'<h2 id="{hid}">{inner.strip()}</h2>'
     b = re.sub(r"<h2([^>]*)>(.*?)</h2>", h2, b, flags=re.S)
     b = re.sub(r'href="(?:https?:?/+(?:www\.)?(?:poiletmuseau\.com)?)?/?blogs/actualites/([\w-]+)/?"', r'href="\1.html"', b)
+    b = re.sub(r'href="(?:https?://(?:www\.)?poiletmuseau\.com)?/articles/([\w-]+)/?(#[\w-]+)?"', r'href="\1.html\2"', b)
     b = re.sub(r'<a ([^>]*href="https://(?:amzn\.to|link\.amazon|(?:www\.)?amazon\.(?:ca|com))[^"]*"[^>]*)>',
                lambda m: "<a " + re.sub(r'href="([^"]+)"', lambda h: f'href="{html.escape(amz_url(h.group(1)))}"', re.sub(r'\s(?:rel|target|class)="[^"]*"', "", m.group(1)), count=1) + ' class="amz" target="_blank" rel="nofollow sponsored noopener">', b)
     # Une ligne « 👉 lien » devient un vrai bouton d'appel à l'action
