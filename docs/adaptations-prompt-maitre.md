@@ -15,3 +15,4 @@ Ces décisions ont préséance sur le texte de docs/prompt-maitre.md lorsqu'il y
 - **Pas de mention « nouvel article chaque lundi »** sur le site, et pas d'infolettre.
 - **Images** : trois photos différentes par article (la photo principale et deux photos dans le corps de l'article, sur des sections différentes). Chaque épingle utilise une de ces trois photos, jamais la même deux fois.
 - **Aperçu final** : avant de conclure, toujours montrer à la personne le rendu HTML de l'article tel qu'il sera publié (FR et EN), avec `python3 build.py --apercu` puis `python3 scripts/apercu_article.py <slug> [--en]`, qui produit un fichier HTML autonome (polices, images et styles intégrés, statistiques désactivées).
+- **Questions** : les validations et toutes les questions à la personne passent par un menu contextuel à choix multiples (outil de questions de Claude), avec l'option recommandée en premier, plutôt qu'une question écrite dans le texte.
