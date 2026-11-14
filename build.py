@@ -227,8 +227,7 @@ def header(active, alt_href):
             subs = [(cat_url(sp, c), cat(c), cur(f"{k}/{c}")) for c in cat_keys(sp)]
             all_l = t(f"Tous les articles {'chiens' if sp == 'chien' else 'chats'} →", f"All {'dog' if sp == 'chien' else 'cat'} articles →")
             menu = "".join(f'<a href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs) + f'<a class="dd-all" href="{u(k)}">{all_l}</a>'
-            links += (f'<div class="dd"><a href="{u(k)}"{top_cur}>{l}</a><button class="dd-btn" type="button" aria-expanded="false" aria-controls="dd-{k}" '
-                      f'aria-label="{t("Sous-menu", "Submenu")} {l}">{ICON_DOWN}</button><div class="dd-menu" id="dd-{k}">{menu}</div></div>')
+            links += f'<div class="dd"><a class="has-dd" href="{u(k)}"{top_cur}>{l}{ICON_DOWN}</a><div class="dd-menu" id="dd-{k}">{menu}</div></div>'
             mob += f'<a href="{u(k)}"{cur(k)}>{l}</a>' + "".join(f'<a class="sub" href="{h}"{c_}>{lab}</a>' for h, lab, c_ in subs)
         else:
             links += f'<a href="{u(k)}"{top_cur}>{l}</a>'

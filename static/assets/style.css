@@ -75,10 +75,9 @@ header.site.scrolled{background:color-mix(in srgb,var(--bg) 86%,transparent);bac
 .mobile-menu a:hover,.mobile-menu a[aria-current="page"]{background:var(--bg-2)}
 .mobile-menu .sub{padding:10px 12px 10px 30px;font-weight:500;font-size:.95rem;color:var(--ink-2)}
 .dd{position:relative;display:flex;align-items:center}
-.dd>a{padding-right:6px!important}
-.dd-btn{width:26px;height:34px;border:0;background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;border-radius:999px;margin-right:4px}
-.dd-btn svg{transition:transform .2s}
-.dd:hover .dd-btn svg,.dd.open .dd-btn svg{transform:rotate(180deg)}
+.links a.has-dd{display:inline-flex;align-items:center;gap:6px}
+.has-dd svg{transition:transform .2s;opacity:.7}
+.dd:hover .has-dd svg,.dd:focus-within .has-dd svg{transform:rotate(180deg)}
 .dd-menu{position:absolute;top:100%;left:0;min-width:230px;padding:8px;margin-top:6px;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none;flex-direction:column;gap:2px;z-index:60}
 .dd-menu::before{content:"";position:absolute;left:0;right:0;top:-10px;height:10px}
 .dd:hover .dd-menu,.dd:focus-within .dd-menu,.dd.open .dd-menu{display:flex}
