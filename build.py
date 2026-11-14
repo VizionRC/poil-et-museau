@@ -465,17 +465,6 @@ def list_tools(articles, show_species):
 def empty_msg():
     return f'<div class="empty" id="empty" hidden><div style="font-size:3rem" aria-hidden="true">🐾</div><p>{t("Aucun article ne correspond. Essayez un autre mot.", "No article matches. Try another word.")}</p></div>'
 
-def newsletter():
-    return f'''<section class="block" style="padding-top:0"><div class="wrap"><div class="news reveal">
-  <div><span class="kicker">{t("Infolettre gratuite", "Free newsletter")}</span><h2 class="sec">{t("Un conseil utile,<br><em>chaque lundi.</em>", "One useful tip,<br><em>every Monday.</em>")}</h2>
-  <div class="perks"><span>✅ {t("Le nouvel article de la semaine", "The new article of the week")}</span><span>✅ {t("Le tableau comparatif des fontaines à eau offert", "Free cat water fountain comparison chart")}</span><span>✅ {t("Zéro pourriel, désabonnement en un clic", "No spam, unsubscribe in one click")}</span></div></div>
-  <form data-demo novalidate>
-    <input id="nl-prenom" type="text" placeholder="{t("Votre prénom", "Your first name")}" aria-label="{t("Prénom", "First name")}" autocomplete="given-name">
-    <input id="nl-courriel" type="email" required placeholder="{t("votre@courriel.com", "you@email.com")}" aria-label="{t("Courriel", "Email")}" autocomplete="email">
-    <button class="btn" type="submit">{t("Je m'inscris", "Sign me up")} 🐾</button>
-    <p class="ok-msg" data-ok hidden>{t("Merci! Surveillez votre boîte de réception.", "Thank you! Keep an eye on your inbox.")} 💛</p>
-    <small>{t("Vos renseignements sont traités selon notre", "Your information is handled according to our")} <a href="{u("confidentialite")}" style="text-decoration:underline">{t("politique de confidentialité", "privacy policy")}</a> {t("(Loi 25).", "(Québec Law 25).")}</small>
-  </form></div></div></section>'''
 
 # ---------------------------------------------------------------- outil aliments
 FOODS = [  # emoji, niveau, (nom FR, explication FR), (nom EN, explication EN)
@@ -646,8 +635,7 @@ def build_home():
 <section class="block" style="padding-top:0"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Le saviez-vous?", "Did you know?")}</span><h2 class="sec">{t("Petites questions, <em>grandes réponses</em>", "Small questions, <em>big answers</em>")}</h2></div><p class="meta">{t("Touchez une carte pour la retourner", "Tap a card to flip it")}</p></div>
   <div class="facts">{facts_html}</div>
-</div></section>
-{newsletter()}'''
+</div></section>'''
     ld = [{"@context": "https://schema.org", "@type": "WebSite", "@id": canon(path) + "#website", "name": "Poil & Museau", "url": canon(path),
            "inLanguage": t("fr-CA", "en-CA"), "publisher": {"@id": SITE + "/#organization"},
            "description": t("Conseils, guides d'achat et produits choisis avec soin pour le bien-être des chiens et des chats.", "Advice, buying guides and carefully chosen products for the well-being of dogs and cats."),
@@ -695,8 +683,7 @@ def build_species(sp):
   <div class="sec-head reveal"><div><span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
   <a class="link-arrow" href="{u("reco")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
   <div class="reco" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">{guides_html}</div>
-</div></section>
-{newsletter()}'''
+</div></section>'''
     desc = (t(f"Conseils pour chiens : santé, alimentation, comportement, toilettage et guides d'achat. {len(lst)} articles clairs et vérifiés.",
               f"Dog care advice: health, nutrition, behaviour, grooming and buying guides. {len(lst)} clear, well-researched articles.") if dog else
             t(f"Conseils pour chats : santé, hydratation, comportement et guides d'achat. {len(lst)} articles clairs et vérifiés.",
@@ -767,8 +754,7 @@ def build_category(sp, c):
   <h2 class="sr-only">{t("Articles", "Articles")}</h2>
   <div class="grid">{"".join(card(a) for a in lst)}</div>
   <p style="margin-top:28px"><a class="link-arrow" href="{u(key)}">{t(f"Tous les articles {'chiens' if sp == 'chien' else 'chats'} →", f"All {'dog' if sp == 'chien' else 'cat'} articles →")}</a></p>
-</div></section>
-{newsletter()}'''
+</div></section>'''
     page(path, title, (lead + " " + t(f"{len(lst)} articles clairs et vérifiés.", f"{len(lst)} clear, well-researched articles."))[:300], body, f"{key}/{c}",
          image=abs_img(lst[0]), jsonld=[crumbs_ld(items), {"@context": "https://schema.org", "@type": "CollectionPage", "url": canon(path),
              "name": re.sub(r"<[^>]+>", "", h1), "inLanguage": t("fr-CA", "en-CA"), "mainEntity": {"@type": "ItemList", "numberOfItems": len(lst),
@@ -790,8 +776,7 @@ def build_conseils():
   <h2 class="sr-only">{t("Tous les articles", "All articles")}</h2>
   <div class="grid" data-list>{"".join(card(a) for a in A)}</div>
   {empty_msg()}
-</div></section>
-{newsletter()}'''
+</div></section>'''
     page(path, t("Tous nos conseils", "All our advice"),
          t(f"Les {len(A)} conseils de Poil & Museau pour chiens et chats : santé, alimentation, comportement, toilettage et guides d'achat.",
            f"All {len(A)} Poil & Museau articles for dogs and cats: health, nutrition, behaviour, grooming and buying guides."),
@@ -884,8 +869,7 @@ def build_reco():
     <div class="value reveal"><span class="ic" aria-hidden="true">📚</span><h3>{t("On s'appuie sur des sources", "We rely on sources")}</h3><p>{t("Organisations vétérinaires, écoles de médecine vétérinaire et références reconnues.", "Veterinary organizations, veterinary schools and recognized references.")}</p></div>
     <div class="value reveal"><span class="ic" aria-hidden="true">🤝</span><h3>{t("On reste transparents", "We stay transparent")}</h3><p>{t("Les liens d'affiliation sont toujours identifiés et ne changent pas nos critères.", "Affiliate links are always identified and never change our criteria.")}</p></div>
   </div>
-</div></section>
-{newsletter()}'''
+</div></section>'''
     page(path, t("Guides d'achat pour chiens et chats", "Buying guides for dogs and cats"),
          t("Guides d'achat pour chiens et chats : fontaine à eau, litière autonettoyante, harnais, lit, toilettage et nourriture. Les critères qui comptent vraiment.",
            "Buying guides for dogs and cats: water fountain, self-cleaning litter box, harness, bed, grooming and food. The criteria that really matter."),
@@ -1138,8 +1122,7 @@ def build_article(i, a, A):
 <section class="block" style="padding-top:20px"><div class="wrap">
   <div class="sec-head reveal"><div><span class="kicker">{t("Continuer la lecture", "Keep reading")}</span><h2 class="sec">{t("À lire <em>aussi</em>", "Read <em>next</em>")}</h2></div></div>
   <div class="grid">{"".join(card(x) for x in related(a, A))}</div>
-</div></section>
-{newsletter()}'''
+</div></section>'''
     ld = {"@context": "https://schema.org", "@type": "Article", "headline": a["t"], "description": a["desc"],
           "image": {"@type": "ImageObject", "url": abs_img(a), "caption": a["alt"]},
           "datePublished": a["d"], "dateModified": a["d"], "inLanguage": t("fr-CA", "en-CA"), "wordCount": words,
