@@ -174,7 +174,7 @@ def art_url(a):
 
 # ---------------------------------------------------------------- libellés
 CATS = {"sante": ("Santé", "Health"), "alimentation": ("Alimentation", "Nutrition"), "comportement": ("Comportement", "Behaviour"),
-        "produits": ("Guides d'achat", "Buying guides"), "toilettage": ("Toilettage", "Grooming")}
+        "produits": ("Conseils produits", "Product advice"), "toilettage": ("Toilettage", "Grooming")}
 SPL = {"chien": ("Chien", "Dog"), "chat": ("Chat", "Cat"), "both": ("Chien et chat", "Dog & cat")}
 def cat(k): return t(*CATS[k])
 def spl(k): return t(*SPL[k])
@@ -213,8 +213,8 @@ def NAV():
 
 # Pages de catégorie par animal (/chiens/sante, /en/dogs/health…), créées dès qu'il y a au moins 2 articles.
 CAT_ORDER = ["sante", "alimentation", "comportement", "toilettage", "produits"]
-CAT_SLUG_FR = {"produits": "guides-achat"}
-CAT_SLUG_EN = {"sante": "health", "alimentation": "nutrition", "comportement": "behaviour", "toilettage": "grooming", "produits": "buying-guides"}
+CAT_SLUG_FR = {"produits": "conseils-produits"}
+CAT_SLUG_EN = {"sante": "health", "alimentation": "nutrition", "comportement": "behaviour", "toilettage": "grooming", "produits": "product-advice"}
 SP_KEY = {"chien": "chiens", "chat": "chats"}
 def sp_arts(sp, A=None):
     return [a for a in (A or arts()) if a["sp"] in (sp, "both")]
@@ -606,7 +606,7 @@ def build_home():
     words = t("chien,chat,museau,poil", "dog,cat,pup,kitty")
     hero_title = t(f'Des conseils qui ont du <span class="swap" id="swap" data-words="{words}"><span>chien</span></span><br>pour des compagnons <span class="underline">bien dans leur poil.',
                    f'Trusted advice for every <span class="swap" id="swap" data-words="{words}"><span>dog</span></span><br>and companions who <span class="underline">feel great in their fur.')
-    topics = t("Santé ✦ Alimentation ✦ Comportement ✦ Toilettage ✦ Guides d'achat ✦ Bien-être ✦", "Health ✦ Nutrition ✦ Behaviour ✦ Grooming ✦ Buying guides ✦ Well-being ✦")
+    topics = t("Santé ✦ Alimentation ✦ Comportement ✦ Toilettage ✦ Produits ✦ Bien-être ✦", "Health ✦ Nutrition ✦ Behaviour ✦ Grooming ✦ Products ✦ Well-being ✦")
     body = f'''
 <section class="hero" data-paws>
   <div class="blob b1" aria-hidden="true"></div><div class="blob b2" aria-hidden="true"></div><div class="blob b3" aria-hidden="true"></div>
@@ -674,13 +674,13 @@ def build_home():
 </div></section>'''
     ld = [{"@context": "https://schema.org", "@type": "WebSite", "@id": canon(path) + "#website", "name": "Poil & Museau", "url": canon(path),
            "inLanguage": t("fr-CA", "en-CA"), "publisher": {"@id": SITE + "/#organization"},
-           "description": t("Conseils, guides d'achat et produits choisis avec soin pour le bien-être des chiens et des chats.", "Advice, buying guides and carefully chosen products for the well-being of dogs and cats."),
+           "description": t("Conseils et produits choisis avec soin pour le bien-être des chiens et des chats.", "Advice and carefully chosen products for the well-being of dogs and cats."),
            "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": canon(path_of("conseils")) + "?q={search_term_string}"},
                                "query-input": "required name=search_term_string"}},
           ORG_LD]
     page(path, t("Poil & Museau : conseils pour chiens et chats", "Poil & Museau: dog and cat care advice"),
-         t("Conseils, guides d'achat et produits choisis avec soin pour le bien-être des chiens et des chats. Santé, alimentation, comportement et toilettage, en français d'ici.",
-           "Advice, buying guides and carefully chosen products for the well-being of dogs and cats. Health, nutrition, behaviour and grooming, from Québec."),
+         t("Conseils et produits choisis avec soin pour le bien-être des chiens et des chats. Santé, alimentation, comportement et toilettage, en français d'ici.",
+           "Advice and carefully chosen products for the well-being of dogs and cats. Health, nutrition, behaviour and grooming, from Québec."),
          body, "home", jsonld=ld, alt=path_of("home", "en" if LANG == "fr" else "fr"))
 
 # ---------------------------------------------------------------- chiens / chats
@@ -716,8 +716,8 @@ def build_species(sp):
   {empty_msg()}
 </div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
-  <div class="sec-head reveal"><div><span class="kicker">{t("Guides d'achat", "Buying guides")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
-  <a class="link-arrow" href="{cat_url(sp, "produits")}">{t("Tous nos guides d'achat →", "All our buying guides →")}</a></div>
+  <div class="sec-head reveal"><div><span class="kicker">{t("Conseils produits", "Product advice")}</span><h2 class="sec">{t("Bien choisir pour votre", "Choosing well for your")} <em>{animal}</em></h2></div>
+  <a class="link-arrow" href="{cat_url(sp, "produits")}">{t("Tous nos conseils produits →", "All our product advice →")}</a></div>
   <div class="reco" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">{guides_html}</div>
 </div></section>
 <section class="block" style="padding-top:0"><div class="wrap">
@@ -725,10 +725,10 @@ def build_species(sp):
   <a class="link-arrow" href="{u("produits_chiens" if dog else "produits_chats")}">{t("Tous les produits →", "All products →")}</a></div>
   <div class="pgrid">{product_cards(sp)}</div>
 </div></section>'''
-    desc = (t(f"Conseils pour chiens : santé, alimentation, comportement, toilettage et guides d'achat. {len(lst)} articles clairs et vérifiés.",
-              f"Dog care advice: health, nutrition, behaviour, grooming and buying guides. {len(lst)} clear, well-researched articles.") if dog else
-            t(f"Conseils pour chats : santé, hydratation, comportement et guides d'achat. {len(lst)} articles clairs et vérifiés.",
-              f"Cat care advice: health, hydration, behaviour and buying guides. {len(lst)} clear, well-researched articles."))
+    desc = (t(f"Conseils pour chiens : santé, alimentation, comportement, toilettage et conseils produits. {len(lst)} articles clairs et vérifiés.",
+              f"Dog care advice: health, nutrition, behaviour, grooming and product advice. {len(lst)} clear, well-researched articles.") if dog else
+            t(f"Conseils pour chats : santé, hydratation, comportement et conseils produits. {len(lst)} articles clairs et vérifiés.",
+              f"Cat care advice: health, hydration, behaviour and product advice. {len(lst)} clear, well-researched articles."))
     page(path, t(f"Conseils pour {'chiens' if dog else 'chats'}", f"{'Dog' if dog else 'Cat'} care advice"), desc, body, key,
          image=abs_img(hero_a), jsonld=[crumbs_ld([(None, label)])], alt=path_of(key, "en" if LANG == "fr" else "fr"))
 
@@ -756,8 +756,8 @@ CAT_TXT = {
         ("Grooming your <em>dog</em>", "Grooming your dog at home"),
         "Bain, brossage, griffes, oreilles : à quelle fréquence et comment s'y prendre à la maison, étape par étape.",
         "Bathing, brushing, nails, ears: how often and how to do it at home, step by step."),
-    ("chien", "produits"): (("Guides d'achat pour <em>chiens</em>", "Guides d'achat pour chiens"),
-        ("Buying guides for <em>dogs</em>", "Dog buying guides"),
+    ("chien", "produits"): (("Conseils produits pour <em>chiens</em>", "Conseils produits pour chiens : bien choisir"),
+        ("Product advice for <em>dogs</em>", "Dog product advice: choosing well"),
         "Harnais, lit, sac de voyage, accessoires du quotidien : les critères qui comptent vraiment avant d'acheter.",
         "Harness, bed, travel bag, everyday accessories: the criteria that really matter before you buy."),
     ("chat", "sante"): (("La santé de votre <em>chat</em>", "Santé du chat : signes à surveiller et bons réflexes"),
@@ -768,8 +768,8 @@ CAT_TXT = {
         ("Understanding your <em>cat</em>", "Cat behaviour: understand and respond"),
         "Pétrissage, regards insistants, griffades et autres habitudes : ce qu'elles signifient et comment réagir.",
         "Kneading, long stares, scratching and other habits: what they mean and how to respond."),
-    ("chat", "produits"): (("Guides d'achat pour <em>chats</em>", "Guides d'achat pour chats"),
-        ("Buying guides for <em>cats</em>", "Cat buying guides"),
+    ("chat", "produits"): (("Conseils produits pour <em>chats</em>", "Conseils produits pour chats : bien choisir"),
+        ("Product advice for <em>cats</em>", "Cat product advice: choosing well"),
         "Fontaine à eau, litière autonettoyante, essentiels du quotidien : bien choisir avant d'acheter.",
         "Water fountain, self-cleaning litter box, everyday essentials: choose well before you buy."),
 }
@@ -819,8 +819,8 @@ def build_conseils():
   {empty_msg()}
 </div></section>'''
     page(path, t("Tous nos conseils", "All our advice"),
-         t(f"Les {len(A)} conseils de Poil & Museau pour chiens et chats : santé, alimentation, comportement, toilettage et guides d'achat.",
-           f"All {len(A)} Poil & Museau articles for dogs and cats: health, nutrition, behaviour, grooming and buying guides."),
+         t(f"Les {len(A)} conseils de Poil & Museau pour chiens et chats : santé, alimentation, comportement, toilettage et conseils produits.",
+           f"All {len(A)} Poil & Museau articles for dogs and cats: health, nutrition, behaviour, grooming and product advice."),
          body, "conseils", jsonld=[crumbs_ld([(None, label)]), {"@context": "https://schema.org", "@type": "CollectionPage", "url": canon(path),
              "inLanguage": t("fr-CA", "en-CA"), "mainEntity": {"@type": "ItemList", "numberOfItems": len(A),
              "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": canon(art_path(x)), "name": x["t"]} for i, x in enumerate(A)]}}],
@@ -974,7 +974,7 @@ def build_products(sp):
 <section class="block" style="padding-top:0"><div class="wrap">
   <p class="disclose"><span aria-hidden="true">ℹ️</span><span>{t("Certains liens de cette page sont des liens d'affiliation. Poil &amp; Museau peut recevoir une commission si vous effectuez un achat, sans frais supplémentaires pour vous.",
      "Some links on this page are affiliate links. Poil &amp; Museau may earn a commission if you make a purchase, at no extra cost to you.")} <a href="{u("divulgation")}">{t("Lire notre divulgation", "Read our disclosure")}</a></span></p>
-  <p style="margin-top:22px"><a class="link-arrow" href="{cat_url(sp, "produits")}">{t(f"Nos guides d'achat pour {'chiens' if dog else 'chats'} →", f"Our {'dog' if dog else 'cat'} buying guides →")}</a></p>
+  <p style="margin-top:22px"><a class="link-arrow" href="{cat_url(sp, "produits")}">{t(f"Nos conseils produits pour {'chiens' if dog else 'chats'} →", f"Our {'dog' if dog else 'cat'} product advice →")}</a></p>
 </div></section>'''
     page(path, t(f"Produits recommandés pour {'chiens' if dog else 'chats'}", f"Recommended {'dog' if dog else 'cat'} products"),
          lead + " " + t(f"{n} produits choisis par Poil & Museau.", f"{n} products picked by Poil & Museau."), body, key,
@@ -1025,7 +1025,7 @@ def build_reco():
   <div class="pgrid">{product_cards("chien")}</div>
   <h3 class="pc-group">{t("Pour votre chat", "For your cat")}</h3>
   <div class="pgrid">{product_cards("chat")}</div>
-  <p style="margin:6px 0 26px;display:flex;gap:24px;flex-wrap:wrap"><a class="link-arrow" href="{cat_url("chien", "produits")}">{t("Nos guides d'achat pour chiens →", "Our dog buying guides →")}</a><a class="link-arrow" href="{cat_url("chat", "produits")}">{t("Nos guides d'achat pour chats →", "Our cat buying guides →")}</a></p>
+  <p style="margin:6px 0 26px;display:flex;gap:24px;flex-wrap:wrap"><a class="link-arrow" href="{cat_url("chien", "produits")}">{t("Nos conseils produits pour chiens →", "Our dog product advice →")}</a><a class="link-arrow" href="{cat_url("chat", "produits")}">{t("Nos conseils produits pour chats →", "Our cat product advice →")}</a></p>
   <p class="disclose reveal"><span aria-hidden="true">ℹ️</span><span>{t("Certains liens de nos guides sont des liens d'affiliation, notamment avec le programme Partenaires d'Amazon. Si vous achetez par leur entremise, Poil &amp; Museau peut recevoir une commission, sans frais supplémentaires pour vous.",
                                                                          "Some links in our guides are affiliate links, including through the Amazon Associates program. If you buy through them, Poil &amp; Museau may earn a commission at no extra cost to you.")} <a href="{u("divulgation")}">{t("Lire notre divulgation", "Read our disclosure")}</a></span></p>
 </div></section>
@@ -1385,7 +1385,7 @@ rss("fr", A_FR); rss("en", A_EN)
 def llms():
     global LANG
     lines = ["# Poil & Museau", "",
-             "> Site indépendant québécois de conseils pour chiens et chats (santé, alimentation, comportement, toilettage, guides d'achat), en français et en anglais. "
+             "> Site indépendant québécois de conseils pour chiens et chats (santé, alimentation, comportement, toilettage, conseils produits), en français et en anglais. "
              "Les articles s'appuient sur des sources vétérinaires reconnues et ne remplacent pas l'avis d'un vétérinaire. Certains liens sont des liens d'affiliation Amazon, identifiés comme tels.", "",
              "Independent Québec website offering dog and cat care advice in French and English.", ""]
     for lang, items in (("fr", A_FR), ("en", A_EN)):
@@ -1441,8 +1441,8 @@ shopify_pages = {
     "nos-recommandations": "/recommandations", "nos-recommandations-pour-chiens-et-chats": "/recommandations",
     "essentiels-chien": "/produits/chiens", "essentiels-chat": "/produits/chats", "produits": "/recommandations"}
 redir += [f"/pages/{k} {v} 301" for k, v in shopify_pages.items()]
-redir += ["/chiens/produits /chiens/guides-achat 301", "/chats/produits /chats/guides-achat 301",
-          "/en/dogs/products /en/dogs/buying-guides 301", "/en/cats/products /en/cats/buying-guides 301"]
+redir += [f"/{a}/{o} /{a}/conseils-produits 301" for a in ("chiens", "chats") for o in ("produits", "guides-achat")]
+redir += [f"/en/{a}/{o} /en/{a}/product-advice 301" for a in ("dogs", "cats") for o in ("products", "buying-guides")]
 policies = {"privacy-policy": "/politique-de-confidentialite", "terms-of-service": "/conditions-utilisation",
             "legal-notice": "/conditions-utilisation", "contact-information": "/contact",
             "refund-policy": "/divulgation", "shipping-policy": "/divulgation", "divulgation-affiliation": "/divulgation"}
