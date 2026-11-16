@@ -1,6 +1,6 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-11-16T13:40:25+00:00",
+  "genere_le": "2026-11-16T17:28:47+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
     "debut": "2026-11-09",
@@ -29,22 +29,17 @@
         "visites": 2
       },
       {
-        "page": "/en/articles/how-to-choose-the-right-food-for-your-dog",
-        "vues": 8,
-        "visites": 5
-      },
-      {
         "page": "/aliments-dangereux",
         "vues": 8,
         "visites": 0
       },
       {
-        "page": "/articles/pourquoi-chat-fait-des-pattes",
-        "vues": 7,
-        "visites": 4
+        "page": "/en/articles/how-to-choose-the-right-food-for-your-dog",
+        "vues": 8,
+        "visites": 5
       },
       {
-        "page": "/produits/chats",
+        "page": "/chats",
         "vues": 7,
         "visites": 0
       },
@@ -54,7 +49,12 @@
         "visites": 0
       },
       {
-        "page": "/chats",
+        "page": "/articles/pourquoi-chat-fait-des-pattes",
+        "vues": 7,
+        "visites": 4
+      },
+      {
+        "page": "/produits/chats",
         "vues": 7,
         "visites": 0
       }
