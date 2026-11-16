@@ -57,9 +57,9 @@ jobs:
           git commit --allow-empty -m "Publication programmée : $(paste -sd ', ' a_publier.txt)"
           git push
       - name: Signaler à IndexNow
-        if: steps.liste.outputs.n != '0' && steps.enligne.outputs.manque == '1'
+        if: steps.liste.outputs.n != '0'
         run: |
-          sleep 240
+          [ "${{ steps.enligne.outputs.manque }}" = "1" ] && sleep 240
           python3 - <<'PY'
           import json, re, urllib.request
           key = re.search(r'INDEXNOW_KEY = "([0-9a-f]+)"', open("build.py").read()).group(1)
