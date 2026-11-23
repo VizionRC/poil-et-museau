@@ -1,91 +1,87 @@
 {
   "site": "poiletmuseau.com",
-  "genere_le": "2026-11-16T20:55:35+00:00",
+  "genere_le": "2026-11-23T13:55:14+00:00",
   "source": "Cloudflare Web Analytics (sans cookie, toutes les visites)",
   "semaine": {
-    "debut": "2026-11-09",
-    "fin": "2026-11-15",
-    "visites": 56,
-    "pages_vues": 223,
+    "debut": "2026-11-16",
+    "fin": "2026-11-22",
+    "visites": 71,
+    "pages_vues": 95,
     "pages": [
       {
         "page": "/",
-        "vues": 57,
-        "visites": 17
+        "vues": 31,
+        "visites": 22
       },
       {
-        "page": "/produits/chiens",
-        "vues": 16,
-        "visites": 0
-      },
-      {
-        "page": "/chiens",
-        "vues": 15,
+        "page": "/articles/sel-deglacage-pattes-chien",
+        "vues": 8,
         "visites": 3
       },
       {
-        "page": "/recommandations",
-        "vues": 12,
+        "page": "/chiens/conseils-produits",
+        "vues": 3,
         "visites": 2
       },
       {
-        "page": "/aliments-dangereux",
-        "vues": 8,
-        "visites": 0
+        "page": "/en/articles/why-does-your-dog-tilt-its-head",
+        "vues": 3,
+        "visites": 3
       },
       {
-        "page": "/en/articles/how-to-choose-the-right-food-for-your-dog",
-        "vues": 8,
-        "visites": 5
+        "page": "/articles/accessoires-utiles-maison-chien",
+        "vues": 3,
+        "visites": 3
       },
       {
-        "page": "/chats",
-        "vues": 7,
-        "visites": 0
+        "page": "/chats/comportement",
+        "vues": 3,
+        "visites": 3
       },
       {
-        "page": "/articles/choisir-nourriture-chien",
-        "vues": 7,
-        "visites": 0
+        "page": "/a-propos",
+        "vues": 3,
+        "visites": 2
       },
       {
-        "page": "/articles/pourquoi-chat-fait-des-pattes",
-        "vues": 7,
-        "visites": 4
+        "page": "/en/articles/why-dogs-love-treats",
+        "vues": 3,
+        "visites": 3
       },
       {
-        "page": "/produits/chats",
-        "vues": 7,
-        "visites": 0
+        "page": "/en/dogs/nutrition",
+        "vues": 3,
+        "visites": 3
+      },
+      {
+        "page": "/articles/chat-boit-il-assez-deau",
+        "vues": 3,
+        "visites": 3
       }
     ],
     "sources": [
       {
         "source": "(accès direct)",
-        "visites": 41
-      },
-      {
-        "source": "www.google.com",
-        "visites": 6
-      },
-      {
-        "source": "m.facebook.com",
-        "visites": 3
+        "visites": 47
       },
       {
         "source": "www.facebook.com",
+        "visites": 8
+      },
+      {
+        "source": "www.google.com",
+        "visites": 7
+      },
+      {
+        "source": "m.facebook.com",
+        "visites": 6
+      },
+      {
+        "source": "facebook.com",
         "visites": 2
       },
       {
         "source": "www.pinterest.com",
-        "visites": 2
-      },
-      {
-        "source": "bing.com",
-        "visites": 1
-      },
-      {
-        "source": "ca.pinterest.com",
         "visites": 1
       },
       {
@@ -95,99 +91,111 @@
     ],
     "pays": [
       {
+        "pays": "CN",
+        "visites": 27
+      },
+      {
         "pays": "CA",
-        "visites": 28
+        "visites": 26
       },
       {
         "pays": "US",
-        "visites": 18
+        "visites": 16
       },
       {
-        "pays": "AR",
-        "visites": 2
-      },
-      {
-        "pays": "CO",
-        "visites": 2
-      },
-      {
-        "pays": "ZA",
-        "visites": 2
-      },
-      {
-        "pays": "MQ",
+        "pays": "ET",
         "visites": 1
       },
       {
-        "pays": "EC",
-        "visites": 1
-      },
-      {
-        "pays": "VE",
+        "pays": "PK",
         "visites": 1
       }
     ],
     "appareils": [
       {
-        "appareil": "desktop",
-        "visites": 42
+        "appareil": "mobile",
+        "visites": 48
       },
       {
-        "appareil": "mobile",
-        "visites": 14
+        "appareil": "desktop",
+        "visites": 22
+      },
+      {
+        "appareil": "tablet",
+        "visites": 1
       }
     ],
     "par_jour": [
       {
-        "date": "2026-11-09",
-        "visites": 3,
-        "pages_vues": 3
+        "date": "2026-11-16",
+        "visites": 14,
+        "pages_vues": 32
       },
       {
-        "date": "2026-11-10",
-        "visites": 16,
-        "pages_vues": 35
+        "date": "2026-11-17",
+        "visites": 11,
+        "pages_vues": 13
       },
       {
-        "date": "2026-11-11",
-        "visites": 3,
-        "pages_vues": 3
-      },
-      {
-        "date": "2026-11-12",
-        "visites": 5,
-        "pages_vues": 5
-      },
-      {
-        "date": "2026-11-13",
+        "date": "2026-11-18",
         "visites": 1,
-        "pages_vues": 3
+        "pages_vues": 1
       },
       {
-        "date": "2026-11-14",
-        "visites": 13,
-        "pages_vues": 103
+        "date": "2026-11-19",
+        "visites": 4,
+        "pages_vues": 7
       },
       {
-        "date": "2026-11-15",
-        "visites": 15,
-        "pages_vues": 71
+        "date": "2026-11-20",
+        "visites": 23,
+        "pages_vues": 23
+      },
+      {
+        "date": "2026-11-21",
+        "visites": 14,
+        "pages_vues": 14
+      },
+      {
+        "date": "2026-11-22",
+        "visites": 4,
+        "pages_vues": 5
       }
     ]
   },
   "semaine_precedente": {
-    "debut": "2026-11-02",
-    "fin": "2026-11-08",
-    "visites": 150,
-    "pages_vues": 180,
+    "debut": "2026-11-09",
+    "fin": "2026-11-15",
+    "visites": 40,
+    "pages_vues": 270,
     "pages": [
       {
         "page": "/",
-        "vues": 20,
-        "visites": 20
+        "vues": 80,
+        "visites": 10
       },
       {
-        "page": "/en/articles/cat-water-fountain-plastic-ceramic-or-stainless-steel",
+        "page": "/chats",
+        "vues": 20,
+        "visites": 0
+      },
+      {
+        "page": "/chiens",
+        "vues": 20,
+        "visites": 10
+      },
+      {
+        "page": "/articles/choisir-nourriture-chien",
+        "vues": 20,
+        "visites": 0
+      },
+      {
+        "page": "/produits/chiens",
+        "vues": 20,
+        "visites": 0
+      },
+      {
+        "page": "/en/articles/why-does-your-dog-tilt-its-head",
         "vues": 10,
         "visites": 10
       },
@@ -197,45 +205,25 @@
         "visites": 0
       },
       {
-        "page": "/aliments-dangereux",
+        "page": "/en/articles/understanding-and-correcting-dog-behaviour",
+        "vues": 10,
+        "visites": 10
+      },
+      {
+        "page": "/en/articles/why-do-cats-knead",
         "vues": 10,
         "visites": 0
       },
       {
-        "page": "/articles/les-comportements-les-plus-frequents-chez-le-chat-et-comment-reagir-efficacement",
+        "page": "/chats/comportement",
         "vues": 10,
-        "visites": 10
-      },
-      {
-        "page": "/conseils",
-        "vues": 10,
-        "visites": 10
-      },
-      {
-        "page": "/en/articles/heatwave-and-dogs-how-to-help-your-dog-stay-cool",
-        "vues": 10,
-        "visites": 10
-      },
-      {
-        "page": "/chats",
-        "vues": 10,
-        "visites": 10
-      },
-      {
-        "page": "/contact",
-        "vues": 10,
-        "visites": 10
-      },
-      {
-        "page": "/en/articles/signs-your-dog-is-not-healthy",
-        "vues": 10,
-        "visites": 10
+        "visites": 0
       }
     ],
     "sources": [
       {
         "source": "(accès direct)",
-        "visites": 150
+        "visites": 40
       },
       {
         "source": "poiletmuseau.com",
@@ -244,18 +232,22 @@
     ],
     "pays": [
       {
-        "pays": "US",
-        "visites": 140
+        "pays": "CA",
+        "visites": 20
       },
       {
-        "pays": "CA",
+        "pays": "VE",
+        "visites": 10
+      },
+      {
+        "pays": "US",
         "visites": 10
       }
     ],
     "appareils": [
       {
         "appareil": "desktop",
-        "visites": 140
+        "visites": 30
       },
       {
         "appareil": "mobile",
@@ -264,14 +256,19 @@
     ],
     "par_jour": [
       {
-        "date": "2026-11-05",
+        "date": "2026-11-10",
         "visites": 10,
-        "pages_vues": 40
+        "pages_vues": 50
       },
       {
-        "date": "2026-11-07",
-        "visites": 140,
-        "pages_vues": 140
+        "date": "2026-11-14",
+        "visites": 20,
+        "pages_vues": 150
+      },
+      {
+        "date": "2026-11-15",
+        "visites": 10,
+        "pages_vues": 70
       }
     ]
   }
